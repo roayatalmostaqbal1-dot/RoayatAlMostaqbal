@@ -185,7 +185,7 @@
             <div class="cta-content">
                 <h2>هل تريد معرفة المزيد عن خدماتنا؟</h2>
                 <p>تواصلوا معنا اليوم للحصول على استشارة مجانية</p>
-                <a href="{{ route('contact') }}" class="btn btn-primary">{{ __('messages.nav.contact') }}</a>
+                <a href="{{ route('contact') }}" class="btn btn-primary text-white">{{ __('messages.nav.contact') }}</a>
             </div>
         </div>
     </section>

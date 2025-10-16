@@ -138,7 +138,7 @@
             </div>
 
             <div class="text-center mt-5">
-                <a href="{{ route('projects') }}" class="btn btn-primary">{{ __('messages.common.learn_more') }}</a>
+                <a href="{{ route('projects') }}" class="btn btn-primary text-white">{{ __('messages.common.learn_more') }}</a>
             </div>
         </div>
     </section>
@@ -200,7 +200,7 @@
                 <form class="newsletter-form" id="newsletter-form">
                     @csrf
                     <input type="email" name="email" placeholder="{{ __('messages.newsletter.placeholder') }}" required>
-                    <button type="submit" class="btn btn-primary">{{ __('messages.newsletter.button') }}</button>
+                    <button type="submit" class="btn btn-primary text-white">{{ __('messages.newsletter.button') }}</button>
                 </form>
                 <p class="newsletter-link">{{ __('messages.newsletter.website') }}</p>
             </div>

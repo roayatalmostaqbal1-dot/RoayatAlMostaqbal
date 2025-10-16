@@ -16,10 +16,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // --- Scroll animations ---
-    initScrollEffects();
+    // initScrollEffects();
 
     // بقية الوظائف
-    initNavigation();
+    // initNavigation();
     initAnimations();
     initNewsletter();
     initMobileMenu();

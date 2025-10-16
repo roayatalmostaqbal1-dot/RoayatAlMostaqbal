@@ -73,7 +73,24 @@ body {
     padding: 10px 0;
     border-bottom: 1px solid var(--medium-blue);
 }
-
+.logo {
+    height: 50px;
+    width: auto;
+    object-fit: contain;
+}
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.brand-text h1 {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+.brand-text p {
+    font-size: 0.875rem;
+    color: #555;
+}
 .contact-info {
     display: flex;
     justify-content: space-between;

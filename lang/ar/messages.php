@@ -13,8 +13,8 @@ return [
     'header.title' => 'رؤية المستقبل',
     'header.subtitle' => 'حلول أمنية متكاملة',
     'header.address' => 'المنطقة الصناعية، شارع السهام ١، العين ٣٠٩١١',
-    'header.email' => 'roayatalmostaqbal742@gmail.com',
-    'header.phone' => '0585460960 / 0562266859',
+    'header.email' => 'Roayatalmostaqbal1@gmail.com',
+    'header.phone' => '971503161818 / 971562266859',
 
     // Hero Section
     'hero.title' => 'مرحباً بكم!',

@@ -13,8 +13,8 @@ return [
     'header.title' => 'Roayat Al Mostaqbal',
     'header.subtitle' => 'Integrated Security Solutions',
     'header.address' => 'Industrial Area, Al Siham Street 1, Al Ain 30911',
-    'header.email' => 'roayatalmostaqbal742@gmail.com',
-    'header.phone' => '0585460960 / 0562266859',
+    'header.email' => 'Roayatalmostaqbal1@gmail.com',
+    'header.phone' => '971503161818 / 971562266859',
 
     // Hero Section
     'hero.title' => 'Welcome!',

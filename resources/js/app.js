@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // initScrollEffects();
 
     // بقية الوظائف
+    initLazyLoading();
     initNavigation();
     initAnimations();
     initNewsletter();
@@ -32,11 +33,10 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-function initNavigation() {
+unction initNavigation() {
     const navLinks = document.querySelectorAll('.nav-link');
     const sections = document.querySelectorAll('section[id]');
 
-    // Update active navigation link based on scroll position
     function updateActiveNav() {
         let current = '';
         const scrollPos = window.scrollY + 100;
@@ -52,38 +52,21 @@ function initNavigation() {
         });
 
         navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === `#${current}`) {
-                link.classList.add('active');
-            }
+            link.classList.toggle('active', link.getAttribute('href') === `#${current}`);
         });
     }
 
-    // Add click event listeners to navigation links
     navLinks.forEach(link => {
         link.addEventListener('click', function (e) {
             e.preventDefault();
             const targetId = this.getAttribute('href').substring(1);
-            const targetSection = document.getElementById(targetId);
-
-            if (targetSection) {
-                const headerHeight = document.querySelector('.header').offsetHeight;
-                const targetPosition = targetSection.offsetTop - headerHeight;
-
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
-            }
+            scrollToSection(targetId); // استخدم الدالة العامة هنا
         });
     });
 
-    // Listen for scroll events
     window.addEventListener('scroll', updateActiveNav);
-    updateActiveNav(); // Initial call
+    updateActiveNav();
 }
-
-
 // Initialize animations
 function initAnimations() {
     // Counter animation for experience badge
@@ -673,3 +656,4 @@ function initMobileMenu() {
 }
 
 
+window.scrollToSection = scrollToSection;

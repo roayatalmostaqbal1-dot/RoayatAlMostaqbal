@@ -8,7 +8,7 @@
     <section class="page-header">
         <div class="container">
             <h1>{{ __('messages.nav.projects') }}</h1>
-            <p>مشاريعنا الأخيرة في مجال الأمن والمراقبة</p>
+            <p>{{ __('messages.projects.subtitle') }}</p>
         </div>
     </section>
 
@@ -16,11 +16,11 @@
     <section class="projects-filter">
         <div class="container">
             <div class="filter-buttons">
-                <button class="filter-btn active" data-filter="all">جميع المشاريع</button>
-                <button class="filter-btn" data-filter="surveillance">أنظمة المراقبة</button>
-                <button class="filter-btn" data-filter="security">الأمن والحماية</button>
-                <button class="filter-btn" data-filter="ai">الذكاء الاصطناعي</button>
-                <button class="filter-btn" data-filter="smart">المنزل الذكي</button>
+                <button class="filter-btn active" data-filter="all">{{ __('messages.projects.filter.all') }}</button>
+                <button class="filter-btn" data-filter="surveillance">{{ __('messages.projects.filter.surveillance') }}</button>
+                <button class="filter-btn" data-filter="security">{{ __('messages.projects.filter.security') }}</button>
+                <button class="filter-btn" data-filter="ai">{{ __('messages.projects.filter.ai') }}</button>
+                <button class="filter-btn" data-filter="smart">{{ __('messages.projects.filter.smart') }}</button>
             </div>
         </div>
     </section>
@@ -41,11 +41,11 @@
                         </div>
                     </div>
                     <div class="project-content">
-                        <h3>نظام مراقبة متطور</h3>
-                        <p>تركيب نظام مراقبة شامل لمجمع سكني كبير</p>
+                        <h3>{{ __('messages.projects.surveillance.title.1') }}</h3>
+                        <p>{{ __('messages.projects.surveillance.description.1') }}</p>
                         <div class="project-tags">
-                            <span class="tag">كاميرات HD</span>
-                            <span class="tag">ذكاء اصطناعي</span>
+                            <span class="tag">{{ __('messages.projects.category.cameras') }}</span>
+                            <span class="tag">{{ __('messages.projects.category.ai') }}</span>
                         </div>
                     </div>
                 </div>
@@ -61,11 +61,11 @@
                         </div>
                     </div>
                     <div class="project-content">
-                        <h3>مراقبة ذكية للمراكز التجارية</h3>
-                        <p>نظام مراقبة متكامل مع تحليل سلوك العملاء</p>
+                        <h3>{{ __('messages.projects.surveillance.title.2') }}</h3>
+                        <p>{{ __('messages.projects.surveillance.description.2') }}</p>
                         <div class="project-tags">
-                            <span class="tag">تحليل البيانات</span>
-                            <span class="tag">مراقبة ذكية</span>
+                            <span class="tag">{{ __('messages.projects.category.dataAnalysis') }}</span>
+                            <span class="tag">{{ __('messages.projects.category.smartWatching') }}</span>
                         </div>
                     </div>
                 </div>
@@ -82,11 +82,11 @@
                         </div>
                     </div>
                     <div class="project-content">
-                        <h3>أنظمة التحكم في الدخول</h3>
-                        <p>نظام تحكم متقدم لمبنى إداري حكومي</p>
+                        <h3>{{ __('messages.projects.security.title.1') }}</h3>
+                        <p>{{ __('messages.projects.security.description.1') }}</p>
                         <div class="project-tags">
-                            <span class="tag">بطاقات ذكية</span>
-                            <span class="tag">تحكم متقدم</span>
+                            <span class="tag">{{ __('messages.projects.category.smartCards') }}</span>
+                            <span class="tag">{{ __('messages.projects.category.advancedControl') }}</span>
                         </div>
                     </div>
                 </div>
@@ -102,11 +102,11 @@
                         </div>
                     </div>
                     <div class="project-content">
-                        <h3>أنظمة الإنذار المتطورة</h3>
-                        <p>نظام إنذار شامل لمستودعات صناعية</p>
+                        <h3>{{ __('messages.projects.security.title.2') }}</h3>
+                        <p>{{ __('messages.projects.security.description.2') }}</p>
                         <div class="project-tags">
-                            <span class="tag">إنذار ذكي</span>
-                            <span class="tag">حماية شاملة</span>
+                            <span class="tag">{{ __('messages.projects.category.smartAlarm') }}</span>
+                            <span class="tag">{{ __('messages.projects.category.comprehensiveProtection') }}</span>
                         </div>
                     </div>
                 </div>
@@ -123,11 +123,11 @@
                         </div>
                     </div>
                     <div class="project-content">
-                        <h3>حلول الذكاء الاصطناعي</h3>
-                        <p>منصة ذكية لتحليل البيانات الأمنية</p>
+                        <h3>{{ __('messages.projects.ai.title.1') }}</h3>
+                        <p>{{ __('messages.projects.ai.description.1') }}</p>
                         <div class="project-tags">
-                            <span class="tag">ذكاء اصطناعي</span>
-                            <span class="tag">تحليل البيانات</span>
+                            <span class="tag">{{ __('messages.projects.category.ai') }}</span>
+                            <span class="tag">{{ __('messages.projects.category.dataAnalysis') }}</span>
                         </div>
                     </div>
                 </div>
@@ -143,11 +143,11 @@
                         </div>
                     </div>
                     <div class="project-content">
-                        <h3>التعرف على الوجوه والمركبات</h3>
-                        <p>نظام متقدم للتعرف على الأشخاص والمركبات</p>
+                        <h3>{{ __('messages.projects.ai.title.2') }}</h3>
+                        <p>{{ __('messages.projects.ai.description.2') }}</p>
                         <div class="project-tags">
-                            <span class="tag">تعرف على الوجوه</span>
-                            <span class="tag">تحليل المركبات</span>
+                            <span class="tag">{{ __('messages.projects.category.faceRecognition') }}</span>
+                            <span class="tag">{{ __('messages.projects.category.vehicleAnalysis') }}</span>
                         </div>
                     </div>
                 </div>
@@ -164,11 +164,11 @@
                         </div>
                     </div>
                     <div class="project-content">
-                        <h3>المنزل الذكي المتكامل</h3>
-                        <p>تحويل منزل تقليدي إلى منزل ذكي متكامل</p>
+                        <h3>{{ __('messages.projects.smart.title.1') }}</h3>
+                        <p>{{ __('messages.projects.smart.description.1') }}</p>
                         <div class="project-tags">
-                            <span class="tag">منزل ذكي</span>
-                            <span class="tag">تحكم ذكي</span>
+                            <span class="tag">{{ __('messages.projects.category.smartHome') }}</span>
+                            <span class="tag">{{ __('messages.projects.category.smartControl') }}</span>
                         </div>
                     </div>
                 </div>
@@ -184,11 +184,11 @@
                         </div>
                     </div>
                     <div class="project-content">
-                        <h3>المساعد الافتراضي الذكي</h3>
-                        <p>تطوير مساعد افتراضي للخدمات الأمنية</p>
+                        <h3>{{ __('messages.projects.smart.title.2') }}</h3>
+                        <p>{{ __('messages.projects.smart.description.2') }}</p>
                         <div class="project-tags">
-                            <span class="tag">مساعد افتراضي</span>
-                            <span class="tag">ذكاء اصطناعي</span>
+                            <span class="tag">{{ __('messages.projects.category.virtualAssistant') }}</span>
+                            <span class="tag">{{ __('messages.projects.category.ai') }}</span>
                         </div>
                     </div>
                 </div>
@@ -202,19 +202,19 @@
             <div class="stats-grid">
                 <div class="stat-item">
                     <div class="stat-number">150+</div>
-                    <div class="stat-label">مشروع مكتمل</div>
+                    <div class="stat-label">{{ __('messages.projects.stats.completedProjects') }}</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">50+</div>
-                    <div class="stat-label">عميل راضي</div>
+                    <div class="stat-label">{{ __('messages.projects.stats.happyClients') }}</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">10+</div>
-                    <div class="stat-label">سنوات خبرة</div>
+                    <div class="stat-label">{{ __('messages.projects.stats.yearsExperience') }}</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">24/7</div>
-                    <div class="stat-label">دعم فني</div>
+                    <div class="stat-label">{{ __('messages.projects.stats.technicalSupport') }}</div>
                 </div>
             </div>
         </div>
@@ -224,9 +224,9 @@
     <section class="contact-cta">
         <div class="container">
             <div class="cta-content">
-                <h2>هل تريد رؤية مشروعك هنا؟</h2>
-                <p>تواصلوا معنا لبدء مشروعكم القادم</p>
-                <a href="{{ route('contact') }}" class="btn btn-primary text-white">{{ __('messages.nav.contact') }}</a>
+                <h2>{{ __('messages.projects.cta.title') }}</h2>
+                <p>{{ __('messages.projects.cta.description') }}</p>
+                <a href="{{ route('contact', app()->getLocale()) }}" class="btn btn-primary text-white">{{ __('messages.nav.contact') }}</a>
             </div>
         </div>
     </section>

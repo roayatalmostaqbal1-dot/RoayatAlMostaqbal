@@ -7,8 +7,8 @@
     <!-- Page Header -->
     <section class="page-header">
         <div class="container">
-            <h1>{{ __('messages.nav.contact') }}</h1>
-            <p>تواصلوا معنا للحصول على استشارة مجانية</p>
+            <h1>{{ __('messages.contact.page_header.title') }}</h1>
+            <p>{{ __('messages.contact.page_header.description') }}</p>
         </div>
     </section>
 
@@ -17,15 +17,15 @@
         <div class="container">
             <div class="contact-grid">
                 <div class="contact-details">
-                    <h2>معلومات التواصل</h2>
+                    <h2>{{ __('messages.contact.info.title') }}</h2>
                     <div class="contact-items">
                         <div class="contact-item">
                             <div class="contact-icon">
                                 <i class="fas fa-map-marker-alt"></i>
                             </div>
                             <div class="contact-content">
-                                <h3>العنوان</h3>
-                                <p>{{ __('messages.header.address') }}</p>
+                                <h3>{{ __('messages.contact.info.address.title') }}</h3>
+                                <p>{{ __('messages.contact.info.address.description') }}</p>
                             </div>
                         </div>
 
@@ -34,8 +34,8 @@
                                 <i class="fas fa-phone"></i>
                             </div>
                             <div class="contact-content">
-                                <h3>الهاتف</h3>
-                                <p>{{ __('messages.header.phone') }}</p>
+                                <h3>{{ __('messages.contact.info.phone.title') }}</h3>
+                                <p>{{ __('messages.contact.info.phone.description') }}</p>
                             </div>
                         </div>
 
@@ -44,8 +44,8 @@
                                 <i class="fas fa-envelope"></i>
                             </div>
                             <div class="contact-content">
-                                <h3>البريد الإلكتروني</h3>
-                                <p>{{ __('messages.header.email') }}</p>
+                                <h3>{{ __('messages.contact.info.email.title') }}</h3>
+                                <p>{{ __('messages.contact.info.email.description') }}</p>
                             </div>
                         </div>
 
@@ -54,55 +54,55 @@
                                 <i class="fas fa-clock"></i>
                             </div>
                             <div class="contact-content">
-                                <h3>ساعات العمل</h3>
-                                <p>الأحد - الخميس: 8:00 ص - 6:00 م<br>الجمعة - السبت: مغلق</p>
+                                <h3>{{ __('messages.contact.info.working_hours.title') }}</h3>
+                                <p>{{ __('messages.contact.info.working_hours.description') }}</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="contact-form-section">
-                    <h2>أرسلوا لنا رسالة</h2>
+                    <h2>{{ __('messages.contact.form.title') }}</h2>
                     <form class="contact-form" id="contact-form">
                         @csrf
                         <div class="form-group">
-                            <label for="name">الاسم *</label>
+                            <label for="name">{{ __('messages.contact.form.name') }}</label>
                             <input type="text" id="name" name="name" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="email">البريد الإلكتروني *</label>
+                            <label for="email">{{ __('messages.contact.form.email') }}</label>
                             <input type="email" id="email" name="email" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="phone">رقم الهاتف</label>
+                            <label for="phone">{{ __('messages.contact.form.phone') }}</label>
                             <input type="tel" id="phone" name="phone">
                         </div>
 
                         <div class="form-group">
-                            <label for="company">اسم الشركة</label>
+                            <label for="company">{{ __('messages.contact.form.company') }}</label>
                             <input type="text" id="company" name="company">
                         </div>
 
                         <div class="form-group">
-                            <label for="service">نوع الخدمة المطلوبة</label>
+                            <label for="service">{{ __('messages.contact.form.service') }}</label>
                             <select id="service" name="service">
-                                <option value="">اختر الخدمة</option>
-                                <option value="surveillance">أنظمة المراقبة</option>
-                                <option value="security">أنظمة الأمن</option>
-                                <option value="ai">الذكاء الاصطناعي</option>
-                                <option value="smart">المنزل الذكي</option>
-                                <option value="consultation">استشارة</option>
+                                <option value="">{{ __('messages.contact.form.service.placeholder') }}</option>
+                                <option value="surveillance">{{ __('messages.contact.form.service.option.surveillance') }}</option>
+                                <option value="security">{{ __('messages.contact.form.service.option.security') }}</option>
+                                <option value="ai">{{ __('messages.contact.form.service.option.ai') }}</option>
+                                <option value="smart">{{ __('messages.contact.form.service.option.smart') }}</option>
+                                <option value="consultation">{{ __('messages.contact.form.service.option.consultation') }}</option>
                             </select>
                         </div>
 
                         <div class="form-group">
-                            <label for="message">الرسالة *</label>
+                            <label for="message">{{ __('messages.contact.form.message') }}</label>
                             <textarea id="message" name="message" rows="5" required></textarea>
                         </div>
 
-                        <button type="submit" class="btn btn-primary text-white">إرسال الرسالة</button>
+                        <button type="submit" class="btn btn-primary text-white">{{ __('messages.contact.form.submit') }}</button>
                     </form>
                 </div>
             </div>
@@ -112,7 +112,7 @@
     <!-- Map Section -->
     <section class="map-section">
         <div class="container">
-            <h2>موقعنا على الخريطة</h2>
+            <h2>{{ __('messages.contact.map.title') }}</h2>
             <div class="map-container">
                 <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3609.123456789!2d55.123456789!3d24.123456789!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjTCsDA3JzI0LjQiTiA1NcKwMDcnMjQuNCJF!5e0!3m2!1sen!2sae!4v1234567890123!5m2!1sen!2sae"
@@ -131,48 +131,48 @@
     <section class="faq-section">
         <div class="container">
             <div class="section-header">
-                <h2>الأسئلة الشائعة</h2>
-                <p>إجابات على أكثر الأسئلة شيوعاً</p>
+                <h2>{{ __('messages.contact.faq.title') }}</h2>
+                <p>{{ __('messages.contact.faq.description') }}</p>
             </div>
 
             <div class="faq-list">
                 <div class="faq-item">
                     <div class="faq-question">
-                        <h3>كم تستغرق عملية تركيب نظام المراقبة؟</h3>
+                        <h3>{{ __('messages.contact.faq.item1.question') }}</h3>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="faq-answer">
-                        <p>تختلف مدة التركيب حسب حجم المشروع وتعقيده. عادة ما تستغرق المشاريع الصغيرة من يوم إلى 3 أيام، بينما المشاريع الكبيرة قد تستغرق من أسبوع إلى عدة أسابيع.</p>
+                        <p>{{ __('messages.contact.faq.item1.answer') }}</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
                     <div class="faq-question">
-                        <h3>هل تقدمون ضمان على الأنظمة؟</h3>
+                        <h3>{{ __('messages.contact.faq.item2.question') }}</h3>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="faq-answer">
-                        <p>نعم، نقدم ضمان شامل على جميع الأنظمة لمدة سنتين، بالإضافة إلى دعم فني مجاني خلال فترة الضمان.</p>
+                        <p>{{ __('messages.contact.faq.item2.answer') }}</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
                     <div class="faq-question">
-                        <h3>هل يمكن تحديث الأنظمة لاحقاً؟</h3>
+                        <h3>{{ __('messages.contact.faq.item3.question') }}</h3>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="faq-answer">
-                        <p>نعم، جميع أنظمتنا قابلة للتحديث والتطوير. نقدم خدمات التحديث والصيانة الدورية لضمان استمرارية العمل.</p>
+                        <p>{{ __('messages.contact.faq.item3.answer') }}</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
                     <div class="faq-question">
-                        <h3>ما هي تكلفة الاستشارة؟</h3>
+                        <h3>{{ __('messages.contact.faq.item4.question') }}</h3>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="faq-answer">
-                        <p>نقدم استشارة مجانية لجميع العملاء. نقوم بتقييم احتياجاتكم وتقديم اقتراحات مخصصة دون أي رسوم.</p>
+                        <p>{{ __('messages.contact.faq.item4.answer') }}</p>
                     </div>
                 </div>
             </div>

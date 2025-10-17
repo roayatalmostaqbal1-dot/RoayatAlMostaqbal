@@ -12,76 +12,59 @@
         </div>
     </section>
 
-    <!-- About Content -->
-    <section class="about-content">
-        <div class="container">
-            <div class="about-grid">
-                <div class="about-text">
-                    <h2>{{ __('messages.about.title') }}</h2>
-                    <p>{{ __('messages.about.description') }}</p>
-
-                    <div class="about-features">
-                        <div class="about-feature">
-                            <div class="feature-icon">
-                                <i class="fas fa-building"></i>
-                            </div>
-                            <div class="feature-content">
-                                <h3>مقرنا الرسمي</h3>
-                                <p>تمتلك الشركة مقراً رسمياً في مدينة العين بموجب عقد إيجار مسجل في مركز أبوظبي العقاري (رقم العقد: 202502506177)</p>
-                                <ul>
-                                    <li>العنوان: المنطقة الصناعية، شارع السهام ١، العين ٣٠٩١١</li>
-                                    <li>نوع المقر: مكتب تجاري (5 Office)</li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="about-feature">
-                            <div class="feature-icon">
-                                <i class="fas fa-eye"></i>
-                            </div>
-                            <div class="feature-content">
-                                <h3>{{ __('messages.why.vision.title') }}</h3>
-                                <p>{{ __('messages.why.vision.description') }}</p>
-                            </div>
-                        </div>
-
-                        <div class="about-feature">
-                            <div class="feature-icon">
-                                <i class="fas fa-bullseye"></i>
-                            </div>
-                            <div class="feature-content">
-                                <h3>{{ __('messages.why.mission.title') }}</h3>
-                                <p>{{ __('messages.why.mission.description') }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="about-image">
-                    <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=600&h=400&fit=crop" alt="About Us">
-                    <div class="image-overlay">
-                        <div class="overlay-content">
-                            <h3>20+</h3>
-                            <p>{{ __('messages.tech.experience') }}</p>
-                        </div>
-                    </div>
-                </div>
+    <!-- About Features -->
+    <div class="about-features">
+        <!-- Headquarters -->
+        <div class="about-feature">
+            <div class="feature-icon blue">
+                <i class="fas fa-building"></i>
+            </div>
+            <div class="feature-content">
+                <h3>{{ __('messages.about.feature.headquarters.title') }}</h3>
+                <ul>
+                    <li>{{ __('messages.about.feature.headquarters.description') }}</li>
+                </ul>
             </div>
         </div>
-    </section>
+
+        <!-- Vision -->
+        <div class="about-feature">
+            <div class="feature-icon green">
+                <i class="fas fa-eye"></i>
+            </div>
+            <div class="feature-content">
+                <h3>{{ __('messages.why.vision.title') }}</h3>
+                <p>{{ __('messages.why.vision.description') }}</p>
+            </div>
+        </div>
+
+        <!-- Mission -->
+        <div class="about-feature">
+            <div class="feature-icon yellow">
+                <i class="fas fa-bullseye"></i>
+            </div>
+            <div class="feature-content">
+                <h3>{{ __('messages.why.mission.title') }}</h3>
+                <p>{{ __('messages.why.mission.description') }}</p>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Services Overview -->
     <section class="services-overview">
         <div class="container">
             <div class="section-header">
-                <h2>خدماتنا المتكاملة</h2>
-                <p>نقدم حلولاً شاملة في مجال الأمن والمراقبة</p>
+                <h2>{{ __('messages.about.services.title') }}</h2>
+                <p>{{ __('messages.about.services.description') }}</p>
             </div>
 
             <div class="services-tabs">
                 <div class="tab-buttons">
-                    <button class="tab-btn active" data-tab="security">قسم "رؤية المستقبل" (الأمن)</button>
-                    <button class="tab-btn" data-tab="technology">قسم "سدد" (التقنية)</button>
+                    <button class="tab-btn active"
+                        data-tab="security">{{ __('messages.about.services.security.VisionOfTheFutureSecuritySection') }}</button>
+                    <button class="tab-btn"
+                        data-tab="technology">{{ __('messages.about.services.technology.SaddDepartmentTechnology') }}</button>
                 </div>
 
                 <div class="tab-content">
@@ -89,23 +72,23 @@
                         <div class="services-grid">
                             <div class="service-item">
                                 <i class="fas fa-video"></i>
-                                <h3>تركيب أنظمة المراقبة بالكاميرات</h3>
+                                <h3>{{ __('messages.about.servers.title.1') }}</h3>
                             </div>
                             <div class="service-item">
                                 <i class="fas fa-bell"></i>
-                                <h3>أنظمة الإنذار ضد السرقة</h3>
+                                <h3>{{ __('messages.about.servers.title.2') }}</h3>
                             </div>
                             <div class="service-item">
                                 <i class="fas fa-door-open"></i>
-                                <h3>البوابات الإلكترونية الأمنية</h3>
+                                <h3>{{ __('messages.about.servers.title.3') }}</h3>
                             </div>
                             <div class="service-item">
                                 <i class="fas fa-key"></i>
-                                <h3>أنظمة التحكم في الدخول</h3>
+                                <h3>{{ __('messages.about.servers.title.4') }}</h3>
                             </div>
                             <div class="service-item">
                                 <i class="fas fa-home"></i>
-                                <h3>أنظمة المنزل الذكي</h3>
+                                <h3>{{ __('messages.about.servers.title.5') }}</h3>
                             </div>
                         </div>
                     </div>
@@ -114,23 +97,23 @@
                         <div class="services-grid">
                             <div class="service-item">
                                 <i class="fas fa-brain"></i>
-                                <h3>حلول الذكاء الاصطناعي وتحليل البيانات</h3>
+                                <h3>{{ __('messages.about.services.sadd.item.1') }}</h3>
                             </div>
                             <div class="service-item">
                                 <i class="fas fa-digital-tachograph"></i>
-                                <h3>التحول الرقمي وتطوير البرمجيات</h3>
+                                <h3>{{ __('messages.about.services.Sadd.item.2') }}</h3>
                             </div>
                             <div class="service-item">
                                 <i class="fas fa-robot"></i>
-                                <h3>المساعد الافتراضي (Chatbot) للخدمات</h3>
+                                <h3>{{ __('messages.about.services.Sadd.item.3') }}</h3>
                             </div>
                             <div class="service-item">
                                 <i class="fas fa-desktop"></i>
-                                <h3>منصات المراقبة الذكية المتكاملة</h3>
+                                <h3>{{ __('messages.about.services.Sadd.item.4') }}</h3>
                             </div>
                             <div class="service-item">
                                 <i class="fas fa-user-check"></i>
-                                <h3>أنظمة التعرف على الوجوه والمركبات</h3>
+                                <h3>{{ __('messages.about.services.Sadd.item.5') }}</h3>
                             </div>
                         </div>
                     </div>
@@ -179,36 +162,36 @@
     <section class="contact-cta">
         <div class="container">
             <div class="cta-content">
-                <h2>هل تريد معرفة المزيد عنا؟</h2>
-                <p>تواصلوا معنا اليوم لمعرفة كيف يمكننا مساعدتكم</p>
-                <a href="{{ route('contact') }}" class="btn btn-primary text-white">{{ __('messages.nav.contact') }}</a>
+                <h2>{{ __('messages.about.more.title') }}</h2>
+                <p>{{ __('messages.about.more.description') }}</p>
+
+                <a href="{{ route('contact', app()->getLocale()) }}"
+                    class="btn btn-primary text-white">{{ __('messages.nav.contact') }}</a>
             </div>
         </div>
     </section>
 @endsection
 
 @push('scripts')
-<script>
-    // Tab functionality
-    document.addEventListener('DOMContentLoaded', function() {
-        const tabButtons = document.querySelectorAll('.tab-btn');
-        const tabPanels = document.querySelectorAll('.tab-panel');
+    <script>
+        // Tab functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabPanels = document.querySelectorAll('.tab-panel');
 
-        tabButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const targetTab = this.getAttribute('data-tab');
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetTab = this.getAttribute('data-tab');
 
-                // Remove active class from all buttons and panels
-                tabButtons.forEach(btn => btn.classList.remove('active'));
-                tabPanels.forEach(panel => panel.classList.remove('active'));
+                    // Remove active class from all buttons and panels
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabPanels.forEach(panel => panel.classList.remove('active'));
 
-                // Add active class to clicked button and corresponding panel
-                this.classList.add('active');
-                document.getElementById(targetTab).classList.add('active');
+                    // Add active class to clicked button and corresponding panel
+                    this.classList.add('active');
+                    document.getElementById(targetTab).classList.add('active');
+                });
             });
         });
-    });
-</script>
+    </script>
 @endpush
-
-

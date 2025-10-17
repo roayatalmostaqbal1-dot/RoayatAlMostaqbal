@@ -16,39 +16,39 @@
     <section class="security-services">
         <div class="container">
             <div class="section-header">
-                <h2>قسم "رؤية المستقبل" (الأمن)</h2>
-                <p>حلول أمنية متكاملة ومتطورة</p>
+                <h2>{{ __('messages.about.services.security.install_cameras.title') }}</h2>
+                <p>{{ __('messages.about.services.description') }}</p>
             </div>
 
             <div class="services-grid">
                 <x-service-card
                     icon="fas fa-video"
-                    title="تركيب أنظمة المراقبة بالكاميرات"
-                    description="تركيب أنظمة المراقبة بالكاميرات المتطورة مع تقنيات الذكاء الاصطناعي للرصد الذكي والمراقبة المستمرة"
+                    title="{{ __('messages.about.services.security.install_cameras.title') }}"
+                    description="{{ __('messages.about.services.security.install_cameras.description') }}"
                 />
 
                 <x-service-card
                     icon="fas fa-bell"
-                    title="أنظمة الإنذار ضد السرقة"
-                    description="أنظمة الإنذار ضد السرقة مع تقنيات متقدمة للكشف المبكر والتنبيه الفوري للحالات الطارئة"
+                    title="{{ __('messages.about.services.security.alarm_systems.title') }}"
+                    description="{{ __('messages.about.services.security.alarm_systems.description') }}"
                 />
 
                 <x-service-card
                     icon="fas fa-door-open"
-                    title="البوابات الإلكترونية الأمنية"
-                    description="البوابات الإلكترونية الأمنية مع أنظمة التحكم في الدخول المتطورة والمراقبة الذكية"
+                    title="{{ __('messages.about.services.security.security_gates.title') }}"
+                    description="{{ __('messages.about.services.security.security_gates.description') }}"
                 />
 
                 <x-service-card
                     icon="fas fa-key"
-                    title="أنظمة التحكم في الدخول"
-                    description="أنظمة التحكم في الدخول المتقدمة مع تقنيات التعرف البيومتري والبطاقات الذكية"
+                    title="{{ __('messages.about.services.security.access_control.title') }}"
+                    description="{{ __('messages.about.services.security.access_control.description') }}"
                 />
 
                 <x-service-card
                     icon="fas fa-home"
-                    title="أنظمة المنزل الذكي"
-                    description="أنظمة المنزل الذكي المتكاملة مع حلول الذكاء الاصطناعي والتحكم عن بُعد"
+                    title="{{ __('messages.about.services.security.smart_home.title') }}"
+                    description="{{ __('messages.about.services.security.smart_home.description') }}"
                 />
             </div>
         </div>
@@ -58,39 +58,39 @@
     <section class="technology-services">
         <div class="container">
             <div class="section-header">
-                <h2>قسم "سدد" (التقنية)</h2>
-                <p>حلول تقنية متطورة وذكية</p>
+                <h2>{{ __('messages.about.services.technology.ai_solutions.title') }}</h2>
+                <p>{{ __('messages.about.services.description') }}</p>
             </div>
 
             <div class="services-grid">
                 <x-service-card
                     icon="fas fa-brain"
-                    title="حلول الذكاء الاصطناعي وتحليل البيانات"
-                    description="حلول الذكاء الاصطناعي وتحليل البيانات المتقدمة لتحسين الأداء واتخاذ القرارات الذكية"
+                    title="{{ __('messages.about.services.technology.ai_solutions.title') }}"
+                    description="{{ __('messages.about.services.technology.ai_solutions.description') }}"
                 />
 
                 <x-service-card
                     icon="fas fa-digital-tachograph"
-                    title="التحول الرقمي وتطوير البرمجيات"
-                    description="التحول الرقمي وتطوير البرمجيات المخصصة لتحسين العمليات وزيادة الكفاءة"
+                    title="{{ __('messages.about.services.technology.digital_transformation.title') }}"
+                    description="{{ __('messages.about.services.technology.digital_transformation.description') }}"
                 />
 
                 <x-service-card
                     icon="fas fa-robot"
-                    title="المساعد الافتراضي (Chatbot) للخدمات"
-                    description="المساعد الافتراضي (Chatbot) للخدمات مع تقنيات الذكاء الاصطناعي المتطورة"
+                    title="{{ __('messages.about.services.technology.chatbot.title') }}"
+                    description="{{ __('messages.about.services.technology.chatbot.description') }}"
                 />
 
                 <x-service-card
                     icon="fas fa-desktop"
-                    title="منصات المراقبة الذكية المتكاملة"
-                    description="منصات المراقبة الذكية المتكاملة مع واجهات سهلة الاستخدام ومراقبة شاملة"
+                    title="{{ __('messages.about.services.technology.monitoring_platforms.title') }}"
+                    description="{{ __('messages.about.services.technology.monitoring_platforms.description') }}"
                 />
 
                 <x-service-card
                     icon="fas fa-user-check"
-                    title="أنظمة التعرف على الوجوه والمركبات"
-                    description="أنظمة التعرف على الوجوه والمركبات مع تقنيات الذكاء الاصطناعي المتقدمة"
+                    title="{{ __('messages.about.services.technology.recognition_systems.title') }}"
+                    description="{{ __('messages.about.services.technology.recognition_systems.description') }}"
                 />
             </div>
         </div>
@@ -100,40 +100,40 @@
     <section class="service-process">
         <div class="container">
             <div class="section-header">
-                <h2>كيف نعمل</h2>
-                <p>عملية منظمة ومدروسة لضمان أفضل النتائج</p>
+                <h2>{{ __('messages.about.process.title') }}</h2>
+                <p>{{ __('messages.about.process.description') }}</p>
             </div>
 
             <div class="process-steps">
                 <div class="process-step">
                     <div class="step-number">1</div>
                     <div class="step-content">
-                        <h3>الاستشارة والتقييم</h3>
-                        <p>نقوم بفهم احتياجاتكم وتقييم الموقع الحالي</p>
+                        <h3>{{ __('messages.about.process.step1.title') }}</h3>
+                        <p>{{ __('messages.about.process.step1.description') }}</p>
                     </div>
                 </div>
 
                 <div class="process-step">
                     <div class="step-number">2</div>
                     <div class="step-content">
-                        <h3>التصميم والتخطيط</h3>
-                        <p>نصمم حلولاً مخصصة تناسب احتياجاتكم</p>
+                        <h3>{{ __('messages.about.process.step2.title') }}</h3>
+                        <p>{{ __('messages.about.process.step2.description') }}</p>
                     </div>
                 </div>
 
                 <div class="process-step">
                     <div class="step-number">3</div>
                     <div class="step-content">
-                        <h3>التنفيذ والتركيب</h3>
-                        <p>نقوم بتركيب الأنظمة بأعلى معايير الجودة</p>
+                        <h3>{{ __('messages.about.process.step3.title') }}</h3>
+                        <p>{{ __('messages.about.process.step3.description') }}</p>
                     </div>
                 </div>
 
                 <div class="process-step">
                     <div class="step-number">4</div>
                     <div class="step-content">
-                        <h3>الاختبار والتسليم</h3>
-                        <p>نختبر الأنظمة ونسلمها مع التدريب والدعم</p>
+                        <h3>{{ __('messages.about.process.step4.title') }}</h3>
+                        <p>{{ __('messages.about.process.step4.description') }}</p>
                     </div>
                 </div>
             </div>
@@ -148,32 +148,32 @@
                     <div class="feature-icon">
                         <i class="fas fa-shield-alt"></i>
                     </div>
-                    <h3>أمان عالي</h3>
-                    <p>نستخدم أحدث التقنيات لضمان أعلى مستويات الأمان</p>
+                    <h3>{{ __('messages.about.features.security.title') }}</h3>
+                    <p>{{ __('messages.about.features.security.description') }}</p>
                 </div>
 
                 <div class="feature-item">
                     <div class="feature-icon">
                         <i class="fas fa-cogs"></i>
                     </div>
-                    <h3>سهولة الاستخدام</h3>
-                    <p>واجهات سهلة ومفهومة لجميع المستخدمين</p>
+                    <h3>{{ __('messages.about.features.usability.title') }}</h3>
+                    <p>{{ __('messages.about.features.usability.description') }}</p>
                 </div>
 
                 <div class="feature-item">
                     <div class="feature-icon">
                         <i class="fas fa-headset"></i>
                     </div>
-                    <h3>دعم فني 24/7</h3>
-                    <p>دعم فني متواصل على مدار الساعة</p>
+                    <h3>{{ __('messages.about.features.support.title') }}</h3>
+                    <p>{{ __('messages.about.features.support.description') }}</p>
                 </div>
 
                 <div class="feature-item">
                     <div class="feature-icon">
                         <i class="fas fa-tools"></i>
                     </div>
-                    <h3>صيانة دورية</h3>
-                    <p>صيانة دورية لضمان استمرارية العمل</p>
+                    <h3>{{ __('messages.about.features.maintenance.title') }}</h3>
+                    <p>{{ __('messages.about.features.maintenance.description') }}</p>
                 </div>
             </div>
         </div>
@@ -183,9 +183,9 @@
     <section class="contact-cta">
         <div class="container">
             <div class="cta-content">
-                <h2>هل تريد معرفة المزيد عن خدماتنا؟</h2>
-                <p>تواصلوا معنا اليوم للحصول على استشارة مجانية</p>
-                <a href="{{ route('contact') }}" class="btn btn-primary text-white">{{ __('messages.nav.contact') }}</a>
+                <h2>{{ __('messages.about.contact_cta.title') }}</h2>
+                <p>{{ __('messages.about.contact_cta.description') }}</p>
+                <a href="{{ route('contact', app()->getLocale()) }}" class="btn btn-primary text-white">{{ __('messages.about.contact_cta.button') }}</a>
             </div>
         </div>
     </section>

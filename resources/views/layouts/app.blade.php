@@ -14,9 +14,9 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}">
     <!-- Styles -->
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('هوية رؤية المستقبل-04.svg') }}" />
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('RoayatAlMostaqbal.svg') }}" />
 
-     @vite(['resources/css/app.css', 'respath: ources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @stack('styles')
 </head>

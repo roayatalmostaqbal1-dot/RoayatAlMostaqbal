@@ -13,7 +13,7 @@
             <div class="section-header">
                 <h2>{{ __('messages.about.title') }}</h2>
                 <p>{{ __('messages.about.subtitle') }}</p>
-                <a href="{{ route('services') }}" class="btn btn-secondary">{{ __('messages.about.button') }}</a>
+                <a href="{{ route('services', app()->getLocale()) }}" class="btn btn-secondary">{{ __('messages.about.button') }}</a>
             </div>
         </div>
     </section>
@@ -30,28 +30,28 @@
                     icon="fas fa-shield-alt"
                     :title="__('messages.services.surveillance.title')"
                     :description="__('messages.services.surveillance.description')"
-                    :link="route('services')"
+                    :link="route('services', app()->getLocale())"
                 />
 
                 <x-service-card
                     icon="fas fa-bell"
                     :title="__('messages.services.alarm.title')"
                     :description="__('messages.services.alarm.description')"
-                    :link="route('services')"
+                    :link="route('services', app()->getLocale())"
                 />
 
                 <x-service-card
                     icon="fas fa-door-open"
                     :title="__('messages.services.gates.title')"
                     :description="__('messages.services.gates.description')"
-                    :link="route('services')"
+                    :link="route('services', app()->getLocale())"
                 />
 
                 <x-service-card
                     icon="fas fa-home"
                     :title="__('messages.services.smart_home.title')"
                     :description="__('messages.services.smart_home.description')"
-                    :link="route('services')"
+                    :link="route('services', app()->getLocale())"
                 />
             </div>
         </div>
@@ -138,7 +138,7 @@
             </div>
 
             <div class="text-center mt-5">
-                <a href="{{ route('projects') }}" class="btn btn-primary text-white">{{ __('messages.common.learn_more') }}</a>
+                <a href="{{ route('projects',app()->getLocale()) }}" class="btn btn-primary text-white">{{ __('messages.common.learn_more') }}</a>
             </div>
         </div>
     </section>
@@ -166,7 +166,7 @@
                         </div>
                         <h3>{{ __('messages.why.vision.title') }}</h3>
                         <p>{{ __('messages.why.vision.description') }}</p>
-                        <a href="{{ route('about') }}" class="read-more">{{ __('messages.why.read_more') }}</a>
+                        <a href="{{ route('about', app()->getLocale()) }}" class="read-more">{{ __('messages.why.read_more') }}</a>
                     </div>
 
                     <div class="why-card">
@@ -175,7 +175,7 @@
                         </div>
                         <h3>{{ __('messages.why.mission.title') }}</h3>
                         <p>{{ __('messages.why.mission.description') }}</p>
-                        <a href="{{ route('about') }}" class="read-more">{{ __('messages.why.read_more') }}</a>
+                        <a href="{{ route('about', app()->getLocale()) }}" class="read-more">{{ __('messages.why.read_more') }}</a>
                     </div>
 
                     <div class="why-card">
@@ -184,7 +184,7 @@
                         </div>
                         <h3>{{ __('messages.why.awards.title') }}</h3>
                         <p>{{ __('messages.why.awards.description') }}</p>
-                        <a href="{{ route('about') }}" class="read-more">{{ __('messages.why.read_more') }}</a>
+                        <a href="{{ route('about', app()->getLocale()) }}" class="read-more">{{ __('messages.why.read_more') }}</a>
                     </div>
                 </div>
             </div>

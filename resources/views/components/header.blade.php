@@ -24,7 +24,7 @@
             <div class="nav-brand">
                 <!-- ✅ Add your logo here -->
                 <a href="{{ route('home', app()->getLocale()) }}" class="logo-link">
-                    <img src="{{ asset('هوية رؤية المستقبل-04.svg') }}" alt="Site Logo" class="logo">
+                    <img src="{{ asset('RoayatAlMostaqbal.svg') }}" alt="Site Logo" class="logo">
                 </a>
 
                 <div class="brand-text">

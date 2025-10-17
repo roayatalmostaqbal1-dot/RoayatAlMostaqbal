@@ -196,19 +196,18 @@
             const name = formData.get('name');
             const email = formData.get('email');
             const message = formData.get('message');
-
             if (!name || !email || !message) {
-                showNotification('يرجى ملء جميع الحقول المطلوبة', 'error');
-                return;
+                    showNotification('{{ __('messages.contact.form.validation.required') }}', 'error');
+                    return;
             }
 
             if (!validateEmail(email)) {
-                showNotification('يرجى إدخال بريد إلكتروني صحيح', 'error');
+                showNotification('{{ __('messages.contact.form.validation.email') }}', 'error');
                 return;
             }
 
             // Simulate form submission
-            showNotification('تم إرسال رسالتكم بنجاح! سنتواصل معكم قريباً', 'success');
+            showNotification('{{ __('messages.contact.form.success') }}', 'success');
             this.reset();
         });
 

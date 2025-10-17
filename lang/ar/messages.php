@@ -169,8 +169,6 @@ return [
     'projects.cta.title' => 'هل تريد رؤية مشروعك هنا؟',
     'projects.cta.description' => 'تواصلوا معنا لبدء مشروعكم القادم',
     'projects.cta.button' => 'اتصل بنا',
-
-    'contact.success' => 'تم إرسال رسالتكم بنجاح! سنتواصل معكم قريباً',
     'newsletter.success' => 'تم الاشتراك بنجاح! شكراً لاهتمامكم',
     'contact.error' => 'حدث خطأ ما. يرجى المحاولة مرة أخرى.',
     'newsletter.error' => 'حدث خطأ ما. يرجى المحاولة مرة أخرى.',
@@ -291,6 +289,9 @@ return [
     'contact.form.service.option.consultation' => 'استشارة',
     'contact.form.message' => 'الرسالة *',
     'contact.form.submit' => 'إرسال الرسالة',
+    'contact.form.validation.required' => 'يرجى ملء جميع الحقول المطلوبة',
+    'contact.form.validation.email' => 'يرجى إدخال بريد إلكتروني صحيح',
+    'contact.form.success' => 'تم إرسال رسالتكم بنجاح! سنتواصل معكم قريباً',
 
     // Map Section
     'contact.map.title' => 'موقعنا على الخريطة',

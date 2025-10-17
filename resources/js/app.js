@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // initScrollEffects();
 
     // بقية الوظائف
-    // initNavigation();
+    initNavigation();
     initAnimations();
     initNewsletter();
     initMobileMenu();
@@ -448,6 +448,36 @@ function initFormHandlers() {
             handleNewsletterForm(this);
         });
     });
+}
+function initScrollEffects() {
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('fade-in-up');
+
+                // Staggered animation للعناصر المحددة
+                const staggerClasses = ['service-card', 'project-card', 'why-card'];
+                if (staggerClasses.some(cls => entry.target.classList.contains(cls))) {
+                    const siblings = Array.from(entry.target.parentNode.children);
+                    const index = siblings.indexOf(entry.target);
+                    entry.target.style.transitionDelay = `${index * 0.1}s`;
+                }
+
+                observer.unobserve(entry.target); // توقف المراقبة بعد الظهور
+            }
+        });
+    }, observerOptions);
+
+    const animateElements = document.querySelectorAll(
+        '.service-card, .project-card, .why-card, .tech-feature, .feature-card, .stat-item, .why-item'
+    );
+
+    animateElements.forEach(el => observer.observe(el));
 }
 
 function handleContactForm(form) {

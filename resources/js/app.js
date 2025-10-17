@@ -15,12 +15,13 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // --- Scroll animations ---
-    // initScrollEffects();
 
-    // بقية الوظائف
-    initLazyLoading();
+
+
+
+
     initNavigation();
+    initLazyLoading();  
     initAnimations();
     initNewsletter();
     initMobileMenu();
@@ -33,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-unction initNavigation() {
+function initNavigation() {
     const navLinks = document.querySelectorAll('.nav-link');
     const sections = document.querySelectorAll('section[id]');
 
@@ -52,21 +53,46 @@ unction initNavigation() {
         });
 
         navLinks.forEach(link => {
-            link.classList.toggle('active', link.getAttribute('href') === `#${current}`);
+            const href = link.getAttribute('href');
+            // فقط إذا كان الرابط داخل الصفحة
+            if (href.startsWith('#')) {
+                link.classList.toggle('active', href === `#${current}`);
+            }
         });
     }
 
     navLinks.forEach(link => {
         link.addEventListener('click', function (e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href').substring(1);
-            scrollToSection(targetId); // استخدم الدالة العامة هنا
+            const href = this.getAttribute('href');
+
+            // روابط داخل الصفحة
+            if (href.startsWith('#')) {
+                e.preventDefault();
+                const targetId = href.substring(1);
+                scrollToSection(targetId);
+            }
+            // روابط لارافيل الحقيقية تترك كما هي
         });
     });
 
     window.addEventListener('scroll', updateActiveNav);
     updateActiveNav();
 }
+
+// دالة التمرير الداخلي
+function scrollToSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    if (section) {
+        const headerHeight = document.querySelector('.header').offsetHeight;
+        const targetPosition = section.offsetTop - headerHeight;
+
+        window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+        });
+    }
+}
+
 // Initialize animations
 function initAnimations() {
     // Counter animation for experience badge
@@ -309,8 +335,6 @@ function initLazyLoading() {
     images.forEach(img => imageObserver.observe(img));
 }
 
-// Initialize lazy loading
-initLazyLoading();
 
 // Contact form validation (if contact form exists)
 function initContactForm() {
@@ -610,19 +634,6 @@ function initFAQ() {
     });
 }
 
-// Smooth scroll to section
-function scrollToSection(sectionId) {
-    const section = document.getElementById(sectionId);
-    if (section) {
-        const headerHeight = document.querySelector('.header').offsetHeight;
-        const targetPosition = section.offsetTop - headerHeight;
-
-        window.scrollTo({
-            top: targetPosition,
-            behavior: 'smooth'
-        });
-    }
-}
 
 
 // Mobile menu functionality

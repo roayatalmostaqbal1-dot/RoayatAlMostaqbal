@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     initNavigation();
-    initLazyLoading();  
+    initLazyLoading();
     initAnimations();
     initNewsletter();
     initMobileMenu();
@@ -336,37 +336,6 @@ function initLazyLoading() {
 }
 
 
-// Contact form validation (if contact form exists)
-function initContactForm() {
-    const contactForm = document.querySelector('#contact-form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            const formData = new FormData(this);
-            const name = formData.get('name');
-            const email = formData.get('email');
-            const message = formData.get('message');
-
-            if (!name || !email || !message) {
-                showNotification('يرجى ملء جميع الحقول المطلوبة.', 'error');
-                return;
-            }
-
-            if (!validateEmail(email)) {
-                showNotification('يرجى إدخال بريد إلكتروني صحيح.', 'error');
-                return;
-            }
-
-            // Simulate form submission
-            showNotification('تم إرسال رسالتكم بنجاح! سنتواصل معكم قريباً.', 'success');
-            this.reset();
-        });
-    }
-}
-
-// Initialize contact form
-initContactForm();
 
 // Accessibility improvements
 function initAccessibility() {

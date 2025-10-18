@@ -1788,3 +1788,16 @@ html {
 .text-medium-blue {
     color: var(--medium-blue);
 }
+/* اجعل الـ select وخياراته جميعها باللون الأبيض */
+#service {
+    color: #ffffff; /* لون النص */
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    appearance: none; /* لإزالة السهم الافتراضي في بعض المتصفحات */
+}
+
+/* عند فتح القائمة، اجعل جميع الخيارات باللون الأبيض */
+#service option {
+    background-color: #ffffff; /* خلفية كل خيار */
+    color: #000000; /* لون النص */
+}

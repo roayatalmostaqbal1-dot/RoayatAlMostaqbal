@@ -89,11 +89,13 @@
                             <label for="service">{{ __('messages.contact.form.service') }}</label>
                             <select id="service" name="service">
                                 <option value="">{{ __('messages.contact.form.service.placeholder') }}</option>
-                                <option value="surveillance">{{ __('messages.contact.form.service.option.surveillance') }}</option>
+                                <option value="surveillance">{{ __('messages.contact.form.service.option.surveillance') }}
+                                </option>
                                 <option value="security">{{ __('messages.contact.form.service.option.security') }}</option>
                                 <option value="ai">{{ __('messages.contact.form.service.option.ai') }}</option>
                                 <option value="smart">{{ __('messages.contact.form.service.option.smart') }}</option>
-                                <option value="consultation">{{ __('messages.contact.form.service.option.consultation') }}</option>
+                                <option value="consultation">{{ __('messages.contact.form.service.option.consultation') }}
+                                </option>
                             </select>
                         </div>
 
@@ -102,7 +104,8 @@
                             <textarea id="message" name="message" rows="5" required></textarea>
                         </div>
 
-                        <button type="submit" class="btn btn-primary text-white">{{ __('messages.contact.form.submit') }}</button>
+                        <button type="submit"
+                            class="btn btn-primary text-white">{{ __('messages.contact.form.submit') }}</button>
                     </form>
                 </div>
             </div>
@@ -116,11 +119,7 @@
             <div class="map-container">
                 <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3609.123456789!2d55.123456789!3d24.123456789!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjTCsDA3JzI0LjQiTiA1NcKwMDcnMjQuNCJF!5e0!3m2!1sen!2sae!4v1234567890123!5m2!1sen!2sae"
-                    width="100%"
-                    height="400"
-                    style="border:0;"
-                    allowfullscreen=""
-                    loading="lazy"
+                    width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"
                     referrerpolicy="no-referrer-when-downgrade">
                 </iframe>
             </div>
@@ -179,71 +178,4 @@
         </div>
     </section>
 @endsection
-
-@push('scripts')
-<script>
-    // Contact form handling
-    document.addEventListener('DOMContentLoaded', function() {
-        const contactForm = document.getElementById('contact-form');
-
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            // Get form data
-            const formData = new FormData(this);
-
-            // Basic validation
-            const name = formData.get('name');
-            const email = formData.get('email');
-            const message = formData.get('message');
-            if (!name || !email || !message) {
-                    showNotification('{{ __('messages.contact.form.validation.required') }}', 'error');
-                    return;
-            }
-
-            if (!validateEmail(email)) {
-                showNotification('{{ __('messages.contact.form.validation.email') }}', 'error');
-                return;
-            }
-
-            // Simulate form submission
-            showNotification('{{ __('messages.contact.form.success') }}', 'success');
-            this.reset();
-        });
-
-        // FAQ functionality
-        const faqItems = document.querySelectorAll('.faq-item');
-
-        faqItems.forEach(item => {
-            const question = item.querySelector('.faq-question');
-
-            question.addEventListener('click', function() {
-                const answer = item.querySelector('.faq-answer');
-                const icon = this.querySelector('i');
-
-                // Close other FAQ items
-                faqItems.forEach(otherItem => {
-                    if (otherItem !== item) {
-                        otherItem.classList.remove('active');
-                        otherItem.querySelector('.faq-answer').style.maxHeight = null;
-                        otherItem.querySelector('.faq-question i').style.transform = 'rotate(0deg)';
-                    }
-                });
-
-                // Toggle current item
-                item.classList.toggle('active');
-
-                if (item.classList.contains('active')) {
-                    answer.style.maxHeight = answer.scrollHeight + 'px';
-                    icon.style.transform = 'rotate(180deg)';
-                } else {
-                    answer.style.maxHeight = null;
-                    icon.style.transform = 'rotate(0deg)';
-                }
-            });
-        });
-    });
-</script>
-@endpush
-
 

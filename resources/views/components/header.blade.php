@@ -5,8 +5,8 @@
         <div class="header-top">
             <div class="contact-info"></div>
 
-            <!-- Language Switcher -->
-            <div class="language-switcher">
+            <!-- Language Switcher (Desktop only) -->
+            <div class="language-switcher desktop-lang">
                 <a href="{{ route('language.switch', 'ar') }}"
                    class="lang-link {{ app()->getLocale() == 'ar' ? 'active' : '' }}">
                     العربية
@@ -22,7 +22,6 @@
         <!-- Main Navigation -->
         <nav class="navbar">
             <div class="nav-brand">
-                <!-- ✅ Add your logo here -->
                 <a href="{{ route('home', app()->getLocale()) }}" class="logo-link">
                     <img src="{{ asset('RoayatAlMostaqbal.svg') }}" alt="Site Logo" class="logo">
                 </a>
@@ -39,9 +38,24 @@
                 <li><a href="{{ route('services', app()->getLocale()) }}" class="nav-link {{ request()->routeIs('services') ? 'active' : '' }}">{{ __('messages.nav.services') }}</a></li>
                 <li><a href="{{ route('projects', app()->getLocale()) }}" class="nav-link {{ request()->routeIs('projects') ? 'active' : '' }}">{{ __('messages.nav.projects') }}</a></li>
                 <li><a href="{{ route('contact', app()->getLocale()) }}" class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}">{{ __('messages.nav.contact') }}</a></li>
+
+                <!-- Language Switcher (Mobile only) -->
+                <li class="mobile-lang">
+                    <div class="language-switcher">
+                        <a href="{{ route('language.switch', 'ar') }}"
+                           class="lang-link {{ app()->getLocale() == 'ar' ? 'active' : '' }}">
+                            العربية
+                        </a>
+                        <span class="lang-separator">|</span>
+                        <a href="{{ route('language.switch', 'en') }}"
+                           class="lang-link {{ app()->getLocale() == 'en' ? 'active' : '' }}">
+                            English
+                        </a>
+                    </div>
+                </li>
             </ul>
 
-            <div class="nav-toggle">
+            <div class="nav-toggle" id="nav-toggle">
                 <span></span>
                 <span></span>
                 <span></span>

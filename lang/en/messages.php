@@ -263,7 +263,7 @@ return [
     'about.features.maintenance.description' => 'Regular maintenance to ensure continuous operation',
 
     // Contact CTA
-    'about.contact_cta.title' => 'Want to Know More About Our Services?',
+    'about.contact_cta.title' => '? Want to Know More About Our Services',
     'about.contact_cta.description' => 'Contact us today for a free consultation',
     'about.contact_cta.button' => 'Contact Us',
 

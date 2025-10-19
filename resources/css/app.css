@@ -1513,7 +1513,26 @@ section {
     color: #cccccc;
     margin-bottom: 40px;
 }
+.mobile-lang {
+    display: none;
+}
 
+/* ✅ تنسيق محسن للروابط */
+.language-switcher {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.lang-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition);
+}
+.lang-separator {
+    color: #888;
+}
 /* Responsive Design */
 @media (max-width: 1200px) {
     .container {
@@ -1527,6 +1546,7 @@ section {
     .section-header h2 {
         font-size: 2.2rem;
     }
+
 }
 
 @media (max-width: 992px) {
@@ -1555,6 +1575,45 @@ section {
 
     .services-grid {
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+
+    .nav-menu li {
+        margin: 12px 0;
+    }
+    .desktop-lang {
+        display: none;
+    }
+
+    .mobile-lang {
+        display: block;
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .language-switcher {
+        justify-content: center;
+    }
+
+    /* لإظهار وإخفاء القائمة */
+    .nav-menu {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        left: 0;
+        background: var(--secondary-dark);
+        flex-direction: column;
+        align-items: center;
+        display: none;
+        padding: 15px 0;
+        border-top: 1px solid var(--medium-blue);
+    }
+
+    .nav-menu.active {
+        display: flex;
+    }
+
+    .nav-toggle {
+        display: flex;
     }
 }
 

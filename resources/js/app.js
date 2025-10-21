@@ -306,17 +306,17 @@ window.addEventListener('load', function () {
 });
 
 // Service worker registration for PWA capabilities
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function () {
-        navigator.serviceWorker.register('/sw.js')
-            .then(function (registration) {
-                console.log('ServiceWorker registration successful');
-            })
-            .catch(function (err) {
-                console.log('ServiceWorker registration failed');
-            });
-    });
-}
+// if ('serviceWorker' in navigator) {
+//     window.addEventListener('load', function () {
+//         navigator.serviceWorker.register('/RoayatAlMostaqbal/sw.js', { scope: '/RoayatAlMostaqbal/' })
+//             .then(function (registration) {
+//                 console.log('ServiceWorker registration successful');
+//             })
+//             .catch(function (err) {
+//                 console.log('ServiceWorker registration failed');
+//             });
+//     });
+// }
 
 // Performance optimization: Lazy loading for images
 function initLazyLoading() {

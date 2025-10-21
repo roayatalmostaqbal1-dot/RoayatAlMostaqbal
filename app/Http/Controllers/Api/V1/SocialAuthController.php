@@ -78,7 +78,7 @@ class SocialAuthController extends Controller
     {
         $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_[]{}<>~`+=,.;:?';
         $maxIndex = strlen($chars) - 1;
-        $password = '';d
+        $password = '';
         $lower = 'abcdefghijklmnopqrstuvwxyz';
         $upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $digits = '0123456789';

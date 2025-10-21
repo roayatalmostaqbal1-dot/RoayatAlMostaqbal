@@ -1,16 +1,19 @@
 <?php
 
 namespace App\Http\Controllers\Api\V1;
+
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use Illuminate\Support\Facades\{Auth,Log};
-use Laravel\Socialite\Facades\Socialite;
-use Illuminate\Http\Request;
 use App\Http\Resources\Api\V1\User\UserInfoResource;
+use App\Models\SocialAccount;
+use App\Models\User;
+use Illuminate\Support\Facades\Log;
+use Laravel\Socialite\Facades\Socialite;
 
 class SocialAuthController extends Controller
 {
     //
+    
+
     public function redirectToProvider($provider)
     {
         return Socialite::driver($provider)->stateless()->redirect();
@@ -20,19 +23,35 @@ class SocialAuthController extends Controller
     {
         try {
             $socialUser = Socialite::driver($provider)->stateless()->user();
+            $account = SocialAccount::where('provider_id', $socialUser->getId())
+                ->where('provider_name', $provider)
+                ->first();
 
-            // ابحث عن المستخدم أو أنشئ جديد
-            $user = User::firstOrCreate(
-                ['email' => $socialUser->getEmail()],
-                ['name' => $socialUser->getName()]
-            );
-
-            // إنشاء Access Token باستخدام Passport
+            if ($account) {
+                $user = $account->user;
+            } else {
+                $user = User::firstOrCreate(
+                    ['email' => $socialUser->getEmail()],
+                    [
+                        'name' => $socialUser->getName(),
+                        'email_verified_at' => now(),
+                    ]
+                );
+                $user->socialAccounts()->create([
+                    'provider_name' => $provider,
+                    'provider_id' => $socialUser->getId(),
+                    'provider_token' => $socialUser->token,
+                ]);
+            }
             $token = $user->createToken('authToken')->accessToken;
 
-            // إعادة بيانات المستخدم مع التوكن
             return (new UserInfoResource($user))
-                ->additional(['token' => $token]);
+                ->additional([
+                    'response_code' => 200,
+                    'status' => 'success',
+                    'token_type' => 'Bearer',
+                    'token' => $token,
+                ]);
         } catch (\Exception $e) {
             Log::error("Social Login Error ($provider): ".$e->getMessage());
 
@@ -44,5 +63,4 @@ class SocialAuthController extends Controller
             ], 500);
         }
     }
-
 }

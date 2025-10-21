@@ -12,7 +12,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements OAuthenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable ,HasRoles;
+    use HasApiTokens, HasFactory, HasRoles ,Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -47,5 +47,9 @@ class User extends Authenticatable implements OAuthenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function socialAccounts()
+    {
+        return $this->hasMany(SocialAccount::class);
     }
 }

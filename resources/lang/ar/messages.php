@@ -308,4 +308,27 @@ return [
     'contact.faq.item4.question' => 'ما هي تكلفة الاستشارة؟',
     'contact.faq.item4.answer' => 'نقدم استشارة مجانية لجميع العملاء. نقوم بتقييم احتياجاتكم وتقديم اقتراحات مخصصة دون أي رسوم.',
 
+'attributes' => [
+    'name' => 'الاسم', // ar
+    'email' => 'البريد الإلكتروني',
+    'phone' => 'رقم الهاتف',
+    'company' => 'الشركة',
+    'service' => 'الخدمة',
+    'message' => 'الرسالة',
+],
+
+
+
+    'required' => 'حقل :attribute مطلوب.',
+    'email' => 'حقل :attribute يجب أن يكون بريدًا إلكترونيًا صحيحًا.',
+    'max' => [
+        'string' => 'حقل :attribute يجب ألا يزيد عن :max حروف.',
+    ],
+    'min' => [
+        'string' => 'حقل :attribute يجب أن يكون على الأقل :min حروف.',
+    ],
+    'string' => 'حقل :attribute يجب أن يكون نصًا.',
+    'nullable' => 'حقل :attribute يمكن تركه فارغًا.',
+    'exists' => 'القيمة المحددة لحقل :attribute غير صالحة.',
+
 ];

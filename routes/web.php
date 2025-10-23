@@ -18,8 +18,6 @@ Route::group(['prefix' => '{locale?}', 'where' => ['locale' => 'ar|en']], functi
     Route::get('/services', [ServicesController::class, 'index'])->name('services');
     Route::get('/projects', [ProjectsController::class, 'index'])->name('projects');
     Route::get('/contact', [ContactController::class, 'index'])->name('contact');
- 
-
     // Contact form submission
     Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 

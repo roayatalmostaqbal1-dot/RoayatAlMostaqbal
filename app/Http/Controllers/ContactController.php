@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Mail\ContactMail;
+use Illuminate\Support\Facades\Mail;
 class ContactController extends Controller
 {
     public function index()
@@ -14,7 +15,7 @@ class ContactController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|min:3',
             'email' => 'required|email|max:255',
             'phone' => 'nullable|string|max:20',
             'company' => 'nullable|string|max:255',
@@ -22,13 +23,14 @@ class ContactController extends Controller
             'message' => 'required|string|max:1000'
         ]);
 
-        // Here you would typically save to database or send email
-        // For now, we'll just return a success response
 
-        return response()->json([
-            'success' => true,
-            'message' => __('messages.contact.success', [], app()->getLocale())
-        ]);
+        $data = $request->only('name', 'email', "phone", 'company', 'service','subject', 'message');
+
+        Mail::to('Roayatalmostaqbal1@gmail.com')->send(new ContactMail($data));
+
+
+        return back()->with('success', 'تم إرسال رسالتك بنجاح!');
+
     }
 }
 

@@ -1,3 +1,4 @@
+
 <?php
 
 return [
@@ -267,7 +268,7 @@ return [
     'about.contact_cta.description' => 'Contact us today for a free consultation',
     'about.contact_cta.button' => 'Contact Us',
 
-      // Page Header
+    // Page Header
     'contact.page_header.title' => 'Contact Us',
     'contact.page_header.description' => 'Get in touch with us for a free consultation',
 
@@ -313,4 +314,23 @@ return [
     'contact.faq.item4.question' => 'What is the cost of consultation?',
     'contact.faq.item4.answer' => 'We offer free consultation to all clients. We assess your needs and provide customized suggestions at no cost.',
 
+    'required' => 'The :attribute field is required.',
+    'email' => 'The :attribute must be a valid email address.',
+    'max' => [
+        'string' => 'The :attribute may not be greater than :max characters.',
+    ],
+    'min' => [
+        'string' => 'The :attribute must be at least :min characters.',
+    ],
+    'string' => 'The :attribute must be a string.',
+    'nullable' => 'The :attribute field can be null.',
+
+    'attributes' => [
+        'name' => 'name',
+        'email' => 'email',
+        'phone' => 'phone',
+        'company' => 'company',
+        'service' => 'service',
+        'message' => 'message',
+    ],
 ];

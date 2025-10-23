@@ -63,50 +63,83 @@
 
                 <div class="contact-form-section">
                     <h2>{{ __('messages.contact.form.title') }}</h2>
-                    <form class="contact-form" id="contact-form">
+                    <form class="contact-form" id="contact-form" action="{{ route('contact.store', app()->getLocale()) }}" method="POST">
                         @csrf
+
                         <div class="form-group">
                             <label for="name">{{ __('messages.contact.form.name') }}</label>
-                            <input type="text" id="name" name="name" required>
+                            <input type="text" id="name" name="name" value="{{ old('name') }}" required>
+                            @error('name')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div class="form-group">
                             <label for="email">{{ __('messages.contact.form.email') }}</label>
-                            <input type="email" id="email" name="email" required>
+                            <input type="email" id="email" name="email" value="{{ old('email') }}" required>
+                            @error('email')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div class="form-group">
                             <label for="phone">{{ __('messages.contact.form.phone') }}</label>
-                            <input type="tel" id="phone" name="phone">
+                            <input type="tel" id="phone" name="phone" value="{{ old('phone') }}">
+                            @error('phone')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div class="form-group">
                             <label for="company">{{ __('messages.contact.form.company') }}</label>
-                            <input type="text" id="company" name="company">
+                            <input type="text" id="company" name="company" value="{{ old('company') }}">
+                            @error('company')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div class="form-group">
                             <label for="service">{{ __('messages.contact.form.service') }}</label>
                             <select id="service" name="service">
                                 <option value="">{{ __('messages.contact.form.service.placeholder') }}</option>
-                                <option value="surveillance">{{ __('messages.contact.form.service.option.surveillance') }}
+                                <option value="surveillance" {{ old('service') == 'surveillance' ? 'selected' : '' }}>
+                                    {{ __('messages.contact.form.service.option.surveillance') }}
                                 </option>
-                                <option value="security">{{ __('messages.contact.form.service.option.security') }}</option>
-                                <option value="ai">{{ __('messages.contact.form.service.option.ai') }}</option>
-                                <option value="smart">{{ __('messages.contact.form.service.option.smart') }}</option>
-                                <option value="consultation">{{ __('messages.contact.form.service.option.consultation') }}
+                                <option value="security" {{ old('service') == 'security' ? 'selected' : '' }}>
+                                    {{ __('messages.contact.form.service.option.security') }}
+                                </option>
+                                <option value="ai" {{ old('service') == 'ai' ? 'selected' : '' }}>
+                                    {{ __('messages.contact.form.service.option.ai') }}
+                                </option>
+                                <option value="smart" {{ old('service') == 'smart' ? 'selected' : '' }}>
+                                    {{ __('messages.contact.form.service.option.smart') }}
+                                </option>
+                                <option value="consultation" {{ old('service') == 'consultation' ? 'selected' : '' }}>
+                                    {{ __('messages.contact.form.service.option.consultation') }}
                                 </option>
                             </select>
+                            @error('service')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div class="form-group">
                             <label for="message">{{ __('messages.contact.form.message') }}</label>
-                            <textarea id="message" name="message" rows="5" required></textarea>
+                            <textarea id="message" name="message" rows="5" required>{{ old('message') }}</textarea>
+                            @error('message')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
-                        <button type="submit"
-                            class="btn btn-primary text-white">{{ __('messages.contact.form.submit') }}</button>
+                        <button type="submit" class="btn btn-primary text-white">
+                            {{ __('messages.contact.form.submit') }}
+                        </button>
+
+                        @if(session('success'))
+                            <p class="text-green-500 mt-2">{{ session('success') }}</p>
+                        @endif
                     </form>
+
                 </div>
             </div>
         </div>

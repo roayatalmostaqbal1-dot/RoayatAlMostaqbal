@@ -1,7 +1,5 @@
 // Main JavaScript file for Roayat Al Mostaqbal website
 document.addEventListener('DOMContentLoaded', function () {
-
-    // --- Header scroll effect ---
     const header = document.querySelector('.header');
     if (header) {
         window.addEventListener('scroll', function () {
@@ -15,11 +13,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-
-
-
-
-
     initNavigation();
     initLazyLoading();
     initAnimations();
@@ -27,7 +20,6 @@ document.addEventListener('DOMContentLoaded', function () {
     initMobileMenu();
     initSmoothScrolling();
     initLanguageSwitcher();
-    initFormHandlers();
     initProjectFilters();
     initTabs();
     initFAQ();
@@ -305,20 +297,6 @@ window.addEventListener('load', function () {
     document.head.appendChild(loadingStyle);
 });
 
-// Service worker registration for PWA capabilities
-// if ('serviceWorker' in navigator) {
-//     window.addEventListener('load', function () {
-//         navigator.serviceWorker.register('/RoayatAlMostaqbal/sw.js', { scope: '/RoayatAlMostaqbal/' })
-//             .then(function (registration) {
-//                 console.log('ServiceWorker registration successful');
-//             })
-//             .catch(function (err) {
-//                 console.log('ServiceWorker registration failed');
-//             });
-//     });
-// }
-
-// Performance optimization: Lazy loading for images
 function initLazyLoading() {
     const images = document.querySelectorAll('img[data-src]');
     const imageObserver = new IntersectionObserver((entries, observer) => {
@@ -405,26 +383,6 @@ function initLanguageSwitcher() {
 }
 
 
-// Form Handlers
-function initFormHandlers() {
-    // Contact form
-    const contactForm = document.getElementById('contact-form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            handleContactForm(this);
-        });
-    }
-
-    // Newsletter forms
-    const newsletterForms = document.querySelectorAll('.newsletter-form, .footer-newsletter');
-    newsletterForms.forEach(form => {
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
-            handleNewsletterForm(this);
-        });
-    });
-}
 function initScrollEffects() {
     const observerOptions = {
         threshold: 0.1,
@@ -456,63 +414,6 @@ function initScrollEffects() {
     animateElements.forEach(el => observer.observe(el));
 }
 
-function handleContactForm(form) {
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData);
-
-    // Basic validation
-    if (!data.name || !data.email || !data.message) {
-        showNotification('يرجى ملء جميع الحقول المطلوبة', 'error');
-        return;
-    }
-
-    if (!validateEmail(data.email)) {
-        showNotification('يرجى إدخال بريد إلكتروني صحيح', 'error');
-        return;
-    }
-
-    // Show loading state
-    const submitBtn = form.querySelector('button[type="submit"]');
-    const originalText = submitBtn.textContent;
-    submitBtn.textContent = 'جاري الإرسال...';
-    submitBtn.disabled = true;
-
-    // Simulate API call
-    setTimeout(() => {
-        showNotification('تم إرسال رسالتكم بنجاح! سنتواصل معكم قريباً', 'success');
-        form.reset();
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-    }, 2000);
-}
-
-function handleNewsletterForm(form) {
-    const email = form.querySelector('input[type="email"]').value;
-
-    if (!email) {
-        showNotification('يرجى إدخال بريد إلكتروني', 'error');
-        return;
-    }
-
-    if (!validateEmail(email)) {
-        showNotification('يرجى إدخال بريد إلكتروني صحيح', 'error');
-        return;
-    }
-
-    // Show loading state
-    const submitBtn = form.querySelector('button[type="submit"]');
-    const originalText = submitBtn.textContent;
-    submitBtn.textContent = 'جاري الاشتراك...';
-    submitBtn.disabled = true;
-
-    // Simulate API call
-    setTimeout(() => {
-        showNotification('تم الاشتراك بنجاح! شكراً لاهتمامكم', 'success');
-        form.reset();
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-    }, 1500);
-}
 
 // Project Filters
 function initProjectFilters() {

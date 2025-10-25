@@ -25,6 +25,10 @@ Route::group(['prefix' => '{locale?}', 'where' => ['locale' => 'ar|en']], functi
     Route::post('/newsletter', [HomeController::class, 'newsletter'])->name('newsletter.subscribe');
 });
 
+Route::get('/admin/{vue_capture?}', function () {
+    putenv('APP_LOCALE=en');
+    return view('vue.app');
+})->where('vue_capture', '[\/\w\.-]*');
 // Redirect root to Arabic
 Route::get('/', function () {
     return redirect('/ar');

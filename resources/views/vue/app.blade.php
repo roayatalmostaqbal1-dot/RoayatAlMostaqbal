@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">
 
     <!-- Scripts -->
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('RoayatAlMostaqbal.svg') }}" />
 
 
     @vite(['resources/css/vue.css', 'resources/js/vue.js'])

@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Event;
 use Laravel\Passport\Passport;
 use SocialiteProviders\Manager\SocialiteWasCalled;
 use SocialiteProviders\Microsoft\MicrosoftExtendSocialite;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -21,9 +23,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-    SocialiteWasCalled::extendSocialite('microsoft', MicrosoftExtendSocialite::class);
+        // Register Microsoft Socialite Provider
+        Event::listen(function (SocialiteWasCalled $event) {
+            $event->extendSocialite('microsoft', MicrosoftExtendSocialite::class);
+        });
 
-   Passport::tokensExpireIn(now()->addDays(15));
+        Passport::tokensExpireIn(now()->addDays(15));
         Passport::refreshTokensExpireIn(now()->addDays(30));
         Passport::personalAccessTokensExpireIn(now()->addMonths(6));
         if (file_exists(storage_path('oauth-private.key'))) {

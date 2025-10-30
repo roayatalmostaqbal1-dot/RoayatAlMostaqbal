@@ -6,7 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Event;
 use Laravel\Passport\Passport;
 use SocialiteProviders\Manager\SocialiteWasCalled;
-use SocialiteProviders\Microsoft\MicrosoftExtendSocialite;
+use SocialiteProviders\Microsoft\Provider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
     {
         // Register Microsoft Socialite Provider
         Event::listen(function (SocialiteWasCalled $event) {
-            $event->extendSocialite('microsoft', MicrosoftExtendSocialite::class);
+            $event->extendSocialite('microsoft', Provider::class);
         });
 
         Passport::tokensExpireIn(now()->addDays(15));

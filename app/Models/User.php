@@ -52,4 +52,8 @@ class User extends Authenticatable implements OAuthenticatable
     {
         return $this->hasMany(SocialAccount::class);
     }
+    public function telegramMessages()
+    {
+        return $this->hasMany(TelegramMessage::class, 'user_id');
+    }
 }

@@ -21,7 +21,6 @@ class TelegramController extends Controller
             'status' => 'pending',
         ]);
 
-        // إرسال الـ Job لمعالجة الرسالة
         ProcessTelegramMessage::dispatch($message);
 
         return response()->json(['status' => 'ok']);

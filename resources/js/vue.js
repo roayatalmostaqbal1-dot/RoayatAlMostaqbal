@@ -1,4 +1,4 @@
-import './bootstrap';
+import echo from './bootstrap'; // import echo from './bootstrap';
 
 import { createApp, markRaw } from "vue";
 import { createPinia } from "pinia";
@@ -20,6 +20,7 @@ app.config.devtools = true
 
 app.use(pinia);
 // app.use(router);
+app.use(echo);
 
 initFlowbite();
 // const auth = useAuthStore();

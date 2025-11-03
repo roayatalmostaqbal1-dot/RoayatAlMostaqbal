@@ -7,6 +7,7 @@ use App\Http\Controllers\AboutController;
 use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\ProjectsController;
 use App\Http\Controllers\ContactController;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 // Language switching
 Route::get('/language/{locale}', [LanguageController::class, 'switch'])->name('language.switch');

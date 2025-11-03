@@ -16,7 +16,7 @@
     <!-- Styles -->
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('RoayatAlMostaqbal.svg') }}" />
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/vue.css', 'resources/js/app.js'])
 
     @stack('styles')
 </head>
@@ -25,7 +25,7 @@
     <x-header />
 
     <!-- Main Content -->
-    <main>
+    <main class="mt-28">
         @yield('content')
     </main>
 

@@ -1,6 +1,6 @@
 // Main JavaScript file for Roayat Al Mostaqbal website
 document.addEventListener('DOMContentLoaded', function () {
-    const header = document.querySelector('.header');
+    const header = document.querySelector('header');
     if (header) {
         window.addEventListener('scroll', function () {
             if (window.scrollY > 100) {
@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
     initProjectFilters();
     initTabs();
     initFAQ();
+    initScrollEffects();
 });
 
 
@@ -75,7 +76,7 @@ function initNavigation() {
 function scrollToSection(sectionId) {
     const section = document.getElementById(sectionId);
     if (section) {
-        const headerHeight = document.querySelector('.header').offsetHeight;
+        const headerHeight = document.querySelector('header').offsetHeight;
         const targetPosition = section.offsetTop - headerHeight;
 
         window.scrollTo({
@@ -147,7 +148,7 @@ function initSmoothScrolling() {
             const targetElement = document.getElementById(targetId);
 
             if (targetElement) {
-                const headerHeight = document.querySelector('.header').offsetHeight;
+                const headerHeight = document.querySelector('header').offsetHeight;
                 const targetPosition = targetElement.offsetTop - headerHeight;
 
                 window.scrollTo({
@@ -268,11 +269,11 @@ document.head.appendChild(style);
 
 // Header scroll effect
 window.addEventListener('scroll', function () {
-    const header = document.querySelector('.header');
-    if (window.scrollY > 100) {
+    const header = document.querySelector('header');
+    if (header && window.scrollY > 100) {
         header.style.background = 'rgba(5, 24, 36, 0.95)';
         header.style.backdropFilter = 'blur(10px)';
-    } else {
+    } else if (header) {
         header.style.background = 'linear-gradient(135deg, #051824 0%, #162936 100%)';
         header.style.backdropFilter = 'none';
     }
@@ -424,9 +425,13 @@ function initProjectFilters() {
         button.addEventListener('click', function () {
             const filter = this.getAttribute('data-filter');
 
-            // Update active button
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
+            // Update active button with Tailwind classes
+            filterButtons.forEach(btn => {
+                btn.classList.remove('active', 'bg-[#27e9b5]', 'text-[#051824]');
+                btn.classList.add('bg-transparent', 'text-white', 'border-2', 'border-[#27e9b5]');
+            });
+            this.classList.add('active', 'bg-[#27e9b5]', 'text-[#051824]');
+            this.classList.remove('bg-transparent', 'text-white', 'border-2', 'border-[#27e9b5]');
 
             // Filter projects with animation
             projectCards.forEach((card, index) => {
@@ -453,15 +458,19 @@ function initTabs() {
         button.addEventListener('click', function () {
             const targetTab = this.getAttribute('data-tab');
 
-            // Update active button
-            tabButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
+            // Update active button with Tailwind classes
+            tabButtons.forEach(btn => {
+                btn.classList.remove('active', 'bg-[#27e9b5]', 'text-[#051824]');
+                btn.classList.add('bg-transparent', 'text-white', 'border-2', 'border-[#27e9b5]');
+            });
+            this.classList.add('active', 'bg-[#27e9b5]', 'text-[#051824]');
+            this.classList.remove('bg-transparent', 'text-white', 'border-2', 'border-[#27e9b5]');
 
             // Update active panel
             tabPanels.forEach(panel => {
-                panel.classList.remove('active');
+                panel.classList.add('hidden');
                 if (panel.id === targetTab) {
-                    panel.classList.add('active');
+                    panel.classList.remove('hidden');
                 }
             });
         });

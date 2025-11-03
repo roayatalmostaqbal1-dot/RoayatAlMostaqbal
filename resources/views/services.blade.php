@@ -5,22 +5,22 @@
 
 @section('content')
     <!-- Page Header -->
-    <section class="page-header">
-        <div class="container">
-            <h1>{{ __('messages.nav.services') }}</h1>
-            <p>{{ __('messages.services.title') }}</p>
+    <section class="py-20 bg-[linear-gradient(135deg,#051824_0%,#162936_100%)]">
+        <div class="max-w-6xl mx-auto px-5 text-center">
+            <h1 class="text-5xl md:text-6xl font-bold text-white mb-4">{{ __('messages.nav.services') }}</h1>
+            <p class="text-lg text-gray-300">{{ __('messages.services.title') }}</p>
         </div>
     </section>
 
     <!-- Security Services -->
-    <section class="security-services">
-        <div class="container">
-            <div class="section-header">
-                <h2>{{ __('messages.about.services.security.install_cameras.title') }}</h2>
-                <p>{{ __('messages.about.services.description') }}</p>
+    <section class="py-20 bg-[#051824]">
+        <div class="max-w-6xl mx-auto px-5">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">{{ __('messages.about.services.security.install_cameras.title') }}</h2>
+                <p class="text-lg text-gray-300 max-w-2xl mx-auto">{{ __('messages.about.services.description') }}</p>
             </div>
 
-            <div class="services-grid">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
                 <x-service-card
                     icon="fas fa-video"
                     title="{{ __('messages.about.services.security.install_cameras.title') }}"
@@ -55,14 +55,14 @@
     </section>
 
     <!-- Technology Services -->
-    <section class="technology-services">
-        <div class="container">
-            <div class="section-header">
-                <h2>{{ __('messages.about.services.technology.ai_solutions.title') }}</h2>
-                <p>{{ __('messages.about.services.description') }}</p>
+    <section class="py-20 bg-[linear-gradient(135deg,#162936_0%,#3b5265_100%)]">
+        <div class="max-w-6xl mx-auto px-5">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">{{ __('messages.about.services.technology.ai_solutions.title') }}</h2>
+                <p class="text-lg text-gray-300 max-w-2xl mx-auto">{{ __('messages.about.services.description') }}</p>
             </div>
 
-            <div class="services-grid">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
                 <x-service-card
                     icon="fas fa-brain"
                     title="{{ __('messages.about.services.technology.ai_solutions.title') }}"
@@ -97,43 +97,43 @@
     </section>
 
     <!-- Service Process -->
-    <section class="service-process">
-        <div class="container">
-            <div class="section-header">
-                <h2>{{ __('messages.about.process.title') }}</h2>
-                <p>{{ __('messages.about.process.description') }}</p>
+    <section class="py-20 bg-[#051824]">
+        <div class="max-w-6xl mx-auto px-5">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">{{ __('messages.about.process.title') }}</h2>
+                <p class="text-lg text-gray-300 max-w-2xl mx-auto">{{ __('messages.about.process.description') }}</p>
             </div>
 
-            <div class="process-steps">
-                <div class="process-step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h3>{{ __('messages.about.process.step1.title') }}</h3>
-                        <p>{{ __('messages.about.process.step1.description') }}</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-[#162936] p-8 rounded-[20px] hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)] transition-all duration-300">
+                    <div class="text-5xl font-bold text-[#27e9b5] mb-4">1</div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-3">{{ __('messages.about.process.step1.title') }}</h3>
+                        <p class="text-gray-300">{{ __('messages.about.process.step1.description') }}</p>
                     </div>
                 </div>
 
-                <div class="process-step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h3>{{ __('messages.about.process.step2.title') }}</h3>
-                        <p>{{ __('messages.about.process.step2.description') }}</p>
+                <div class="bg-[#162936] p-8 rounded-[20px] hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)] transition-all duration-300">
+                    <div class="text-5xl font-bold text-[#27e9b5] mb-4">2</div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-3">{{ __('messages.about.process.step2.title') }}</h3>
+                        <p class="text-gray-300">{{ __('messages.about.process.step2.description') }}</p>
                     </div>
                 </div>
 
-                <div class="process-step">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                        <h3>{{ __('messages.about.process.step3.title') }}</h3>
-                        <p>{{ __('messages.about.process.step3.description') }}</p>
+                <div class="bg-[#162936] p-8 rounded-[20px] hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)] transition-all duration-300">
+                    <div class="text-5xl font-bold text-[#27e9b5] mb-4">3</div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-3">{{ __('messages.about.process.step3.title') }}</h3>
+                        <p class="text-gray-300">{{ __('messages.about.process.step3.description') }}</p>
                     </div>
                 </div>
 
-                <div class="process-step">
-                    <div class="step-number">4</div>
-                    <div class="step-content">
-                        <h3>{{ __('messages.about.process.step4.title') }}</h3>
-                        <p>{{ __('messages.about.process.step4.description') }}</p>
+                <div class="bg-[#162936] p-8 rounded-[20px] hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)] transition-all duration-300">
+                    <div class="text-5xl font-bold text-[#27e9b5] mb-4">4</div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-3">{{ __('messages.about.process.step4.title') }}</h3>
+                        <p class="text-gray-300">{{ __('messages.about.process.step4.description') }}</p>
                     </div>
                 </div>
             </div>
@@ -141,52 +141,50 @@
     </section>
 
     <!-- Service Features -->
-    <section class="service-features">
-        <div class="container">
-            <div class="features-grid">
-                <div class="feature-item">
-                    <div class="feature-icon">
+    <section class="py-20 bg-[linear-gradient(135deg,#162936_0%,#3b5265_100%)]">
+        <div class="max-w-6xl mx-auto px-5">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-[#051824] p-8 rounded-[20px] text-center hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)] transition-all duration-300">
+                    <div class="text-5xl text-[#27e9b5] mb-4">
                         <i class="fas fa-shield-alt"></i>
                     </div>
-                    <h3>{{ __('messages.about.features.security.title') }}</h3>
-                    <p>{{ __('messages.about.features.security.description') }}</p>
+                    <h3 class="text-lg font-bold text-white mb-3">{{ __('messages.about.features.security.title') }}</h3>
+                    <p class="text-gray-300">{{ __('messages.about.features.security.description') }}</p>
                 </div>
 
-                <div class="feature-item">
-                    <div class="feature-icon">
+                <div class="bg-[#051824] p-8 rounded-[20px] text-center hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)] transition-all duration-300">
+                    <div class="text-5xl text-[#27e9b5] mb-4">
                         <i class="fas fa-cogs"></i>
                     </div>
-                    <h3>{{ __('messages.about.features.usability.title') }}</h3>
-                    <p>{{ __('messages.about.features.usability.description') }}</p>
+                    <h3 class="text-lg font-bold text-white mb-3">{{ __('messages.about.features.usability.title') }}</h3>
+                    <p class="text-gray-300">{{ __('messages.about.features.usability.description') }}</p>
                 </div>
 
-                <div class="feature-item">
-                    <div class="feature-icon">
+                <div class="bg-[#051824] p-8 rounded-[20px] text-center hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)] transition-all duration-300">
+                    <div class="text-5xl text-[#27e9b5] mb-4">
                         <i class="fas fa-headset"></i>
                     </div>
-                    <h3>{{ __('messages.about.features.support.title') }}</h3>
-                    <p>{{ __('messages.about.features.support.description') }}</p>
+                    <h3 class="text-lg font-bold text-white mb-3">{{ __('messages.about.features.support.title') }}</h3>
+                    <p class="text-gray-300">{{ __('messages.about.features.support.description') }}</p>
                 </div>
 
-                <div class="feature-item">
-                    <div class="feature-icon">
+                <div class="bg-[#051824] p-8 rounded-[20px] text-center hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)] transition-all duration-300">
+                    <div class="text-5xl text-[#27e9b5] mb-4">
                         <i class="fas fa-tools"></i>
                     </div>
-                    <h3>{{ __('messages.about.features.maintenance.title') }}</h3>
-                    <p>{{ __('messages.about.features.maintenance.description') }}</p>
+                    <h3 class="text-lg font-bold text-white mb-3">{{ __('messages.about.features.maintenance.title') }}</h3>
+                    <p class="text-gray-300">{{ __('messages.about.features.maintenance.description') }}</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Contact CTA -->
-    <section class="contact-cta">
-        <div class="container">
-            <div class="cta-content">
-                <h2>{{ __('messages.about.contact_cta.title') }}</h2>
-                <p>{{ __('messages.about.contact_cta.description') }}</p>
-                <a href="{{ route('contact', app()->getLocale()) }}" class="btn btn-primary text-white">{{ __('messages.about.contact_cta.button') }}</a>
-            </div>
+    <section class="py-20 bg-[linear-gradient(135deg,#3b5265_0%,#162936_100%)]">
+        <div class="max-w-6xl mx-auto px-5 text-center">
+            <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">{{ __('messages.about.contact_cta.title') }}</h2>
+            <p class="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">{{ __('messages.about.contact_cta.description') }}</p>
+            <a href="{{ route('contact', app()->getLocale()) }}" class="inline-block px-8 py-4 rounded-[30px] no-underline font-bold text-center transition-all duration-300 border-none cursor-pointer text-base bg-gradient-to-r from-[#27e9b5] to-[#27eb5] text-[#051824] shadow-[0_4px_15px_rgba(39,233,181,0.3)] hover:shadow-[0_6px_20px_rgba(39,233,181,0.4)] hover:translate-y-[-2px]">{{ __('messages.about.contact_cta.button') }}</a>
         </div>
     </section>
 @endsection

@@ -25,7 +25,7 @@
     <x-header />
 
     <!-- Main Content -->
-    <main class="mt-28">
+    <main class="mt-24">
         @yield('content')
     </main>
 

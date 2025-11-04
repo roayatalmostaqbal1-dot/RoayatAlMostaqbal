@@ -516,30 +516,61 @@ function initFAQ() {
 
 
 // Mobile menu functionality
+// Mobile menu functionality (Updated)
 function initMobileMenu() {
     const navToggle = document.querySelector('.nav-toggle');
-    const navMenu = document.querySelector('.nav-menu');
+    const navMenu = document.querySelector('header .nav-menu.md\\:hidden'); // القائمة الخاصة بالهاتف
 
     if (navToggle && navMenu) {
+        // عند الضغط على زر الهامبرجر
         navToggle.addEventListener('click', function () {
-            navMenu.classList.toggle('active');
-            this.classList.toggle('active');
+            const isOpen = navMenu.classList.contains('max-h-screen');
+
+            navMenu.classList.toggle('max-h-0', isOpen);
+            navMenu.classList.toggle('max-h-screen', !isOpen);
+            navMenu.classList.toggle('hidden', false); // تأكد أنها مرئية دائمًا
+            this.classList.toggle('open', !isOpen);
+
+            // تأثير بصري لأشرطة الزر
+            const bars = this.querySelectorAll('span');
+            if (this.classList.contains('open')) {
+                bars[0].style.transform = 'rotate(45deg) translateY(6px)';
+                bars[1].style.opacity = '0';
+                bars[2].style.transform = 'rotate(-45deg) translateY(-6px)';
+            } else {
+                bars.forEach(b => {
+                    b.style.transform = 'none';
+                    b.style.opacity = '1';
+                });
+            }
         });
 
-        // Close menu when clicking on a link
+        // إغلاق القائمة عند الضغط على أي رابط داخلها
         const navLinks = navMenu.querySelectorAll('.nav-link');
         navLinks.forEach(link => {
             link.addEventListener('click', function () {
-                navMenu.classList.remove('active');
-                navToggle.classList.remove('active');
+                navMenu.classList.add('max-h-0');
+                navMenu.classList.remove('max-h-screen');
+                navToggle.classList.remove('open');
+                const bars = navToggle.querySelectorAll('span');
+                bars.forEach(b => {
+                    b.style.transform = 'none';
+                    b.style.opacity = '1';
+                });
             });
         });
 
-        // Close menu when clicking outside
+        // إغلاق القائمة عند الضغط خارجها
         document.addEventListener('click', function (e) {
             if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
-                navMenu.classList.remove('active');
-                navToggle.classList.remove('active');
+                navMenu.classList.add('max-h-0');
+                navMenu.classList.remove('max-h-screen');
+                navToggle.classList.remove('open');
+                const bars = navToggle.querySelectorAll('span');
+                bars.forEach(b => {
+                    b.style.transform = 'none';
+                    b.style.opacity = '1';
+                });
             }
         });
     }

@@ -10,7 +10,7 @@
         @if($description)
             <p class="text-gray-300 mb-4">{{ $description }}</p>
         @endif
-        <a href="{{ $link }}" class="bg-transparent text-[#27e9b5] border-2 border-[#27e9b5] px-5 py-2.5 text-sm hover:bg-[#27e9b5] hover:text-[#051824] inline-block rounded-[30px] no-underline font-bold text-center transition-all duration-300 border-none cursor-pointer">{{ __('messages.common.more') }}</a>
+        {{-- <a href="{{ $link }}" class="bg-transparent text-[#27e9b5] border-2 border-[#27e9b5] px-5 py-2.5 text-sm hover:bg-[#27e9b5] hover:text-[#051824] inline-block rounded-[30px] no-underline font-bold text-center transition-all duration-300 border-none cursor-pointer">{{ __('messages.common.more') }}</a> --}}
     </div>
 </div>
 

@@ -17,6 +17,11 @@ const echo = new Echo({
     wssPort: import.meta.env.VITE_REVERB_PORT ?? 443,
     forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
     enabledTransports: ['ws', 'wss'],
-});;
+});
 
-export default echo;
+// Export as a Vue plugin with install function
+export default {
+  install(app) {
+    app.config.globalProperties.$echo = echo;
+  }
+};

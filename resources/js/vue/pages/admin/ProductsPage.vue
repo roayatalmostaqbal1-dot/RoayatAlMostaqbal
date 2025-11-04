@@ -1,16 +1,16 @@
 <template>
-  <DashboardLayout page-title="Users" page-description="Manage system users">
+  <DashboardLayout page-title="Products" page-description="Manage your products">
     <Card>
       <template #header>
         <div class="flex items-center justify-between">
-          <h2 class="text-lg font-bold text-white">Users List</h2>
-          <Button
-            variant="primary"
+          <h2 class="text-lg font-bold text-white">Products List</h2>
+          <Button 
+            variant="primary" 
             size="sm"
             @click="crud.openCreateModal"
             :disabled="crud.isLoading.value"
           >
-            + Add User
+            + Add Product
           </Button>
         </div>
       </template>
@@ -31,74 +31,72 @@
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
         </div>
-        <p class="text-gray-400 mt-2">Loading users...</p>
+        <p class="text-gray-400 mt-2">Loading products...</p>
       </div>
 
       <!-- Empty State -->
       <div v-else-if="crud.items.value.length === 0" class="text-center py-8">
-        <p class="text-gray-400 mb-4">No users found</p>
-        <Button variant="primary" @click="crud.openCreateModal">Create First User</Button>
+        <p class="text-gray-400 mb-4">No products found</p>
+        <Button variant="primary" @click="crud.openCreateModal">Create First Product</Button>
       </div>
 
-      <!-- Users Table -->
+      <!-- Products Table -->
       <div v-else class="overflow-x-auto">
         <table class="w-full">
           <thead>
             <tr class="border-b border-[#3b5265]">
               <th class="text-left py-3 px-4 text-gray-400 font-semibold text-sm">Name</th>
-              <th class="text-left py-3 px-4 text-gray-400 font-semibold text-sm">Email</th>
-              <th class="text-left py-3 px-4 text-gray-400 font-semibold text-sm">Role</th>
-              <th class="text-left py-3 px-4 text-gray-400 font-semibold text-sm">Status</th>
+              <th class="text-left py-3 px-4 text-gray-400 font-semibold text-sm">SKU</th>
+              <th class="text-left py-3 px-4 text-gray-400 font-semibold text-sm">Price</th>
+              <th class="text-left py-3 px-4 text-gray-400 font-semibold text-sm">Category</th>
+              <th class="text-left py-3 px-4 text-gray-400 font-semibold text-sm">Stock</th>
               <th class="text-left py-3 px-4 text-gray-400 font-semibold text-sm">Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr
-              v-for="user in crud.items.value"
-              :key="user.id"
+            <tr 
+              v-for="product in crud.items.value" 
+              :key="product.id" 
               class="border-b border-[#3b5265] hover:bg-[#1f3a4a] transition-colors"
             >
-              <td class="py-3 px-4 text-white">{{ user.name }}</td>
-              <td class="py-3 px-4 text-gray-400">{{ user.email }}</td>
+              <td class="py-3 px-4 text-white">{{ product.name }}</td>
+              <td class="py-3 px-4 text-gray-400">{{ product.sku }}</td>
+              <td class="py-3 px-4 text-white font-semibold">${{ parseFloat(product.price).toFixed(2) }}</td>
               <td class="py-3 px-4">
                 <span class="px-3 py-1 rounded-full text-xs font-semibold bg-[#27e9b5] bg-opacity-20 text-[#27e9b5]">
-                  {{ user.role || 'User' }}
+                  {{ product.category || 'General' }}
                 </span>
               </td>
               <td class="py-3 px-4">
-                <span class="flex items-center gap-2">
-                  <span
-                    class="w-2 h-2 rounded-full"
-                    :class="user.is_active ? 'bg-green-500' : 'bg-red-500'"
-                  ></span>
-                  <span
-                    class="text-sm"
-                    :class="user.is_active ? 'text-green-400' : 'text-red-400'"
-                  >
-                    {{ user.is_active ? 'Active' : 'Inactive' }}
-                  </span>
+                <span 
+                  class="px-3 py-1 rounded-full text-xs font-semibold"
+                  :class="product.stock > 0 
+                    ? 'bg-green-500 bg-opacity-20 text-green-400' 
+                    : 'bg-red-500 bg-opacity-20 text-red-400'"
+                >
+                  {{ product.stock }} units
                 </span>
               </td>
               <td class="py-3 px-4">
                 <div class="flex gap-2">
-                  <Button
-                    variant="ghost"
+                  <Button 
+                    variant="ghost" 
                     size="sm"
-                    @click="crud.openViewModal(user)"
+                    @click="crud.openViewModal(product)"
                   >
                     View
                   </Button>
-                  <Button
-                    variant="ghost"
+                  <Button 
+                    variant="ghost" 
                     size="sm"
-                    @click="crud.openEditModal(user)"
+                    @click="crud.openEditModal(product)"
                   >
                     Edit
                   </Button>
-                  <Button
-                    variant="danger"
+                  <Button 
+                    variant="danger" 
                     size="sm"
-                    @click="handleDelete(user)"
+                    @click="handleDelete(product)"
                     :disabled="crud.isLoading.value"
                   >
                     Delete
@@ -115,7 +113,7 @@
     <CrudModal
       :is-open="crud.isModalOpen.value"
       :mode="crud.modalMode.value"
-      :fields="userFields"
+      :fields="productFields"
       :initial-data="crud.selectedItem.value || {}"
       :is-loading="crud.isLoading.value"
       :errors="crud.errors"
@@ -134,54 +132,62 @@ import Button from '../../components/ui/Button.vue';
 import CrudModal from '../../components/crud/CrudModal.vue';
 import { useCrud } from '../../composables/useCrud';
 
-// Initialize CRUD operations for users endpoint
-const crud = useCrud('/api/users');
+// Initialize CRUD operations for products endpoint
+const crud = useCrud('/api/products');
 
-// Define form fields for user creation/editing
-const userFields = [
+// Define form fields for product creation/editing
+const productFields = [
   {
     name: 'name',
-    label: 'Full Name',
+    label: 'Product Name',
     type: 'text',
-    placeholder: 'Enter full name',
+    placeholder: 'Enter product name',
     required: true,
-    hint: 'User\'s full name',
   },
   {
-    name: 'email',
-    label: 'Email Address',
-    type: 'email',
-    placeholder: 'Enter email address',
+    name: 'sku',
+    label: 'SKU',
+    type: 'text',
+    placeholder: 'Enter SKU',
     required: true,
-    hint: 'Must be a valid email',
+    hint: 'Unique product identifier',
   },
   {
-    name: 'password',
-    label: 'Password',
-    type: 'password',
-    placeholder: 'Enter password',
+    name: 'price',
+    label: 'Price',
+    type: 'number',
+    placeholder: '0.00',
     required: true,
-    hint: 'Minimum 8 characters',
   },
   {
-    name: 'role',
-    label: 'Role',
+    name: 'stock',
+    label: 'Stock Quantity',
+    type: 'number',
+    placeholder: '0',
+    required: true,
+  },
+  {
+    name: 'category',
+    label: 'Category',
     type: 'select',
     required: true,
     options: [
-      { value: 'admin', label: 'Administrator' },
-      { value: 'user', label: 'User' },
-      { value: 'guest', label: 'Guest' },
+      { value: 'electronics', label: 'Electronics' },
+      { value: 'clothing', label: 'Clothing' },
+      { value: 'food', label: 'Food & Beverage' },
+      { value: 'books', label: 'Books' },
+      { value: 'other', label: 'Other' },
     ],
   },
   {
-    name: 'is_active',
-    label: 'Active',
-    type: 'checkbox',
+    name: 'description',
+    label: 'Description',
+    type: 'textarea',
+    placeholder: 'Enter product description',
   },
 ];
 
-// Fetch users on component mount
+// Fetch products on component mount
 onMounted(() => {
   crud.fetchItems();
 });

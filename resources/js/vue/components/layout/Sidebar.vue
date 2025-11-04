@@ -1,4 +1,11 @@
 <template>
+  <!-- Mobile Overlay -->
+  <div
+    v-if="isExpanded && isMobile"
+    class="fixed inset-0  bg-opacity-50 z-30 md:hidden"
+    @click="closeSidebar"
+  ></div>
+
   <aside
     :class="[
       'fixed left-0 top-0 h-screen w-64 bg-[#051824] border-r border-[#3b5265] transition-all duration-300 z-40',
@@ -15,6 +22,7 @@
       <button
         @click="toggleSidebar"
         class="md:hidden text-white hover:text-[#27e9b5] transition-colors"
+        aria-label="Close sidebar"
       >
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -28,6 +36,7 @@
         v-for="item in menuItems"
         :key="item.path"
         :to="item.path"
+        @click="handleNavClick"
         :class="[
           'flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300',
           'text-gray-400 hover:text-white hover:bg-[#162936]',
@@ -63,36 +72,45 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted, onUnmounted, h } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '../../stores/auth';
 import Button from '../ui/Button.vue';
 
-// Icons (simple SVG components)
+// Icons using render functions (no runtime compilation needed)
 const IconDashboard = {
-  template: '<svg fill="currentColor" viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>'
+  render: () => h('svg', { fill: 'currentColor', viewBox: '0 0 24 24' }, [
+    h('path', { d: 'M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z' })
+  ])
 };
 
 const IconUsers = {
-  template: '<svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>'
+  render: () => h('svg', { fill: 'currentColor', viewBox: '0 0 24 24' }, [
+    h('path', { d: 'M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z' })
+  ])
 };
 
 const IconSettings = {
-  template: '<svg fill="currentColor" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.62l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.48.1.62l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.62l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.48-.1-.62l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>'
+  render: () => h('svg', { fill: 'currentColor', viewBox: '0 0 24 24' }, [
+    h('path', { d: 'M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.62l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.48.1.62l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.62l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.48-.1-.62l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z' })
+  ])
 };
 
 const router = useRouter();
 const route = useRoute();
 const authStore = useAuthStore();
 const isExpanded = ref(true);
+const isMobile = ref(false);
 
 // Logo URL - using public asset
 const logoUrl = '/RoayatAlMostaqbal.svg';
 
 const menuItems = [
-  { path: '/admin/dashboard', label: 'Dashboard', icon: IconDashboard },
-  { path: '/admin/users', label: 'Users', icon: IconUsers },
-  { path: '/admin/settings', label: 'Settings', icon: IconSettings },
+  { path: '/dashboard', label: 'Dashboard', icon: IconDashboard },
+  { path: '/users', label: 'Users', icon: IconUsers },
+  { path: '/products', label: 'Products', icon: IconUsers },
+  { path: '/categories', label: 'Categories', icon: IconUsers },
+  { path: '/settings', label: 'Settings', icon: IconSettings },
 ];
 
 const userInitial = computed(() => {
@@ -103,9 +121,30 @@ const isActive = (path) => {
   return route.path === path;
 };
 
+const checkMobile = () => {
+  isMobile.value = window.innerWidth < 768;
+  // Close sidebar on mobile by default
+  if (isMobile.value && isExpanded.value) {
+    isExpanded.value = false;
+  }
+};
+
 const toggleSidebar = () => {
   isExpanded.value = !isExpanded.value;
   localStorage.setItem('sidebar-expanded', isExpanded.value);
+};
+
+const closeSidebar = () => {
+  if (isMobile.value) {
+    isExpanded.value = false;
+  }
+};
+
+const handleNavClick = () => {
+  // Close sidebar on mobile after navigation
+  if (isMobile.value) {
+    isExpanded.value = false;
+  }
 };
 
 const handleLogout = async () => {
@@ -113,9 +152,23 @@ const handleLogout = async () => {
   router.push('/admin/login');
 };
 
-// Restore sidebar state
-if (localStorage.getItem('sidebar-expanded') === 'false') {
-  isExpanded.value = false;
-}
+// Restore sidebar state and setup mobile detection
+onMounted(() => {
+  checkMobile();
+  window.addEventListener('resize', checkMobile);
+
+  if (localStorage.getItem('sidebar-expanded') === 'false') {
+    isExpanded.value = false;
+  }
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile);
+});
+
+// Expose toggleSidebar method to parent components
+defineExpose({
+  toggleSidebar
+});
 </script>
 

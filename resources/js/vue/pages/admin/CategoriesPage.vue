@@ -1,16 +1,16 @@
 <template>
-  <DashboardLayout page-title="Users" page-description="Manage system users">
+  <DashboardLayout page-title="Categories" page-description="Manage product categories">
     <Card>
       <template #header>
         <div class="flex items-center justify-between">
-          <h2 class="text-lg font-bold text-white">Users List</h2>
-          <Button
-            variant="primary"
+          <h2 class="text-lg font-bold text-white">Categories List</h2>
+          <Button 
+            variant="primary" 
             size="sm"
             @click="crud.openCreateModal"
             :disabled="crud.isLoading.value"
           >
-            + Add User
+            + Add Category
           </Button>
         </div>
       </template>
@@ -31,74 +31,66 @@
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
         </div>
-        <p class="text-gray-400 mt-2">Loading users...</p>
+        <p class="text-gray-400 mt-2">Loading categories...</p>
       </div>
 
       <!-- Empty State -->
       <div v-else-if="crud.items.value.length === 0" class="text-center py-8">
-        <p class="text-gray-400 mb-4">No users found</p>
-        <Button variant="primary" @click="crud.openCreateModal">Create First User</Button>
+        <p class="text-gray-400 mb-4">No categories found</p>
+        <Button variant="primary" @click="crud.openCreateModal">Create First Category</Button>
       </div>
 
-      <!-- Users Table -->
+      <!-- Categories Table -->
       <div v-else class="overflow-x-auto">
         <table class="w-full">
           <thead>
             <tr class="border-b border-[#3b5265]">
               <th class="text-left py-3 px-4 text-gray-400 font-semibold text-sm">Name</th>
-              <th class="text-left py-3 px-4 text-gray-400 font-semibold text-sm">Email</th>
-              <th class="text-left py-3 px-4 text-gray-400 font-semibold text-sm">Role</th>
+              <th class="text-left py-3 px-4 text-gray-400 font-semibold text-sm">Slug</th>
+              <th class="text-left py-3 px-4 text-gray-400 font-semibold text-sm">Description</th>
               <th class="text-left py-3 px-4 text-gray-400 font-semibold text-sm">Status</th>
               <th class="text-left py-3 px-4 text-gray-400 font-semibold text-sm">Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr
-              v-for="user in crud.items.value"
-              :key="user.id"
+            <tr 
+              v-for="category in crud.items.value" 
+              :key="category.id" 
               class="border-b border-[#3b5265] hover:bg-[#1f3a4a] transition-colors"
             >
-              <td class="py-3 px-4 text-white">{{ user.name }}</td>
-              <td class="py-3 px-4 text-gray-400">{{ user.email }}</td>
+              <td class="py-3 px-4 text-white font-semibold">{{ category.name }}</td>
+              <td class="py-3 px-4 text-gray-400 font-mono text-sm">{{ category.slug }}</td>
+              <td class="py-3 px-4 text-gray-400 truncate max-w-xs">{{ category.description || '-' }}</td>
               <td class="py-3 px-4">
-                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-[#27e9b5] bg-opacity-20 text-[#27e9b5]">
-                  {{ user.role || 'User' }}
-                </span>
-              </td>
-              <td class="py-3 px-4">
-                <span class="flex items-center gap-2">
-                  <span
-                    class="w-2 h-2 rounded-full"
-                    :class="user.is_active ? 'bg-green-500' : 'bg-red-500'"
-                  ></span>
-                  <span
-                    class="text-sm"
-                    :class="user.is_active ? 'text-green-400' : 'text-red-400'"
-                  >
-                    {{ user.is_active ? 'Active' : 'Inactive' }}
-                  </span>
+                <span 
+                  class="px-3 py-1 rounded-full text-xs font-semibold"
+                  :class="category.is_active 
+                    ? 'bg-green-500 bg-opacity-20 text-green-400' 
+                    : 'bg-gray-500 bg-opacity-20 text-gray-400'"
+                >
+                  {{ category.is_active ? 'Active' : 'Inactive' }}
                 </span>
               </td>
               <td class="py-3 px-4">
                 <div class="flex gap-2">
-                  <Button
-                    variant="ghost"
+                  <Button 
+                    variant="ghost" 
                     size="sm"
-                    @click="crud.openViewModal(user)"
+                    @click="crud.openViewModal(category)"
                   >
                     View
                   </Button>
-                  <Button
-                    variant="ghost"
+                  <Button 
+                    variant="ghost" 
                     size="sm"
-                    @click="crud.openEditModal(user)"
+                    @click="crud.openEditModal(category)"
                   >
                     Edit
                   </Button>
-                  <Button
-                    variant="danger"
+                  <Button 
+                    variant="danger" 
                     size="sm"
-                    @click="handleDelete(user)"
+                    @click="handleDelete(category)"
                     :disabled="crud.isLoading.value"
                   >
                     Delete
@@ -115,7 +107,7 @@
     <CrudModal
       :is-open="crud.isModalOpen.value"
       :mode="crud.modalMode.value"
-      :fields="userFields"
+      :fields="categoryFields"
       :initial-data="crud.selectedItem.value || {}"
       :is-loading="crud.isLoading.value"
       :errors="crud.errors"
@@ -134,45 +126,31 @@ import Button from '../../components/ui/Button.vue';
 import CrudModal from '../../components/crud/CrudModal.vue';
 import { useCrud } from '../../composables/useCrud';
 
-// Initialize CRUD operations for users endpoint
-const crud = useCrud('/api/users');
+// Initialize CRUD operations for categories endpoint
+const crud = useCrud('/api/categories');
 
-// Define form fields for user creation/editing
-const userFields = [
+// Define form fields for category creation/editing
+const categoryFields = [
   {
     name: 'name',
-    label: 'Full Name',
+    label: 'Category Name',
     type: 'text',
-    placeholder: 'Enter full name',
+    placeholder: 'Enter category name',
     required: true,
-    hint: 'User\'s full name',
   },
   {
-    name: 'email',
-    label: 'Email Address',
-    type: 'email',
-    placeholder: 'Enter email address',
+    name: 'slug',
+    label: 'Slug',
+    type: 'text',
+    placeholder: 'category-slug',
     required: true,
-    hint: 'Must be a valid email',
+    hint: 'URL-friendly identifier',
   },
   {
-    name: 'password',
-    label: 'Password',
-    type: 'password',
-    placeholder: 'Enter password',
-    required: true,
-    hint: 'Minimum 8 characters',
-  },
-  {
-    name: 'role',
-    label: 'Role',
-    type: 'select',
-    required: true,
-    options: [
-      { value: 'admin', label: 'Administrator' },
-      { value: 'user', label: 'User' },
-      { value: 'guest', label: 'Guest' },
-    ],
+    name: 'description',
+    label: 'Description',
+    type: 'textarea',
+    placeholder: 'Enter category description',
   },
   {
     name: 'is_active',
@@ -181,7 +159,7 @@ const userFields = [
   },
 ];
 
-// Fetch users on component mount
+// Fetch categories on component mount
 onMounted(() => {
   crud.fetchItems();
 });

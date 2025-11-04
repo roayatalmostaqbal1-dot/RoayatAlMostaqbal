@@ -39,7 +39,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, h } from 'vue';
 import Card from '../ui/Card.vue';
 
 const props = defineProps({
@@ -50,21 +50,33 @@ const props = defineProps({
   trendUp: Boolean,
 });
 
-// Simple inline SVG icons
+// Simple inline SVG icons using render functions (no runtime compilation needed)
 const IconUsers = {
-  template: '<svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>'
+  render: () => h('svg', { fill: 'currentColor', viewBox: '0 0 24 24' }, [
+    h('path', { d: 'M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z' })
+  ])
 };
 
 const IconActivity = {
-  template: '<svg fill="currentColor" viewBox="0 0 24 24"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><polyline points="13 2 13 9 20 9" style="fill:none;stroke:currentColor;stroke-width:2"/></svg>'
+  render: () => h('svg', { fill: 'currentColor', viewBox: '0 0 24 24' }, [
+    h('path', { d: 'M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z' }),
+    h('polyline', { points: '13 2 13 9 20 9', style: 'fill:none;stroke:currentColor;stroke-width:2' })
+  ])
 };
 
 const IconTrendingUp = {
-  template: '<svg fill="currentColor" viewBox="0 0 24 24"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><polyline points="13 2 13 9 20 9" style="fill:none;stroke:currentColor;stroke-width:2"/></svg>'
+  render: () => h('svg', { fill: 'currentColor', viewBox: '0 0 24 24' }, [
+    h('path', { d: 'M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z' }),
+    h('polyline', { points: '13 2 13 9 20 9', style: 'fill:none;stroke:currentColor;stroke-width:2' })
+  ])
 };
 
 const IconTarget = {
-  template: '<svg fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="12" r="5" style="fill:none;stroke:currentColor;stroke-width:2"/><circle cx="12" cy="12" r="9" style="fill:none;stroke:currentColor;stroke-width:2"/></svg>'
+  render: () => h('svg', { fill: 'currentColor', viewBox: '0 0 24 24' }, [
+    h('circle', { cx: '12', cy: '12', r: '1' }),
+    h('circle', { cx: '12', cy: '12', r: '5', style: 'fill:none;stroke:currentColor;stroke-width:2' }),
+    h('circle', { cx: '12', cy: '12', r: '9', style: 'fill:none;stroke:currentColor;stroke-width:2' })
+  ])
 };
 
 const iconComponent = computed(() => {

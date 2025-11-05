@@ -87,7 +87,7 @@
       <div class="text-center">
         <p class="text-gray-400">
           Don't have an account?
-          <router-link to="/admin/register" class="text-[#27e9b5] hover:text-white transition-colors font-semibold">
+          <router-link to="/register" class="text-[#27e9b5] hover:text-white transition-colors font-semibold">
             Sign up
           </router-link>
         </p>

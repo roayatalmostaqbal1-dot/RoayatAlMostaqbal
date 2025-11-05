@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Api\V1\User\UserInfoResource;
 use App\Models\SocialAccount;
 use App\Models\User;
 use Illuminate\Support\Facades\{Log,Hash};
@@ -50,27 +49,28 @@ class SocialAuthController extends Controller
             }
             $token = $user->createToken('authToken')->accessToken;
 
-            $response = (new UserInfoResource($user))
-                ->additional([
-                    'response_code' => 200,
-                    'status' => 'success',
-                    'token_type' => 'Bearer',
-                    'token' => $token,
-                ]);
+            // Prepare user data
+            $userData = [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+            ];
+
+            // Build callback URL with token and user data
+            $callbackUrl = config('app.url') . '/admin/social-callback';
+            $redirectUrl = $callbackUrl . '?token=' . urlencode($token) . '&user=' . urlencode(json_encode($userData));
+
             if ($generatedPassword) {
-                $response = $response->additional(['generated_password' => $generatedPassword]);
+                $redirectUrl .= '&generated_password=' . urlencode($generatedPassword);
             }
 
-            return $response;
+            return redirect($redirectUrl);
 
         } catch (\Exception $e) {
             Log::error("Social Login Error ($provider): " . $e->getMessage());
-            return response()->json([
-                'response_code' => 500,
-                'status' => 'error',
-                'message' => "Login via $provider failed",
-                'error' => $e->getMessage(),
-            ], 500);
+            $callbackUrl = config('app.url') . '/admin/social-callback';
+            $redirectUrl = $callbackUrl . '?error=' . urlencode("Login via $provider failed: " . $e->getMessage());
+            return redirect($redirectUrl);
         }
     }
 

@@ -2,22 +2,25 @@
   <DashboardLayout page-title="API Routes" page-description="Manage API routes and their permissions">
     <Card>
       <template #header>
-        <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between gap-4">
           <h2 class="text-lg font-bold text-white">API Routes</h2>
-          <div class="space-x-2">
+          <div class="flex items-center gap-2">
             <Button
               variant="secondary"
               size="sm"
               @click="handleSyncRoutes"
               :disabled="apiRoutesStore.isSyncing"
+              :is-loading="apiRoutesStore.isSyncing"
+              title="Synchronize API routes from application"
             >
-              {{ apiRoutesStore.isSyncing ? 'Syncing...' : '🔄 Sync Routes' }}
+              🔄 Sync Routes
             </Button>
             <Button
               variant="primary"
               size="sm"
               @click="openCreateModal"
               :disabled="isLoading"
+              title="Create a new API route"
             >
               + Add Route
             </Button>
@@ -80,23 +83,27 @@
                   Inactive
                 </span>
               </td>
-              <td class="py-3 px-4 space-x-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  @click="openEditModal(route)"
-                  :disabled="isLoading"
-                >
-                  Edit
-                </Button>
-                <Button
-                  variant="danger"
-                  size="sm"
-                  @click="handleDelete(route)"
-                  :disabled="isLoading"
-                >
-                  Delete
-                </Button>
+              <td class="py-3 px-4">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    @click="openEditModal(route)"
+                    :disabled="isLoading"
+                    title="Edit route details"
+                  >
+                    ✏️ Edit
+                  </Button>
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    @click="handleDelete(route)"
+                    :disabled="isLoading"
+                    title="Delete this route"
+                  >
+                    🗑️ Delete
+                  </Button>
+                </div>
               </td>
             </tr>
           </tbody>

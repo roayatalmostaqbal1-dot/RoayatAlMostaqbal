@@ -101,7 +101,52 @@ export const useAuthStore = defineStore('auth', () => {
 
     const socialAuthRedirect = (provider) => {
         const API_BASE_URL = '/api/v1';
-        window.location.href = `${API_BASE_URL}/social-auth/${provider}`;
+        const callbackUrl = `${window.location.origin}/admin/social-callback`;
+        const redirectUrl = `${API_BASE_URL}/social-auth/${provider}?callback=${encodeURIComponent(callbackUrl)}`;
+
+        // Open in popup window
+        const width = 500;
+        const height = 600;
+        const left = window.screenX + (window.outerWidth - width) / 2;
+        const top = window.screenY + (window.outerHeight - height) / 2;
+
+        const popup = window.open(
+            redirectUrl,
+            `${provider}-login`,
+            `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
+        );
+
+        if (!popup) {
+            error.value = 'Popup blocked. Please allow popups for this site.';
+            return;
+        }
+
+        // Listen for message from popup
+        const handleMessage = (event) => {
+            if (event.origin !== window.location.origin) return;
+
+            if (event.data.type === 'SOCIAL_AUTH_SUCCESS') {
+                const { token: newToken, data } = event.data;
+
+                token.value = newToken;
+                user.value = data;
+
+                localStorage.setItem('auth_token', newToken);
+                localStorage.setItem('user', JSON.stringify(data));
+
+                popup.close();
+                window.removeEventListener('message', handleMessage);
+
+                // Emit success event or redirect
+                window.dispatchEvent(new CustomEvent('social-auth-success', { detail: { token: newToken, user: data } }));
+            } else if (event.data.type === 'SOCIAL_AUTH_ERROR') {
+                error.value = event.data.message || 'Social authentication failed';
+                popup.close();
+                window.removeEventListener('message', handleMessage);
+            }
+        };
+
+        window.addEventListener('message', handleMessage);
     };
 
     const restoreSession = () => {

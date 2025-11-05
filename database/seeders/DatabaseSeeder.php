@@ -21,8 +21,8 @@ class DatabaseSeeder extends Seeder
 
         $this->call([RolesAndPermissionsSeeder::class]);
                 User::create([
-            'name' => 'dynmaite',
-            'email' => 'dynmaite@gmail.com',
+            'name' => 'dynamite',
+            'email' => 'dynamite@gmail.com',
             'password' => Hash::make('password123')
         ])->assignRole('super-admin');
         User::create([

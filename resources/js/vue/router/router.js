@@ -4,6 +4,7 @@ import { useAuthStore } from '../stores/auth';
 // Pages
 import LoginPage from '../pages/auth/LoginPage.vue';
 import RegisterPage from '../pages/auth/RegisterPage.vue';
+import SocialCallbackPage from '../pages/auth/SocialCallbackPage.vue';
 import DashboardPage from '../pages/admin/DashboardPage.vue';
 import UsersPage from '../pages/admin/UsersPage.vue';
 import ProductsPage from '../pages/admin/ProductsPage.vue';
@@ -24,6 +25,12 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: RegisterPage,
+    meta: { requiresAuth: false, layout: 'blank' },
+  },
+  {
+    path: '/social-callback',
+    name: 'SocialCallback',
+    component: SocialCallbackPage,
     meta: { requiresAuth: false, layout: 'blank' },
   },
   {

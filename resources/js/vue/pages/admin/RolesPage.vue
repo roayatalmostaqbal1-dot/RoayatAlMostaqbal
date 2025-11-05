@@ -51,32 +51,37 @@
               <td class="py-3 px-4 text-gray-300">
                 <span class="text-sm">{{ role.users_count || 0 }}</span>
               </td>
-              <td class="py-3 px-4 space-x-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  @click="openPermissionsModal(role)"
-                  :disabled="isLoading"
-                >
-                  Permissions
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  @click="openEditModal(role)"
-                  :disabled="isLoading"
-                >
-                  Edit
-                </Button>
-                <Button
-                  v-if="role.name !== 'super-admin'"
-                  variant="danger"
-                  size="sm"
-                  @click="handleDelete(role)"
-                  :disabled="isLoading"
-                >
-                  Delete
-                </Button>
+              <td class="py-3 px-4">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    @click="openPermissionsModal(role)"
+                    :disabled="isLoading"
+                    title="Manage role permissions"
+                  >
+                    🔐 Permissions
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    @click="openEditModal(role)"
+                    :disabled="isLoading"
+                    title="Edit role details"
+                  >
+                    ✏️ Edit
+                  </Button>
+                  <Button
+                    v-if="role.name !== 'super-admin'"
+                    variant="danger"
+                    size="sm"
+                    @click="handleDelete(role)"
+                    :disabled="isLoading"
+                    title="Delete this role"
+                  >
+                    🗑️ Delete
+                  </Button>
+                </div>
               </td>
             </tr>
           </tbody>

@@ -25,7 +25,8 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted, onUnmounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { useAuthStore } from '../../stores/auth';
 import SocialIcons from '../icons/SocialIcons.vue';
 
@@ -37,6 +38,7 @@ const props = defineProps({
   },
 });
 
+const router = useRouter();
 const authStore = useAuthStore();
 const isLoading = ref(false);
 
@@ -53,9 +55,25 @@ const label = computed(() => {
   return `Sign in with ${labels[props.provider]}`;
 });
 
+const handleSocialAuthSuccess = (event) => {
+  if (event.detail && event.detail.token) {
+    isLoading.value = false;
+    // Redirect to dashboard after successful social auth
+    router.push('/admin/dashboard');
+  }
+};
+
 const handleSocialLogin = () => {
   isLoading.value = true;
   authStore.socialAuthRedirect(props.provider);
 };
+
+onMounted(() => {
+  window.addEventListener('social-auth-success', handleSocialAuthSuccess);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('social-auth-success', handleSocialAuthSuccess);
+});
 </script>
 

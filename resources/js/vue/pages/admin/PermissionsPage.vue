@@ -53,23 +53,27 @@
               <td class="py-3 px-4 text-gray-300">
                 <span class="text-sm">{{ permission.roles_count || 0 }}</span>
               </td>
-              <td class="py-3 px-4 space-x-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  @click="openEditModal(permission)"
-                  :disabled="isLoading"
-                >
-                  Edit
-                </Button>
-                <Button
-                  variant="danger"
-                  size="sm"
-                  @click="handleDelete(permission)"
-                  :disabled="isLoading"
-                >
-                  Delete
-                </Button>
+              <td class="py-3 px-4">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    @click="openEditModal(permission)"
+                    :disabled="isLoading"
+                    title="Edit permission details"
+                  >
+                    ✏️ Edit
+                  </Button>
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    @click="handleDelete(permission)"
+                    :disabled="isLoading"
+                    title="Delete this permission"
+                  >
+                    🗑️ Delete
+                  </Button>
+                </div>
               </td>
             </tr>
           </tbody>

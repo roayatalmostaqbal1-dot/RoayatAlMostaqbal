@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import { authService } from '../services/api';
+import apiClient from '../services/api';
 
 export const useAuthStore = defineStore('auth', () => {
     // State
@@ -19,15 +19,15 @@ export const useAuthStore = defineStore('auth', () => {
         isLoading.value = true;
         error.value = null;
         try {
-            const response = await authService.login(email, password);
+            const response = await apiClient.post('/auth/login', { email, password });
             const { token: newToken, data } = response.data;
-            
+
             token.value = newToken;
             user.value = data;
-            
+
             localStorage.setItem('auth_token', newToken);
             localStorage.setItem('user', JSON.stringify(data));
-            
+
             return { success: true, data };
         } catch (err) {
             error.value = err.response?.data?.message || 'Login failed';
@@ -41,15 +41,15 @@ export const useAuthStore = defineStore('auth', () => {
         isLoading.value = true;
         error.value = null;
         try {
-            const response = await authService.register(userData);
+            const response = await apiClient.post('/auth/register', userData);
             const { token: newToken, data } = response.data;
-            
+
             token.value = newToken;
             user.value = data;
-            
+
             localStorage.setItem('auth_token', newToken);
             localStorage.setItem('user', JSON.stringify(data));
-            
+
             return { success: true, data };
         } catch (err) {
             error.value = err.response?.data?.message || 'Registration failed';
@@ -61,10 +61,13 @@ export const useAuthStore = defineStore('auth', () => {
 
     const logout = async () => {
         isLoading.value = true;
+        error.value = null;
         try {
-            await authService.logout();
+            await apiClient.post('/logout');
+            return { success: true };
         } catch (err) {
-            console.error('Logout error:', err);
+            error.value = err.response?.data?.message || 'Logout failed';
+            return { success: false, error: error.value };
         } finally {
             token.value = null;
             user.value = null;
@@ -75,30 +78,36 @@ export const useAuthStore = defineStore('auth', () => {
     };
 
     const fetchUser = async () => {
-        if (!token.value) return;
-        
+        if (!token.value) {
+            return { success: false, error: 'No token available' };
+        }
+
         isLoading.value = true;
+        error.value = null;
         try {
-            const response = await authService.getUser();
+            const response = await apiClient.get('/user');
             user.value = response.data.data;
             localStorage.setItem('user', JSON.stringify(user.value));
+            return { success: true, data: user.value };
         } catch (err) {
-            console.error('Fetch user error:', err);
+            error.value = err.response?.data?.message || 'Failed to fetch user';
             token.value = null;
             localStorage.removeItem('auth_token');
+            return { success: false, error: error.value };
         } finally {
             isLoading.value = false;
         }
     };
 
     const socialAuthRedirect = (provider) => {
-        authService.socialAuthRedirect(provider);
+        const API_BASE_URL = '/api/v1';
+        window.location.href = `${API_BASE_URL}/social-auth/${provider}`;
     };
 
     const restoreSession = () => {
         const savedToken = localStorage.getItem('auth_token');
         const savedUser = localStorage.getItem('user');
-        
+
         if (savedToken) {
             token.value = savedToken;
         }
@@ -117,12 +126,12 @@ export const useAuthStore = defineStore('auth', () => {
         token,
         isLoading,
         error,
-        
+
         // Computed
         isAuthenticated,
         userName,
         userEmail,
-        
+
         // Actions
         login,
         register,

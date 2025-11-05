@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isOpen" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div v-if="isOpen" class="fixed inset-0  bg-opacity-50 flex items-center justify-center z-50">
     <div class="bg-[#162936] rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
       <!-- Header -->
       <div class="sticky top-0 bg-[#051824] border-b border-[#3b5265] px-6 py-4 flex items-center justify-between">
@@ -68,6 +68,7 @@
 
 <script setup>
 import { ref, watch, computed } from 'vue';
+import { usePermissionsStore } from '../../stores/permissionsStore';
 
 const props = defineProps({
   isOpen: Boolean,
@@ -77,8 +78,8 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'save']);
 
+const permissionsStore = usePermissionsStore();
 const selectedPermissions = ref([]);
-const allPermissions = ref({});
 
 watch(() => props.isOpen, async (newVal) => {
   if (newVal && props.role) {
@@ -87,26 +88,19 @@ watch(() => props.isOpen, async (newVal) => {
 });
 
 const loadPermissions = async () => {
-  try {
-    const response = await fetch('/SuperAdmin/role-permissions/all', {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
-      },
-    });
-    const data = await response.json();
-    allPermissions.value = data.data;
+  // Load all permissions
+  const result = await permissionsStore.fetchAllPermissions();
+  if (!result.success) {
+    console.error('Error loading permissions:', result.error);
+    return;
+  }
 
-    // Load current role permissions
-    const roleResponse = await fetch(`/SuperAdmin/roles/${props.role.id}/permissions`, {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
-      },
-    });
-    const roleData = await roleResponse.json();
-
+  // Load current role permissions
+  const roleResult = await permissionsStore.fetchRolePermissions(props.role.id);
+  if (roleResult.success && roleResult.data) {
     // Flatten and get permission IDs
     const currentPermissions = [];
-    Object.values(roleData.data).forEach(group => {
+    Object.values(roleResult.data).forEach(group => {
       if (Array.isArray(group)) {
         group.forEach(permission => {
           currentPermissions.push(permission.id);
@@ -114,13 +108,11 @@ const loadPermissions = async () => {
       }
     });
     selectedPermissions.value = currentPermissions;
-  } catch (error) {
-    console.error('Error loading permissions:', error);
   }
 };
 
 const groupedPermissions = computed(() => {
-  return allPermissions.value;
+  return permissionsStore.allPermissions;
 });
 
 const handleSave = () => {

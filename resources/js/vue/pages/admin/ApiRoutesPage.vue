@@ -8,16 +8,16 @@
             <Button
               variant="secondary"
               size="sm"
-              @click="syncRoutes"
-              :disabled="isSyncing"
+              @click="handleSyncRoutes"
+              :disabled="apiRoutesStore.isSyncing"
             >
-              {{ isSyncing ? 'Syncing...' : '🔄 Sync Routes' }}
+              {{ apiRoutesStore.isSyncing ? 'Syncing...' : '🔄 Sync Routes' }}
             </Button>
             <Button
               variant="primary"
               size="sm"
-              @click="crud.openCreateModal"
-              :disabled="crud.isLoading.value"
+              @click="openCreateModal"
+              :disabled="isLoading"
             >
               + Add Route
             </Button>
@@ -26,17 +26,17 @@
       </template>
 
       <!-- Error Message -->
-      <div v-if="crud.errors.general" class="mb-4 p-4 rounded-lg bg-red-500 bg-opacity-10 border border-red-500 text-red-400">
-        {{ crud.errors.general }}
+      <div v-if="errors.general" class="mb-4 p-4 rounded-lg bg-red-500 bg-opacity-10 border border-red-500 text-red-400">
+        {{ errors.general }}
       </div>
 
       <!-- Sync Message -->
-      <div v-if="syncMessage" class="mb-4 p-4 rounded-lg" :class="syncMessageType === 'success' ? 'bg-green-500 bg-opacity-10 border border-green-500 text-green-400' : 'bg-red-500 bg-opacity-10 border border-red-500 text-red-400'">
-        {{ syncMessage }}
+      <div v-if="apiRoutesStore.syncMessage" class="mb-4 p-4 rounded-lg" :class="syncMessageType === 'success' ? 'bg-green-500 bg-opacity-10 border border-green-500 text-green-400' : 'bg-red-500 bg-opacity-10 border border-red-500 text-red-400'">
+        {{ apiRoutesStore.syncMessage }}
       </div>
 
       <!-- Loading State -->
-      <div v-if="crud.isLoading.value && crud.items.value.length === 0" class="text-center py-8">
+      <div v-if="isLoading && items.length === 0" class="text-center py-8">
         <svg class="animate-spin h-8 w-8 text-[#27e9b5] mx-auto">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -58,7 +58,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="route in crud.items.value" :key="route.id" class="border-b border-[#162936] hover:bg-[#162936] transition">
+            <tr v-for="route in items" :key="route.id" class="border-b border-[#162936] hover:bg-[#162936] transition">
               <td class="py-3 px-4 text-white font-mono text-xs">{{ route.route_name }}</td>
               <td class="py-3 px-4 text-gray-300 font-mono text-xs">{{ route.route_path }}</td>
               <td class="py-3 px-4">
@@ -84,8 +84,8 @@
                 <Button
                   variant="ghost"
                   size="sm"
-                  @click="crud.openEditModal(route)"
-                  :disabled="crud.isLoading.value"
+                  @click="openEditModal(route)"
+                  :disabled="isLoading"
                 >
                   Edit
                 </Button>
@@ -93,7 +93,7 @@
                   variant="danger"
                   size="sm"
                   @click="handleDelete(route)"
-                  :disabled="crud.isLoading.value"
+                  :disabled="isLoading"
                 >
                   Delete
                 </Button>
@@ -103,7 +103,7 @@
         </table>
 
         <!-- Empty State -->
-        <div v-if="crud.items.value.length === 0" class="text-center py-8">
+        <div v-if="items.length === 0" class="text-center py-8">
           <p class="text-gray-400">No API routes found</p>
         </div>
       </div>
@@ -111,30 +111,35 @@
 
     <!-- CRUD Modal -->
     <CrudModal
-      :is-open="crud.isModalOpen.value"
-      :mode="crud.modalMode.value"
+      :is-open="isCreateModalOpen || isEditModalOpen"
+      :mode="modalMode"
       :fields="routeFields"
-      :initial-data="crud.selectedItem.value || {}"
-      :is-loading="crud.isLoading.value"
-      :errors="crud.errors"
-      @close="crud.closeModal"
-      @submit="crud.handleSubmit"
+      :initial-data="selectedRouteForModal || {}"
+      :is-loading="isLoading"
+      :errors="errors"
+      @close="closeModal"
+      @submit="handleSubmit"
       @delete="handleDelete"
     />
   </DashboardLayout>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useCrud } from '../../composables/useCrud';
+import { ref, onMounted, computed } from 'vue';
+import { useApiRoutesStore } from '../../stores/apiRoutesStore';
+import { usePermissionsStore } from '../../stores/permissionsStore';
 import DashboardLayout from '../../components/layout/DashboardLayout.vue';
 import Card from '../../components/ui/Card.vue';
 import Button from '../../components/ui/Button.vue';
 import CrudModal from '../../components/crud/CrudModal.vue';
 
-const crud = useCrud('/SuperAdmin/api-routes');
-const isSyncing = ref(false);
-const syncMessage = ref('');
+const apiRoutesStore = useApiRoutesStore();
+const permissionsStore = usePermissionsStore();
+
+const isCreateModalOpen = ref(false);
+const isEditModalOpen = ref(false);
+const modalMode = ref('create');
+const selectedRouteForModal = ref(null);
 const syncMessageType = ref('success');
 
 const routeFields = [
@@ -158,23 +163,22 @@ const routeFields = [
   { name: 'is_active', label: 'Active', type: 'checkbox' },
 ];
 
-onMounted(() => {
-  crud.fetchItems();
-  loadPermissions();
+// Computed properties
+const items = computed(() => apiRoutesStore.apiRoutesList);
+const isLoading = computed(() => apiRoutesStore.isLoading);
+const errors = computed(() => ({ general: apiRoutesStore.error }));
+
+onMounted(async () => {
+  await apiRoutesStore.fetchApiRoutes();
+  await loadPermissions();
 });
 
 const loadPermissions = async () => {
-  try {
-    const response = await fetch('/SuperAdmin/role-permissions/all', {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
-      },
-    });
-    const data = await response.json();
-
+  const result = await permissionsStore.fetchAllPermissions();
+  if (result.success && permissionsStore.allPermissions) {
     // Flatten permissions from grouped data
     const permissionOptions = [];
-    Object.values(data.data).forEach(group => {
+    Object.values(permissionsStore.allPermissions).forEach(group => {
       if (Array.isArray(group)) {
         group.forEach(permission => {
           permissionOptions.push({
@@ -189,47 +193,68 @@ const loadPermissions = async () => {
     if (permField) {
       permField.options = permissionOptions;
     }
-  } catch (error) {
-    console.error('Error loading permissions:', error);
   }
 };
 
-const syncRoutes = async () => {
-  isSyncing.value = true;
-  syncMessage.value = '';
+const openCreateModal = () => {
+  modalMode.value = 'create';
+  selectedRouteForModal.value = null;
+  isCreateModalOpen.value = true;
+};
 
-  try {
-    const response = await fetch('/SuperAdmin/sync-routes', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
-      },
-    });
+const openEditModal = (route) => {
+  modalMode.value = 'edit';
+  selectedRouteForModal.value = { ...route };
+  isEditModalOpen.value = true;
+};
 
-    const data = await response.json();
+const closeModal = () => {
+  isCreateModalOpen.value = false;
+  isEditModalOpen.value = false;
+  selectedRouteForModal.value = null;
+};
 
-    if (response.ok) {
-      syncMessage.value = data.message || 'Routes synced successfully!';
-      syncMessageType.value = 'success';
-      await crud.fetchItems();
+const handleSubmit = async (formData) => {
+  if (modalMode.value === 'create') {
+    const result = await apiRoutesStore.createApiRoute(formData);
+    if (result.success) {
+      alert('Route created successfully');
+      closeModal();
     } else {
-      syncMessage.value = data.message || 'Error syncing routes';
-      syncMessageType.value = 'error';
+      alert(`Error: ${result.error}`);
     }
-  } catch (error) {
-    syncMessage.value = 'Error syncing routes: ' + error.message;
-    syncMessageType.value = 'error';
-  } finally {
-    isSyncing.value = false;
-    setTimeout(() => {
-      syncMessage.value = '';
-    }, 5000);
+  } else {
+    const result = await apiRoutesStore.updateApiRoute(selectedRouteForModal.value.id, formData);
+    if (result.success) {
+      alert('Route updated successfully');
+      closeModal();
+    } else {
+      alert(`Error: ${result.error}`);
+    }
   }
+};
+
+const handleSyncRoutes = async () => {
+  const result = await apiRoutesStore.syncRoutes();
+  if (result.success) {
+    syncMessageType.value = 'success';
+    await apiRoutesStore.fetchApiRoutes();
+  } else {
+    syncMessageType.value = 'error';
+  }
+  setTimeout(() => {
+    apiRoutesStore.syncMessage = '';
+  }, 5000);
 };
 
 const handleDelete = async (item) => {
   if (confirm(`Are you sure you want to delete the route "${item.route_name}"?`)) {
-    await crud.deleteItem(item.id);
+    const result = await apiRoutesStore.deleteApiRoute(item.id);
+    if (result.success) {
+      alert('Route deleted successfully');
+    } else {
+      alert(`Error: ${result.error}`);
+    }
   }
 };
 

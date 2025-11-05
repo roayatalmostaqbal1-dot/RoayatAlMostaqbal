@@ -7,8 +7,8 @@
           <Button
             variant="primary"
             size="sm"
-            @click="crud.openCreateModal"
-            :disabled="crud.isLoading.value"
+            @click="openCreateModal"
+            :disabled="isLoading"
           >
             + Add Role
           </Button>
@@ -16,12 +16,12 @@
       </template>
 
       <!-- Error Message -->
-      <div v-if="crud.errors.general" class="mb-4 p-4 rounded-lg bg-red-500 bg-opacity-10 border border-red-500 text-red-400">
-        {{ crud.errors.general }}
+      <div v-if="errors.general" class="mb-4 p-4 rounded-lg bg-red-500 bg-opacity-10 border border-red-500 text-red-400">
+        {{ errors.general }}
       </div>
 
       <!-- Loading State -->
-      <div v-if="crud.isLoading.value && crud.items.value.length === 0" class="text-center py-8">
+      <div v-if="isLoading && items.length === 0" class="text-center py-8">
         <svg class="animate-spin h-8 w-8 text-[#27e9b5] mx-auto">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -41,7 +41,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="role in crud.items.value" :key="role.id" class="border-b border-[#162936] hover:bg-[#162936] transition">
+            <tr v-for="role in items" :key="role.id" class="border-b border-[#162936] hover:bg-[#162936] transition">
               <td class="py-3 px-4 text-white">{{ role.name }}</td>
               <td class="py-3 px-4 text-gray-300">
                 <span class="inline-block bg-[#3b5265] text-[#27e9b5] px-2 py-1 rounded text-sm">
@@ -56,15 +56,15 @@
                   variant="ghost"
                   size="sm"
                   @click="openPermissionsModal(role)"
-                  :disabled="crud.isLoading.value"
+                  :disabled="isLoading"
                 >
                   Permissions
                 </Button>
                 <Button
                   variant="ghost"
                   size="sm"
-                  @click="crud.openEditModal(role)"
-                  :disabled="crud.isLoading.value"
+                  @click="openEditModal(role)"
+                  :disabled="isLoading"
                 >
                   Edit
                 </Button>
@@ -73,7 +73,7 @@
                   variant="danger"
                   size="sm"
                   @click="handleDelete(role)"
-                  :disabled="crud.isLoading.value"
+                  :disabled="isLoading"
                 >
                   Delete
                 </Button>
@@ -83,7 +83,7 @@
         </table>
 
         <!-- Empty State -->
-        <div v-if="crud.items.value.length === 0" class="text-center py-8">
+        <div v-if="items.length === 0" class="text-center py-8">
           <p class="text-gray-400">No roles found</p>
         </div>
       </div>
@@ -91,22 +91,22 @@
 
     <!-- CRUD Modal -->
     <CrudModal
-      :is-open="crud.isModalOpen.value"
-      :mode="crud.modalMode.value"
+      :is-open="isCreateModalOpen || isEditModalOpen"
+      :mode="modalMode"
       :fields="roleFields"
-      :initial-data="crud.selectedItem.value || {}"
-      :is-loading="crud.isLoading.value"
-      :errors="crud.errors"
-      @close="crud.closeModal"
-      @submit="crud.handleSubmit"
+      :initial-data="selectedRoleForModal || {}"
+      :is-loading="isLoading"
+      :errors="errors"
+      @close="closeModal"
+      @submit="handleSubmit"
       @delete="handleDelete"
     />
 
     <!-- Permissions Modal -->
     <PermissionsModal
       :is-open="isPermissionsModalOpen"
-      :role="selectedRole"
-      :is-loading="isPermissionsLoading"
+      :role="rolesStore.selectedRole"
+      :is-loading="permissionsStore.isLoading"
       @close="isPermissionsModalOpen = false"
       @save="savePermissions"
     />
@@ -114,24 +114,36 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useCrud } from '../../composables/useCrud';
+import { ref, onMounted, computed } from 'vue';
+import { useRolesStore } from '../../stores/rolesStore';
+import { usePermissionsStore } from '../../stores/permissionsStore';
 import DashboardLayout from '../../components/layout/DashboardLayout.vue';
 import Card from '../../components/ui/Card.vue';
 import Button from '../../components/ui/Button.vue';
 import CrudModal from '../../components/crud/CrudModal.vue';
 import PermissionsModal from '../../components/access-control/PermissionsModal.vue';
 
-const crud = useCrud('/SuperAdmin/roles');
+const rolesStore = useRolesStore();
+const permissionsStore = usePermissionsStore();
+
 const isPermissionsModalOpen = ref(false);
-const selectedRole = ref(null);
-const isPermissionsLoading = ref(false);
+const isCreateModalOpen = ref(false);
+const isEditModalOpen = ref(false);
+const modalMode = ref('create');
+const selectedRoleForModal = ref(null);
 
 const roleFields = [
   { name: 'name', label: 'Role Name', type: 'text', required: true },
 ];
 
-onMounted(() => crud.fetchItems());
+// Computed properties
+const items = computed(() => rolesStore.rolesList);
+const isLoading = computed(() => rolesStore.isLoading);
+const errors = computed(() => ({ general: rolesStore.error }));
+
+onMounted(async () => {
+  await rolesStore.fetchRoles();
+});
 
 const handleDelete = async (item) => {
   if (item.name === 'super-admin') {
@@ -140,35 +152,69 @@ const handleDelete = async (item) => {
   }
 
   if (confirm(`Are you sure you want to delete the "${item.name}" role?`)) {
-    await crud.deleteItem(item.id);
+    const result = await rolesStore.deleteRole(item.id);
+    if (result.success) {
+      alert('Role deleted successfully');
+    } else {
+      alert(`Error: ${result.error}`);
+    }
+  }
+};
+
+const openCreateModal = () => {
+  modalMode.value = 'create';
+  selectedRoleForModal.value = null;
+  isCreateModalOpen.value = true;
+};
+
+const openEditModal = (role) => {
+  modalMode.value = 'edit';
+  selectedRoleForModal.value = { ...role };
+  isEditModalOpen.value = true;
+};
+
+const closeModal = () => {
+  isCreateModalOpen.value = false;
+  isEditModalOpen.value = false;
+  selectedRoleForModal.value = null;
+};
+
+const handleSubmit = async (formData) => {
+  if (modalMode.value === 'create') {
+    const result = await rolesStore.createRole(formData);
+    if (result.success) {
+      alert('Role created successfully');
+      closeModal();
+    } else {
+      alert(`Error: ${result.error}`);
+    }
+  } else {
+    const result = await rolesStore.updateRole(selectedRoleForModal.value.id, formData);
+    if (result.success) {
+      alert('Role updated successfully');
+      closeModal();
+    } else {
+      alert(`Error: ${result.error}`);
+    }
   }
 };
 
 const openPermissionsModal = (role) => {
-  selectedRole.value = role;
+  rolesStore.setSelectedRole(role);
   isPermissionsModalOpen.value = true;
 };
 
 const savePermissions = async (permissionIds) => {
-  isPermissionsLoading.value = true;
-  try {
-    const response = await fetch(`/SuperAdmin/roles/${selectedRole.value.id}/permissions`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
-      },
-      body: JSON.stringify({ permission_ids: permissionIds }),
-    });
-
-    if (response.ok) {
-      isPermissionsModalOpen.value = false;
-      await crud.fetchItems();
-    }
-  } catch (error) {
-    console.error('Error saving permissions:', error);
-  } finally {
-    isPermissionsLoading.value = false;
+  const result = await permissionsStore.assignPermissionsToRole(
+    rolesStore.selectedRole.id,
+    permissionIds
+  );
+  if (result.success) {
+    alert('Permissions assigned successfully');
+    isPermissionsModalOpen.value = false;
+    await rolesStore.fetchRoles();
+  } else {
+    alert(`Error: ${result.error}`);
   }
 };
 </script>

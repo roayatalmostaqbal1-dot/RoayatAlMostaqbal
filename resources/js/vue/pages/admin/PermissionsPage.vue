@@ -7,8 +7,8 @@
           <Button
             variant="primary"
             size="sm"
-            @click="crud.openCreateModal"
-            :disabled="crud.isLoading.value"
+            @click="openCreateModal"
+            :disabled="isLoading"
           >
             + Add Permission
           </Button>
@@ -16,12 +16,12 @@
       </template>
 
       <!-- Error Message -->
-      <div v-if="crud.errors.general" class="mb-4 p-4 rounded-lg bg-red-500 bg-opacity-10 border border-red-500 text-red-400">
-        {{ crud.errors.general }}
+      <div v-if="errors.general" class="mb-4 p-4 rounded-lg bg-red-500 bg-opacity-10 border border-red-500 text-red-400">
+        {{ errors.general }}
       </div>
 
       <!-- Loading State -->
-      <div v-if="crud.isLoading.value && crud.items.value.length === 0" class="text-center py-8">
+      <div v-if="isLoading && items.length === 0" class="text-center py-8">
         <svg class="animate-spin h-8 w-8 text-[#27e9b5] mx-auto">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -42,7 +42,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="permission in crud.items.value" :key="permission.id" class="border-b border-[#162936] hover:bg-[#162936] transition">
+            <tr v-for="permission in items" :key="permission.id" class="border-b border-[#162936] hover:bg-[#162936] transition">
               <td class="py-3 px-4 text-white font-mono text-sm">{{ permission.name }}</td>
               <td class="py-3 px-4">
                 <span class="inline-block bg-[#3b5265] text-[#27e9b5] px-2 py-1 rounded text-xs">
@@ -57,8 +57,8 @@
                 <Button
                   variant="ghost"
                   size="sm"
-                  @click="crud.openEditModal(permission)"
-                  :disabled="crud.isLoading.value"
+                  @click="openEditModal(permission)"
+                  :disabled="isLoading"
                 >
                   Edit
                 </Button>
@@ -66,7 +66,7 @@
                   variant="danger"
                   size="sm"
                   @click="handleDelete(permission)"
-                  :disabled="crud.isLoading.value"
+                  :disabled="isLoading"
                 >
                   Delete
                 </Button>
@@ -76,7 +76,7 @@
         </table>
 
         <!-- Empty State -->
-        <div v-if="crud.items.value.length === 0" class="text-center py-8">
+        <div v-if="items.length === 0" class="text-center py-8">
           <p class="text-gray-400">No permissions found</p>
         </div>
       </div>
@@ -84,28 +84,33 @@
 
     <!-- CRUD Modal -->
     <CrudModal
-      :is-open="crud.isModalOpen.value"
-      :mode="crud.modalMode.value"
+      :is-open="isCreateModalOpen || isEditModalOpen"
+      :mode="modalMode"
       :fields="permissionFields"
-      :initial-data="crud.selectedItem.value || {}"
-      :is-loading="crud.isLoading.value"
-      :errors="crud.errors"
-      @close="crud.closeModal"
-      @submit="crud.handleSubmit"
+      :initial-data="selectedPermissionForModal || {}"
+      :is-loading="isLoading"
+      :errors="errors"
+      @close="closeModal"
+      @submit="handleSubmit"
       @delete="handleDelete"
     />
   </DashboardLayout>
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
-import { useCrud } from '../../composables/useCrud';
+import { ref, onMounted, computed } from 'vue';
+import { usePermissionsStore } from '../../stores/permissionsStore';
 import DashboardLayout from '../../components/layout/DashboardLayout.vue';
 import Card from '../../components/ui/Card.vue';
 import Button from '../../components/ui/Button.vue';
 import CrudModal from '../../components/crud/CrudModal.vue';
 
-const crud = useCrud('/SuperAdmin/permissions');
+const permissionsStore = usePermissionsStore();
+
+const isCreateModalOpen = ref(false);
+const isEditModalOpen = ref(false);
+const modalMode = ref('create');
+const selectedPermissionForModal = ref(null);
 
 const permissionFields = [
   { name: 'name', label: 'Permission Name', type: 'text', required: true, placeholder: 'e.g., users.view' },
@@ -126,11 +131,61 @@ const permissionFields = [
   },
 ];
 
-onMounted(() => crud.fetchItems());
+// Computed properties
+const items = computed(() => permissionsStore.permissionsList);
+const isLoading = computed(() => permissionsStore.isLoading);
+const errors = computed(() => ({ general: permissionsStore.error }));
+
+onMounted(async () => {
+  await permissionsStore.fetchPermissions();
+});
+
+const openCreateModal = () => {
+  modalMode.value = 'create';
+  selectedPermissionForModal.value = null;
+  isCreateModalOpen.value = true;
+};
+
+const openEditModal = (permission) => {
+  modalMode.value = 'edit';
+  selectedPermissionForModal.value = { ...permission };
+  isEditModalOpen.value = true;
+};
+
+const closeModal = () => {
+  isCreateModalOpen.value = false;
+  isEditModalOpen.value = false;
+  selectedPermissionForModal.value = null;
+};
+
+const handleSubmit = async (formData) => {
+  if (modalMode.value === 'create') {
+    const result = await permissionsStore.createPermission(formData);
+    if (result.success) {
+      alert('Permission created successfully');
+      closeModal();
+    } else {
+      alert(`Error: ${result.error}`);
+    }
+  } else {
+    const result = await permissionsStore.updatePermission(selectedPermissionForModal.value.id, formData);
+    if (result.success) {
+      alert('Permission updated successfully');
+      closeModal();
+    } else {
+      alert(`Error: ${result.error}`);
+    }
+  }
+};
 
 const handleDelete = async (item) => {
   if (confirm(`Are you sure you want to delete the "${item.name}" permission?`)) {
-    await crud.deleteItem(item.id);
+    const result = await permissionsStore.deletePermission(item.id);
+    if (result.success) {
+      alert('Permission deleted successfully');
+    } else {
+      alert(`Error: ${result.error}`);
+    }
   }
 };
 </script>

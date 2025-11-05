@@ -7,7 +7,7 @@ use App\Http\Controllers\Api\V1\SuperAdmin\ApiRouteController;
 use App\Http\Controllers\Api\V1\SuperAdmin\RolePermissionController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('SuperAdmin')->middleware(['auth:api', 'role:super-admin'])->group(function () {
+Route::prefix('SuperAdmin')->middleware(['auth:api'])->group(function () {
     Route::apiResource('roles', RoleController::class);
     Route::apiResource('permissions', PermissionController::class);
     Route::apiResource('permissionRole', PermissionRoleController::class);

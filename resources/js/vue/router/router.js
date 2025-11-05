@@ -9,6 +9,9 @@ import UsersPage from '../pages/admin/UsersPage.vue';
 import ProductsPage from '../pages/admin/ProductsPage.vue';
 import CategoriesPage from '../pages/admin/CategoriesPage.vue';
 import SettingsPage from '../pages/admin/SettingsPage.vue';
+import RolesPage from '../pages/admin/RolesPage.vue';
+import PermissionsPage from '../pages/admin/PermissionsPage.vue';
+import ApiRoutesPage from '../pages/admin/ApiRoutesPage.vue';
 
 const routes = [
   {
@@ -51,6 +54,24 @@ const routes = [
     path: '/settings',
     name: 'Settings',
     component: SettingsPage,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/roles',
+    name: 'Roles',
+    component: RolesPage,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/permissions',
+    name: 'Permissions',
+    component: PermissionsPage,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/api-routes',
+    name: 'ApiRoutes',
+    component: ApiRoutesPage,
     meta: { requiresAuth: true },
   },
   {

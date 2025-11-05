@@ -16,6 +16,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             \App\Http\Middleware\SetLocale::class,
         ]);
+
+        // Register API middleware
+        $middleware->api(append: [
+            \App\Http\Middleware\CheckApiPermission::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

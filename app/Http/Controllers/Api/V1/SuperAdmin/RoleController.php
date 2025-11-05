@@ -3,24 +3,24 @@
 namespace App\Http\Controllers\Api\V1\SuperAdmin;
 
 use App\Http\Controllers\Controller;
-use Spatie\Permission\Models\{Role,Permission};
+use App\Models\AuditLog;
+use Spatie\Permission\Models\{Role, Permission};
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Http\Resources\Api\V1\SuperAdmin\PermissionRole\{RoleResource,PermissionResource ,PermissionRoleResource};
-use App\Http\Requests\Api\V1\SuperAdmin\PermissionRole\Role\{StoreRequest,UpdateRequest};
+use App\Http\Resources\Api\V1\SuperAdmin\PermissionRole\{RoleResource, PermissionResource, PermissionRoleResource};
+use App\Http\Requests\Api\V1\SuperAdmin\PermissionRole\Role\{StoreRequest, UpdateRequest};
+
 class RoleController extends Controller
 {
     /**
      * Display a listing of the resource.
-     * Api\V1\Admin\PermissionRole\PermissionRole\AddpermissionToRoleRequest
-     * Api\V1\Admin\PermissionRole\PermissionRole\RemovepermissionToRoleRequest
      */
     public function index(Request $request)
     {
         $roles = Role::with('permissions:id,name')
             ->select(['id', 'name', 'guard_name'])
             ->orderBy('id', 'asc')
-            ->paginate(perPage: $request->per_page ?? 10,page: $request->page ?? 1);
+            ->paginate(perPage: $request->per_page ?? 10, page: $request->page ?? 1);
 
         return RoleResource::collection($roles);
     }
@@ -30,11 +30,22 @@ class RoleController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        //
         $role = Role::firstOrCreate([
             'name' => $request->name,
             'guard_name' => 'api',
         ]);
+
+        // Log the action
+        AuditLog::create([
+            'user_id' => Auth::id(),
+            'model_type' => 'Role',
+            'model_id' => $role->id,
+            'action' => 'created',
+            'new_values' => $role->toArray(),
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
+
         return new RoleResource($role);
     }
 
@@ -43,10 +54,10 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
-        //
         $role = Role::with('permissions:id,name')
-        ->select(['id', 'name', 'guard_name'])
-        ->findOrFail($role->id);
+            ->select(['id', 'name', 'guard_name'])
+            ->findOrFail($role->id);
+
         return new RoleResource($role);
     }
 
@@ -55,34 +66,60 @@ class RoleController extends Controller
      */
     public function update(UpdateRequest $request, string $id)
     {
-        //
         $role = Role::findOrFail($id);
+        $oldValues = $role->toArray();
+
         $role->update([
             'name' => $request->name,
         ]);
-        return new RoleResource($role);
 
+        // Log the action
+        AuditLog::create([
+            'user_id' => Auth::id(),
+            'model_type' => 'Role',
+            'model_id' => $role->id,
+            'action' => 'updated',
+            'old_values' => $oldValues,
+            'new_values' => $role->toArray(),
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
+
+        return new RoleResource($role);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Role $role)
+    public function destroy(Role $role, Request $request)
     {
-        if(!Auth::user()->hasRole('super-admin')||!Auth::user()->hasPermissionTo('delete-role')){
+        // Check if role has users assigned
+        if ($role->users()->count() > 0) {
             return response()->json([
-                'response_code' => 403,
+                'response_code' => 422,
                 'status' => 'error',
-                'message' => 'You are not authorized to delete this role',
-            ], 403);
+                'message' => 'Cannot delete role with assigned users',
+            ], 422);
         }
-        $role = Role::findOrFail($role->id);
+
+        $roleData = $role->toArray();
         $role->delete();
+
+        // Log the action
+        AuditLog::create([
+            'user_id' => Auth::id(),
+            'model_type' => 'Role',
+            'model_id' => $role->id,
+            'action' => 'deleted',
+            'old_values' => $roleData,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
+
         return response()->json([
             'response_code' => 200,
             'status' => 'success',
             'message' => 'Role deleted successfully',
         ]);
     }
-
 }

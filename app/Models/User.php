@@ -52,8 +52,43 @@ class User extends Authenticatable implements OAuthenticatable
     {
         return $this->hasMany(SocialAccount::class);
     }
-    public function telegramMessages()
+  
+
+    /**
+     * Get the user's permissions through their role
+     */
+    public function getPermissionsAttribute()
     {
-        return $this->hasMany(TelegramMessage::class, 'user_id');
+        if ($this->roles->isEmpty()) {
+            return collect();
+        }
+
+        return $this->roles->first()->permissions ?? collect();
+    }
+
+    /**
+     * Check if user has a specific permission
+     */
+    public function hasPermission($permission)
+    {
+        return $this->roles->first()?->permissions->contains('name', $permission) ?? false;
+    }
+
+    /**
+     * Check if user has any of the given permissions
+     */
+    public function hasAnyPermission($permissions)
+    {
+        $userPermissions = $this->getPermissionsAttribute();
+        return collect($permissions)->intersect($userPermissions->pluck('name'))->isNotEmpty();
+    }
+
+    /**
+     * Check if user has all of the given permissions
+     */
+    public function hasAllPermissions($permissions)
+    {
+        $userPermissions = $this->getPermissionsAttribute();
+        return collect($permissions)->diff($userPermissions->pluck('name'))->isEmpty();
     }
 }

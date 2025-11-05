@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useAuthStore } from '../stores/auth';
 
 const API_BASE_URL = '/api/v1';
 
@@ -7,16 +8,34 @@ const apiClient = axios.create({
     baseURL: API_BASE_URL,
     headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
         'X-Requested-With': 'XMLHttpRequest',
     },
 });
 
-// Add token to requests if available
+// Add CSRF token and auth token to requests
 apiClient.interceptors.request.use((config) => {
-    const token = localStorage.getItem('auth_token');
+    // Add CSRF token if available
+    const csrfToken = document.querySelector('meta[name="csrf-token"]');
+    if (csrfToken) {
+        config.headers['X-CSRF-TOKEN'] = csrfToken.getAttribute('content');
+    }
+
+    // Add auth token from localStorage or Pinia store
+    let token = localStorage.getItem('auth_token');
+    if (!token) {
+        try {
+            const authStore = useAuthStore();
+            token = authStore.token;
+        } catch (e) {
+            // Store not available yet
+        }
+    }
+
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
+
     return config;
 });
 

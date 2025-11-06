@@ -10,60 +10,62 @@
 
       <!-- Login Card -->
       <Card class="mb-6">
-        <!-- Error Alert -->
-        <div v-if="authStore.error" class="mb-4 p-4 bg-red-500 bg-opacity-20 border border-red-500 rounded-lg">
-          <p class="text-red-400 text-sm">{{ authStore.error }}</p>
-        </div>
+        <form @submit.prevent="handleLogin">
+          <!-- Error Alert -->
+          <div v-if="authStore.error" class="mb-4 p-4 bg-red-500 bg-opacity-20 border border-red-500 rounded-lg">
+            <p class="text-red-400 text-sm">{{ authStore.error }}</p>
+          </div>
 
-        <!-- Email Input -->
-        <div class="mb-4">
-          <Input
-            v-model="form.email"
-            type="email"
-            label="Email Address"
-            placeholder="you@example.com"
-            :error="errors.email"
-            required
-          />
-        </div>
-
-        <!-- Password Input -->
-        <div class="mb-6">
-          <Input
-            v-model="form.password"
-            type="password"
-            label="Password"
-            placeholder="••••••••"
-            :error="errors.password"
-            required
-          />
-        </div>
-
-        <!-- Remember Me & Forgot Password -->
-        <div class="flex items-center justify-between mb-6">
-          <label class="flex items-center gap-2 cursor-pointer">
-            <input
-              v-model="form.rememberMe"
-              type="checkbox"
-              class="w-4 h-4 rounded border-[#3b5265] bg-[#051824] text-[#27e9b5] cursor-pointer"
+          <!-- Email Input -->
+          <div class="mb-4">
+            <Input
+              v-model="form.email"
+              type="email"
+              label="Email Address"
+              placeholder="you@example.com"
+              :error="errors.email"
+              required
             />
-            <span class="text-sm text-gray-400">Remember me</span>
-          </label>
-          <a href="#" class="text-sm text-[#27e9b5] hover:text-white transition-colors">
-            Forgot password?
-          </a>
-        </div>
+          </div>
 
-        <!-- Login Button -->
-        <Button
-          variant="primary"
-          size="lg"
-          class="w-full mb-4"
-          :is-loading="authStore.isLoading"
-          @click="handleLogin"
-        >
-          Sign In
-        </Button>
+          <!-- Password Input -->
+          <div class="mb-6">
+            <Input
+              v-model="form.password"
+              type="password"
+              label="Password"
+              placeholder="••••••••"
+              :error="errors.password"
+              required
+            />
+          </div>
+
+          <!-- Remember Me & Forgot Password -->
+          <div class="flex items-center justify-between mb-6">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input
+                v-model="form.rememberMe"
+                type="checkbox"
+                class="w-4 h-4 rounded border-[#3b5265] bg-[#051824] text-[#27e9b5] cursor-pointer"
+              />
+              <span class="text-sm text-gray-400">Remember me</span>
+            </label>
+            <a href="#" class="text-sm text-[#27e9b5] hover:text-white transition-colors">
+              Forgot password?
+            </a>
+          </div>
+
+          <!-- Login Button -->
+          <Button
+            type="submit"
+            variant="primary"
+            size="lg"
+            class="w-full mb-4"
+            :is-loading="authStore.isLoading"
+          >
+            Sign In
+          </Button>
+        </form>
 
         <!-- Divider -->
         <div class="relative mb-6">
@@ -97,7 +99,7 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue';
+import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../../stores/auth';
 import Card from '../../components/ui/Card.vue';
@@ -141,13 +143,24 @@ const validateForm = () => {
   return !errors.email && !errors.password;
 };
 
-const handleLogin = async () => {
+const handleLogin = async (event) => {
+  // Prevent form submission and page refresh
+  if (event) {
+    event.preventDefault();
+  }
+
   if (!validateForm()) return;
+
+  // Clear any previous auth errors
+  authStore.clearError();
 
   const result = await authStore.login(form.email, form.password);
 
   if (result.success) {
     router.push('/admin/dashboard');
+  } else {
+    // Error is already set in the auth store, no need to do anything else
+    // The error will be displayed in the template via authStore.error
   }
 };
 </script>

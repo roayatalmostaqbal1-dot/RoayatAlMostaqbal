@@ -92,6 +92,18 @@
           <p class="text-gray-400">No roles found</p>
         </div>
       </div>
+
+      <!-- Pagination -->
+      <Pagination
+        :current-page="rolesStore.pagination.current_page"
+        :total-pages="rolesStore.pagination.total > 0 ? Math.ceil(rolesStore.pagination.total / rolesStore.pagination.per_page) : 1"
+        :total="rolesStore.pagination.total"
+        :per-page="rolesStore.pagination.per_page"
+        :is-loading="rolesStore.isLoading"
+        @prev="rolesStore.fetchRoles(rolesStore.pagination.current_page - 1)"
+        @next="rolesStore.fetchRoles(rolesStore.pagination.current_page + 1)"
+        @go-to-page="rolesStore.fetchRoles"
+      />
     </Card>
 
     <!-- CRUD Modal -->
@@ -122,9 +134,11 @@
 import { ref, onMounted, computed } from 'vue';
 import { useRolesStore } from '../../stores/rolesStore';
 import { usePermissionsStore } from '../../stores/permissionsStore';
+import { useToastStore } from '../../stores/toastStore';
 import DashboardLayout from '../../components/layout/DashboardLayout.vue';
 import Card from '../../components/ui/Card.vue';
 import Button from '../../components/ui/Button.vue';
+import Pagination from '../../components/ui/Pagination.vue';
 import CrudModal from '../../components/crud/CrudModal.vue';
 import PermissionsModal from '../../components/access-control/PermissionsModal.vue';
 
@@ -152,17 +166,15 @@ onMounted(async () => {
 
 const handleDelete = async (item) => {
   if (item.name === 'super-admin') {
-    alert('Cannot delete the super-admin role');
+    // Use toast instead of alert
+    const toastStore = useToastStore();
+    toastStore.error('Cannot Delete', 'Cannot delete the super-admin role');
     return;
   }
 
   if (confirm(`Are you sure you want to delete the "${item.name}" role?`)) {
-    const result = await rolesStore.deleteRole(item.id);
-    if (result.success) {
-      alert('Role deleted successfully');
-    } else {
-      alert(`Error: ${result.error}`);
-    }
+    await rolesStore.deleteRole(item.id);
+    // Toast notifications are handled in the store
   }
 };
 
@@ -188,19 +200,17 @@ const handleSubmit = async (formData) => {
   if (modalMode.value === 'create') {
     const result = await rolesStore.createRole(formData);
     if (result.success) {
-      alert('Role created successfully');
       closeModal();
-    } else {
-      alert(`Error: ${result.error}`);
+      // Toast notification is handled in the store
     }
+    // Error toast is also handled in the store
   } else {
     const result = await rolesStore.updateRole(selectedRoleForModal.value.id, formData);
     if (result.success) {
-      alert('Role updated successfully');
       closeModal();
-    } else {
-      alert(`Error: ${result.error}`);
+      // Toast notification is handled in the store
     }
+    // Error toast is also handled in the store
   }
 };
 

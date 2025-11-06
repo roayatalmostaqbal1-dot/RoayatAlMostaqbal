@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import apiClient from '../services/api';
+import { useToastStore } from './toastStore';
 
 export const useApiRoutesStore = defineStore('apiRoutes', () => {
     // State
@@ -14,6 +15,9 @@ export const useApiRoutesStore = defineStore('apiRoutes', () => {
         per_page: 10,
         total: 0,
     });
+
+    // Toast store
+    const toastStore = useToastStore();
 
     // Computed
     const apiRoutesList = computed(() => apiRoutes.value);
@@ -48,10 +52,15 @@ export const useApiRoutesStore = defineStore('apiRoutes', () => {
         try {
             const response = await apiClient.post('/SuperAdmin/api-routes', routeData);
             apiRoutes.value.push(response.data.data);
+
+            toastStore.success('API Route Created', response.data.message || 'API route has been created successfully');
+
             return { success: true, data: response.data.data };
         } catch (err) {
-            error.value = err.response?.data?.message || 'Failed to create API route';
-            return { success: false, error: error.value };
+            const errorMessage = err.response?.data?.message || 'Failed to create API route';
+            error.value = errorMessage;
+            toastStore.error('Create Failed', errorMessage);
+            return { success: false, error: errorMessage, errors: err.response?.data?.errors };
         } finally {
             isLoading.value = false;
         }
@@ -66,10 +75,15 @@ export const useApiRoutesStore = defineStore('apiRoutes', () => {
             if (index !== -1) {
                 apiRoutes.value[index] = response.data.data;
             }
+
+            toastStore.success('API Route Updated', response.data.message || 'API route has been updated successfully');
+
             return { success: true, data: response.data.data };
         } catch (err) {
-            error.value = err.response?.data?.message || 'Failed to update API route';
-            return { success: false, error: error.value };
+            const errorMessage = err.response?.data?.message || 'Failed to update API route';
+            error.value = errorMessage;
+            toastStore.error('Update Failed', errorMessage);
+            return { success: false, error: errorMessage, errors: err.response?.data?.errors };
         } finally {
             isLoading.value = false;
         }
@@ -79,12 +93,17 @@ export const useApiRoutesStore = defineStore('apiRoutes', () => {
         isLoading.value = true;
         error.value = null;
         try {
-            await apiClient.delete(`/SuperAdmin/api-routes/${routeId}`);
+            const response = await apiClient.delete(`/SuperAdmin/api-routes/${routeId}`);
             apiRoutes.value = apiRoutes.value.filter(r => r.id !== routeId);
+
+            toastStore.success('API Route Deleted', response.data?.message || 'API route has been deleted successfully');
+
             return { success: true };
         } catch (err) {
-            error.value = err.response?.data?.message || 'Failed to delete API route';
-            return { success: false, error: error.value };
+            const errorMessage = err.response?.data?.message || 'Failed to delete API route';
+            error.value = errorMessage;
+            toastStore.error('Delete Failed', errorMessage);
+            return { success: false, error: errorMessage };
         } finally {
             isLoading.value = false;
         }

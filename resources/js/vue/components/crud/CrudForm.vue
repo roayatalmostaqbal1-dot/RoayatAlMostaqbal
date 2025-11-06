@@ -88,7 +88,7 @@
 <script setup>
 import Input from '../ui/Input.vue';
 
-defineProps({
+const props = defineProps({
   fields: {
     type: Array,
     required: true,
@@ -111,7 +111,7 @@ const emit = defineEmits(['update:form-data', 'submit']);
 
 const updateField = (fieldName, value) => {
   emit('update:form-data', {
-    ...formData,
+    ...props.formData,
     [fieldName]: value,
   });
 };

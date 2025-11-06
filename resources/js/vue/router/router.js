@@ -7,8 +7,6 @@ import RegisterPage from '../pages/auth/RegisterPage.vue';
 import SocialCallbackPage from '../pages/auth/SocialCallbackPage.vue';
 import DashboardPage from '../pages/admin/DashboardPage.vue';
 import UsersPage from '../pages/admin/UsersPage.vue';
-import ProductsPage from '../pages/admin/ProductsPage.vue';
-import CategoriesPage from '../pages/admin/CategoriesPage.vue';
 import SettingsPage from '../pages/admin/SettingsPage.vue';
 import RolesPage from '../pages/admin/RolesPage.vue';
 import PermissionsPage from '../pages/admin/PermissionsPage.vue';
@@ -43,18 +41,6 @@ const routes = [
     path: '/users',
     name: 'Users',
     component: UsersPage,
-    meta: { requiresAuth: true },
-  },
-  {
-    path: '/products',
-    name: 'Products',
-    component: ProductsPage,
-    meta: { requiresAuth: true },
-  },
-  {
-    path: '/categories',
-    name: 'Categories',
-    component: CategoriesPage,
     meta: { requiresAuth: true },
   },
   {

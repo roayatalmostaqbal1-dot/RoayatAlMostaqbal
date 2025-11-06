@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import apiClient from '../services/api';
+import { useToastStore } from './toastStore';
 
 export const usePermissionsStore = defineStore('permissions', () => {
     // State
@@ -14,6 +15,9 @@ export const usePermissionsStore = defineStore('permissions', () => {
         total: 0,
     });
 
+    // Toast store
+    const toastStore = useToastStore();
+
     // Computed
     const permissionsList = computed(() => permissions.value);
     const totalPermissions = computed(() => pagination.value.total);
@@ -26,6 +30,7 @@ export const usePermissionsStore = defineStore('permissions', () => {
             const response = await apiClient.get('/SuperAdmin/permissions', {
                 params: { page, per_page: perPage },
             });
+
             permissions.value = response.data.data;
             pagination.value = {
                 current_page: response.data.meta?.current_page || page,
@@ -62,10 +67,15 @@ export const usePermissionsStore = defineStore('permissions', () => {
         try {
             const response = await apiClient.post('/SuperAdmin/permissions', permissionData);
             permissions.value.push(response.data.data);
+
+            toastStore.success('Permission Created', response.data.message || 'Permission has been created successfully');
+
             return { success: true, data: response.data.data };
         } catch (err) {
-            error.value = err.response?.data?.message || 'Failed to create permission';
-            return { success: false, error: error.value };
+            const errorMessage = err.response?.data?.message || 'Failed to create permission';
+            error.value = errorMessage;
+            toastStore.error('Create Failed', errorMessage);
+            return { success: false, error: errorMessage, errors: err.response?.data?.errors };
         } finally {
             isLoading.value = false;
         }
@@ -80,10 +90,15 @@ export const usePermissionsStore = defineStore('permissions', () => {
             if (index !== -1) {
                 permissions.value[index] = response.data.data;
             }
+
+            toastStore.success('Permission Updated', response.data.message || 'Permission has been updated successfully');
+
             return { success: true, data: response.data.data };
         } catch (err) {
-            error.value = err.response?.data?.message || 'Failed to update permission';
-            return { success: false, error: error.value };
+            const errorMessage = err.response?.data?.message || 'Failed to update permission';
+            error.value = errorMessage;
+            toastStore.error('Update Failed', errorMessage);
+            return { success: false, error: errorMessage, errors: err.response?.data?.errors };
         } finally {
             isLoading.value = false;
         }
@@ -93,12 +108,17 @@ export const usePermissionsStore = defineStore('permissions', () => {
         isLoading.value = true;
         error.value = null;
         try {
-            await apiClient.delete(`/SuperAdmin/permissions/${permissionId}`);
+            const response = await apiClient.delete(`/SuperAdmin/permissions/${permissionId}`);
             permissions.value = permissions.value.filter(p => p.id !== permissionId);
+
+            toastStore.success('Permission Deleted', response.data?.message || 'Permission has been deleted successfully');
+
             return { success: true };
         } catch (err) {
-            error.value = err.response?.data?.message || 'Failed to delete permission';
-            return { success: false, error: error.value };
+            const errorMessage = err.response?.data?.message || 'Failed to delete permission';
+            error.value = errorMessage;
+            toastStore.error('Delete Failed', errorMessage);
+            return { success: false, error: errorMessage };
         } finally {
             isLoading.value = false;
         }

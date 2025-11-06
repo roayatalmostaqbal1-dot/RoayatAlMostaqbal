@@ -165,6 +165,10 @@ export const useAuthStore = defineStore('auth', () => {
         }
     };
 
+    const clearError = () => {
+        error.value = null;
+    };
+
     return {
         // State
         user,
@@ -184,6 +188,7 @@ export const useAuthStore = defineStore('auth', () => {
         fetchUser,
         socialAuthRedirect,
         restoreSession,
+        clearError,
     };
 }, {
     persist: true,

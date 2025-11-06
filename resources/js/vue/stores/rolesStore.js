@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import apiClient from '../services/api';
+import { useToastStore } from './toastStore';
 
 export const useRolesStore = defineStore('roles', () => {
     // State
@@ -13,6 +14,9 @@ export const useRolesStore = defineStore('roles', () => {
         per_page: 10,
         total: 0,
     });
+
+    // Toast store
+    const toastStore = useToastStore();
 
     // Computed
     const rolesList = computed(() => roles.value);
@@ -47,10 +51,22 @@ export const useRolesStore = defineStore('roles', () => {
         try {
             const response = await apiClient.post('/SuperAdmin/roles', roleData);
             roles.value.push(response.data.data);
+
+            // Show success toast
+            toastStore.success(
+                'Role Created',
+                response.data.message || 'Role has been created successfully'
+            );
+
             return { success: true, data: response.data.data };
         } catch (err) {
-            error.value = err.response?.data?.message || 'Failed to create role';
-            return { success: false, error: error.value };
+            const errorMessage = err.response?.data?.message || 'Failed to create role';
+            error.value = errorMessage;
+
+            // Show error toast
+            toastStore.error('Create Failed', errorMessage);
+
+            return { success: false, error: errorMessage, errors: err.response?.data?.errors };
         } finally {
             isLoading.value = false;
         }
@@ -65,10 +81,22 @@ export const useRolesStore = defineStore('roles', () => {
             if (index !== -1) {
                 roles.value[index] = response.data.data;
             }
+
+            // Show success toast
+            toastStore.success(
+                'Role Updated',
+                response.data.message || 'Role has been updated successfully'
+            );
+
             return { success: true, data: response.data.data };
         } catch (err) {
-            error.value = err.response?.data?.message || 'Failed to update role';
-            return { success: false, error: error.value };
+            const errorMessage = err.response?.data?.message || 'Failed to update role';
+            error.value = errorMessage;
+
+            // Show error toast
+            toastStore.error('Update Failed', errorMessage);
+
+            return { success: false, error: errorMessage, errors: err.response?.data?.errors };
         } finally {
             isLoading.value = false;
         }
@@ -78,12 +106,24 @@ export const useRolesStore = defineStore('roles', () => {
         isLoading.value = true;
         error.value = null;
         try {
-            await apiClient.delete(`/SuperAdmin/roles/${roleId}`);
+            const response = await apiClient.delete(`/SuperAdmin/roles/${roleId}`);
             roles.value = roles.value.filter(r => r.id !== roleId);
+
+            // Show success toast
+            toastStore.success(
+                'Role Deleted',
+                response.data?.message || 'Role has been deleted successfully'
+            );
+
             return { success: true };
         } catch (err) {
-            error.value = err.response?.data?.message || 'Failed to delete role';
-            return { success: false, error: error.value };
+            const errorMessage = err.response?.data?.message || 'Failed to delete role';
+            error.value = errorMessage;
+
+            // Show error toast
+            toastStore.error('Delete Failed', errorMessage);
+
+            return { success: false, error: errorMessage };
         } finally {
             isLoading.value = false;
         }

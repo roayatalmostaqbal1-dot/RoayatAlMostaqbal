@@ -108,8 +108,6 @@ const logoUrl = '/RoayatAlMostaqbal.svg';
 const menuItems = [
   { path: '/dashboard', label: 'Dashboard', icon: IconDashboard },
   { path: '/users', label: 'Users', icon: IconUsers },
-  { path: '/products', label: 'Products', icon: IconUsers },
-  { path: '/categories', label: 'Categories', icon: IconUsers },
   { path: '/roles', label: 'Roles', icon: IconUsers },
   { path: '/permissions', label: 'Permissions', icon: IconUsers },
   { path: '/api-routes', label: 'API Routes', icon: IconUsers },

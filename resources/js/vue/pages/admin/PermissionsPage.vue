@@ -84,6 +84,18 @@
           <p class="text-gray-400">No permissions found</p>
         </div>
       </div>
+
+      <!-- Pagination -->
+      <Pagination
+        :current-page="permissionsStore.pagination.current_page"
+        :total-pages="permissionsStore.pagination.total > 0 ? Math.ceil(permissionsStore.pagination.total / permissionsStore.pagination.per_page) : 1"
+        :total="permissionsStore.pagination.total"
+        :per-page="permissionsStore.pagination.per_page"
+        :is-loading="permissionsStore.isLoading"
+        @prev="permissionsStore.fetchPermissions(permissionsStore.pagination.current_page - 1)"
+        @next="permissionsStore.fetchPermissions(permissionsStore.pagination.current_page + 1)"
+        @go-to-page="permissionsStore.fetchPermissions"
+      />
     </Card>
 
     <!-- CRUD Modal -->
@@ -107,6 +119,7 @@ import { usePermissionsStore } from '../../stores/permissionsStore';
 import DashboardLayout from '../../components/layout/DashboardLayout.vue';
 import Card from '../../components/ui/Card.vue';
 import Button from '../../components/ui/Button.vue';
+import Pagination from '../../components/ui/Pagination.vue';
 import CrudModal from '../../components/crud/CrudModal.vue';
 
 const permissionsStore = usePermissionsStore();
@@ -126,8 +139,6 @@ const permissionFields = [
     required: false,
     options: [
       { value: 'users', label: 'Users' },
-      { value: 'products', label: 'Products' },
-      { value: 'categories', label: 'Categories' },
       { value: 'roles', label: 'Roles' },
       { value: 'permissions', label: 'Permissions' },
       { value: 'api_routes', label: 'API Routes' },
@@ -166,19 +177,17 @@ const handleSubmit = async (formData) => {
   if (modalMode.value === 'create') {
     const result = await permissionsStore.createPermission(formData);
     if (result.success) {
-      alert('Permission created successfully');
       closeModal();
-    } else {
-      alert(`Error: ${result.error}`);
+      // Toast notification is handled in the store
     }
+    // Error toast is also handled in the store
   } else {
     const result = await permissionsStore.updatePermission(selectedPermissionForModal.value.id, formData);
     if (result.success) {
-      alert('Permission updated successfully');
       closeModal();
-    } else {
-      alert(`Error: ${result.error}`);
+      // Toast notification is handled in the store
     }
+    // Error toast is also handled in the store
   }
 };
 

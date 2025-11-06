@@ -114,6 +114,18 @@
           <p class="text-gray-400">No API routes found</p>
         </div>
       </div>
+
+      <!-- Pagination -->
+      <Pagination
+        :current-page="apiRoutesStore.pagination.current_page"
+        :total-pages="apiRoutesStore.pagination.total > 0 ? Math.ceil(apiRoutesStore.pagination.total / apiRoutesStore.pagination.per_page) : 1"
+        :total="apiRoutesStore.pagination.total"
+        :per-page="apiRoutesStore.pagination.per_page"
+        :is-loading="apiRoutesStore.isLoading"
+        @prev="apiRoutesStore.fetchApiRoutes(apiRoutesStore.pagination.current_page - 1)"
+        @next="apiRoutesStore.fetchApiRoutes(apiRoutesStore.pagination.current_page + 1)"
+        @go-to-page="apiRoutesStore.fetchApiRoutes"
+      />
     </Card>
 
     <!-- CRUD Modal -->
@@ -138,6 +150,7 @@ import { usePermissionsStore } from '../../stores/permissionsStore';
 import DashboardLayout from '../../components/layout/DashboardLayout.vue';
 import Card from '../../components/ui/Card.vue';
 import Button from '../../components/ui/Button.vue';
+import Pagination from '../../components/ui/Pagination.vue';
 import CrudModal from '../../components/crud/CrudModal.vue';
 
 const apiRoutesStore = useApiRoutesStore();
@@ -225,19 +238,17 @@ const handleSubmit = async (formData) => {
   if (modalMode.value === 'create') {
     const result = await apiRoutesStore.createApiRoute(formData);
     if (result.success) {
-      alert('Route created successfully');
       closeModal();
-    } else {
-      alert(`Error: ${result.error}`);
+      // Toast notification is handled in the store
     }
+    // Error toast is also handled in the store
   } else {
     const result = await apiRoutesStore.updateApiRoute(selectedRouteForModal.value.id, formData);
     if (result.success) {
-      alert('Route updated successfully');
       closeModal();
-    } else {
-      alert(`Error: ${result.error}`);
+      // Toast notification is handled in the store
     }
+    // Error toast is also handled in the store
   }
 };
 
@@ -256,12 +267,8 @@ const handleSyncRoutes = async () => {
 
 const handleDelete = async (item) => {
   if (confirm(`Are you sure you want to delete the route "${item.route_name}"?`)) {
-    const result = await apiRoutesStore.deleteApiRoute(item.id);
-    if (result.success) {
-      alert('Route deleted successfully');
-    } else {
-      alert(`Error: ${result.error}`);
-    }
+    await apiRoutesStore.deleteApiRoute(item.id);
+    // Toast notifications are handled in the store
   }
 };
 

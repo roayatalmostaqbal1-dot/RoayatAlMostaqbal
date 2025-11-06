@@ -7,8 +7,8 @@
           <Button
             variant="primary"
             size="sm"
-            @click="crud.openCreateModal"
-            :disabled="crud.isLoading.value"
+            @click="openCreateModal"
+            :disabled="usersStore.isLoading"
           >
             + Add User
           </Button>
@@ -17,14 +17,14 @@
 
       <!-- Error Message -->
       <div
-        v-if="crud.errors.general"
+        v-if="usersStore.error"
         class="mb-4 p-4 rounded-lg bg-red-500 bg-opacity-10 border border-red-500 text-red-400"
       >
-        {{ crud.errors.general }}
+        {{ usersStore.error }}
       </div>
 
       <!-- Loading State -->
-      <div v-if="crud.isLoading.value && crud.items.value.length === 0" class="text-center py-8">
+      <div v-if="usersStore.isLoading && usersStore.usersList.length === 0" class="text-center py-8">
         <div class="inline-block">
           <svg class="animate-spin h-8 w-8 text-[#27e9b5]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -35,9 +35,9 @@
       </div>
 
       <!-- Empty State -->
-      <div v-else-if="crud.items.value.length === 0" class="text-center py-8">
+      <div v-else-if="usersStore.usersList.length === 0" class="text-center py-8">
         <p class="text-gray-400 mb-4">No users found</p>
-        <Button variant="primary" @click="crud.openCreateModal">Create First User</Button>
+        <Button variant="primary" @click="openCreateModal">Create First User</Button>
       </div>
 
       <!-- Users Table -->
@@ -54,7 +54,7 @@
           </thead>
           <tbody>
             <tr
-              v-for="user in crud.items.value"
+              v-for="user in usersStore.usersList"
               :key="user.id"
               class="border-b border-[#3b5265] hover:bg-[#1f3a4a] transition-colors"
             >
@@ -62,7 +62,7 @@
               <td class="py-3 px-4 text-gray-400">{{ user.email }}</td>
               <td class="py-3 px-4">
                 <span class="px-3 py-1 rounded-full text-xs font-semibold bg-[#27e9b5] bg-opacity-20 text-[#27e9b5]">
-                  {{ user.role || 'User' }}
+                  {{ user.roles && user.roles.length > 0 ? user.roles[0] : 'User' }}
                 </span>
               </td>
               <td class="py-3 px-4">
@@ -80,28 +80,31 @@
                 </span>
               </td>
               <td class="py-3 px-4">
-                <div class="flex gap-2">
+                <div class="flex items-center gap-2 flex-wrap">
                   <Button
-                    variant="ghost"
+                    variant="secondary"
                     size="sm"
-                    @click="crud.openViewModal(user)"
+                    @click="openViewModal(user)"
+                    title="View user details"
                   >
-                    View
+                    👁️ View
                   </Button>
                   <Button
-                    variant="ghost"
+                    variant="secondary"
                     size="sm"
-                    @click="crud.openEditModal(user)"
+                    @click="openEditModal(user)"
+                    title="Edit user details"
                   >
-                    Edit
+                    ✏️ Edit
                   </Button>
                   <Button
                     variant="danger"
                     size="sm"
                     @click="handleDelete(user)"
-                    :disabled="crud.isLoading.value"
+                    :disabled="usersStore.isLoading"
+                    title="Delete this user"
                   >
-                    Delete
+                    🗑️ Delete
                   </Button>
                 </div>
               </td>
@@ -109,33 +112,52 @@
           </tbody>
         </table>
       </div>
+
+      <!-- Pagination -->
+      <Pagination
+        :current-page="usersStore.currentPage"
+        :total-pages="usersStore.lastPage"
+        :total="usersStore.totalUsers"
+        :per-page="usersStore.pagination.per_page"
+        :is-loading="usersStore.isLoading"
+        @prev="usersStore.prevPage"
+        @next="usersStore.nextPage"
+        @go-to-page="usersStore.goToPage"
+      />
     </Card>
 
     <!-- CRUD Modal -->
     <CrudModal
-      :is-open="crud.isModalOpen.value"
-      :mode="crud.modalMode.value"
+      :is-open="isModalOpen"
+      :mode="modalMode"
       :fields="userFields"
-      :initial-data="crud.selectedItem.value || {}"
-      :is-loading="crud.isLoading.value"
-      :errors="crud.errors"
-      @close="crud.closeModal"
-      @submit="crud.handleSubmit"
+      :initial-data="selectedUser || {}"
+      :is-loading="usersStore.isLoading"
+      :errors="modalErrors"
+      @close="closeModal"
+      @submit="handleSubmit"
       @delete="handleDelete"
     />
   </DashboardLayout>
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import DashboardLayout from '../../components/layout/DashboardLayout.vue';
 import Card from '../../components/ui/Card.vue';
 import Button from '../../components/ui/Button.vue';
+import Pagination from '../../components/ui/Pagination.vue';
 import CrudModal from '../../components/crud/CrudModal.vue';
-import { useCrud } from '../../composables/useCrud';
+import { useUsersStore } from '../../stores/usersStore';
 
-// Initialize CRUD operations for users endpoint
-const crud = useCrud('/api/users');
+// Initialize users store
+const usersStore = useUsersStore();
+
+// Modal state
+const isModalOpen = ref(false);
+const modalMode = ref('create');
+const selectedUser = ref(null);
+const modalErrors = ref({});
 
 // Define form fields for user creation/editing
 const userFields = [
@@ -181,18 +203,67 @@ const userFields = [
   },
 ];
 
+// Modal functions
+const openCreateModal = () => {
+  modalMode.value = 'create';
+  selectedUser.value = null;
+  modalErrors.value = {};
+  isModalOpen.value = true;
+};
+
+const openEditModal = (user) => {
+  modalMode.value = 'edit';
+  selectedUser.value = { ...user };
+  modalErrors.value = {};
+  isModalOpen.value = true;
+};
+
+const openViewModal = (user) => {
+  modalMode.value = 'view';
+  selectedUser.value = { ...user };
+  modalErrors.value = {};
+  isModalOpen.value = true;
+};
+
+const closeModal = () => {
+  isModalOpen.value = false;
+  selectedUser.value = null;
+  modalErrors.value = {};
+  usersStore.clearError();
+};
+
+const handleSubmit = async (formData) => {
+  modalErrors.value = {};
+  let result;
+
+  if (modalMode.value === 'create') {
+    result = await usersStore.createUser(formData);
+  } else if (modalMode.value === 'edit') {
+    result = await usersStore.updateUser(selectedUser.value.id, formData);
+  }
+
+  if (result.success) {
+    closeModal();
+  } else {
+    if (result.errors) {
+      modalErrors.value = result.errors;
+    } else {
+      modalErrors.value.general = result.error;
+    }
+  }
+};
+
 // Fetch users on component mount
 onMounted(() => {
-  crud.fetchItems();
+  usersStore.fetchUsers();
 });
 
 // Handle delete with confirmation
 const handleDelete = async (item) => {
   if (confirm(`Are you sure you want to delete ${item.name}?`)) {
-    try {
-      await crud.deleteItem(item.id);
-    } catch (error) {
-      console.error('Delete failed:', error);
+    const result = await usersStore.deleteUser(item.id);
+    if (!result.success) {
+      console.error('Delete failed:', result.error);
     }
   }
 };

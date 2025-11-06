@@ -20,15 +20,15 @@ import Pusher from 'pusher-js';
 // });
 const echo = new Echo({
     broadcaster: 'reverb',
-    key: import.meta.env.VITE_REVERB_APP_KEY,
-    host: import.meta.env.VITE_REVERB_HOST,      // فقط اسم النطاق
-    wsHost: import.meta.env.VITE_REVERB_HOST,    // اسم النطاق أيضاً
-    wsPort: 443,                                  // لأن Nginx سيعمل proxy على HTTPS
-    wss: true,                                    // استخدام WSS
-    path: '/reverb/app',                           // مسار البروكسي في Nginx
-    forceTLS: true,
+    key: import.meta.env.VITE_REVERB_APP_KEY,      // مفتاح Reverb
+    wsHost: import.meta.env.VITE_REVERB_HOST,      // roayatalmostaqbal.net
+    wsPort: 443,                                   // لأننا نستخدم HTTPS
+    wss: true,                                     // البروتوكول الآمن
+    forceTLS: true,                                // اجبار TLS
     enabledTransports: ['ws', 'wss'],
+    path: '/reverb/app',                            // 🔹 مسار البروكسي الصحيح
 });
+
 // Export as a Vue plugin with install function
 export default {
   install(app) {

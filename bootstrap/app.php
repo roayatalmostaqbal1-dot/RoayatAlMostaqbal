@@ -19,7 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Register API middleware
         $middleware->api(append: [
-            \App\Http\Middleware\CheckApiPermission::class,
+            
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

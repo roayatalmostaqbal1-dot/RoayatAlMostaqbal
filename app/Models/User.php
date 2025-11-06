@@ -24,6 +24,9 @@ class User extends Authenticatable implements OAuthenticatable
         'name',
         'email',
         'password',
+        'two_factor_enabled',
+        'two_factor_secret',
+        'two_factor_recovery_codes',
     ];
 
     /**
@@ -34,6 +37,8 @@ class User extends Authenticatable implements OAuthenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'two_factor_secret',
+        'two_factor_recovery_codes',
     ];
 
     /**
@@ -52,7 +57,7 @@ class User extends Authenticatable implements OAuthenticatable
     {
         return $this->hasMany(SocialAccount::class);
     }
-  
+
 
     /**
      * Get the user's permissions through their role

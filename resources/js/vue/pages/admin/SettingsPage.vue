@@ -48,11 +48,7 @@
 
           <!-- Security Settings -->
           <div v-if="activeTab === 'security'" class="space-y-6">
-            <div class="p-4 bg-[#1f3a4a] rounded-lg border border-[#3b5265]">
-              <h3 class="text-white font-semibold mb-2">Two-Factor Authentication</h3>
-              <p class="text-gray-400 text-sm mb-4">Enhance your account security with 2FA</p>
-              <Button variant="secondary">Enable 2FA</Button>
-            </div>
+            <TwoFactorSettings />
             <div class="p-4 bg-[#1f3a4a] rounded-lg border border-[#3b5265]">
               <h3 class="text-white font-semibold mb-2">Change Password</h3>
               <p class="text-gray-400 text-sm mb-4">Update your password regularly</p>
@@ -89,6 +85,7 @@ import DashboardLayout from '../../components/layout/DashboardLayout.vue';
 import Card from '../../components/ui/Card.vue';
 import Input from '../../components/ui/Input.vue';
 import Button from '../../components/ui/Button.vue';
+import TwoFactorSettings from '../../components/settings/TwoFactorSettings.vue';
 
 const activeTab = ref('general');
 

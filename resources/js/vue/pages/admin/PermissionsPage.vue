@@ -141,7 +141,6 @@ const permissionFields = [
       { value: 'users', label: 'Users' },
       { value: 'roles', label: 'Roles' },
       { value: 'permissions', label: 'Permissions' },
-      { value: 'api_routes', label: 'API Routes' },
     ]
   },
 ];

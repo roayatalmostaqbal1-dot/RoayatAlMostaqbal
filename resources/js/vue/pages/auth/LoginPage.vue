@@ -1,5 +1,13 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-[#051824] via-[#162936] to-[#3b5265] flex items-center justify-center px-4 py-8">
+    <!-- 2FA Verification Modal -->
+    <TwoFactorVerification
+      v-if="show2FAModal"
+      :user-id="twoFactorUserId"
+      @verified="handle2FAVerified"
+      @cancel="handle2FACancel"
+    />
+
     <div class="w-full max-w-md">
       <!-- Logo and Title -->
       <div class="text-center mb-8">
@@ -99,19 +107,24 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../../stores/auth';
 import Card from '../../components/ui/Card.vue';
 import Input from '../../components/ui/Input.vue';
 import Button from '../../components/ui/Button.vue';
 import SocialLoginButton from '../../components/auth/SocialLoginButton.vue';
+import TwoFactorVerification from '../../components/auth/TwoFactorVerification.vue';
 
 const router = useRouter();
 const authStore = useAuthStore();
 
 // Logo URL - using public asset
 const logoUrl = '/RoayatAlMostaqbal.svg';
+
+// 2FA state
+const show2FAModal = ref(false);
+const twoFactorUserId = ref(null);
 
 const form = reactive({
   email: '',
@@ -157,11 +170,29 @@ const handleLogin = async (event) => {
   const result = await authStore.login(form.email, form.password);
 
   if (result.success) {
-    router.push('/admin/dashboard');
+    // Check if 2FA is required
+    if (result.data?.two_factor_enabled) {
+      show2FAModal.value = true;
+      twoFactorUserId.value = result.data.id;
+    } else {
+      router.push('/admin/dashboard');
+    }
   } else {
     // Error is already set in the auth store, no need to do anything else
     // The error will be displayed in the template via authStore.error
   }
+};
+
+const handle2FAVerified = () => {
+  show2FAModal.value = false;
+  twoFactorUserId.value = null;
+  router.push('/admin/dashboard');
+};
+
+const handle2FACancel = () => {
+  show2FAModal.value = false;
+  twoFactorUserId.value = null;
+  authStore.resetTwoFactor();
 };
 </script>
 

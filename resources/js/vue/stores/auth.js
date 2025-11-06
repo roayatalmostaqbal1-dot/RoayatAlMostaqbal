@@ -8,6 +8,8 @@ export const useAuthStore = defineStore('auth', () => {
     const token = ref(localStorage.getItem('auth_token') || null);
     const isLoading = ref(false);
     const error = ref(null);
+    const twoFactorRequired = ref(false);
+    const twoFactorUserId = ref(null);
 
     // Computed
     const isAuthenticated = computed(() => !!token.value);
@@ -169,12 +171,19 @@ export const useAuthStore = defineStore('auth', () => {
         error.value = null;
     };
 
+    const resetTwoFactor = () => {
+        twoFactorRequired.value = false;
+        twoFactorUserId.value = null;
+    };
+
     return {
         // State
         user,
         token,
         isLoading,
         error,
+        twoFactorRequired,
+        twoFactorUserId,
 
         // Computed
         isAuthenticated,
@@ -189,6 +198,7 @@ export const useAuthStore = defineStore('auth', () => {
         socialAuthRedirect,
         restoreSession,
         clearError,
+        resetTwoFactor,
     };
 }, {
     persist: true,

@@ -1,34 +1,23 @@
 <template>
   <DashboardLayout page-title="Dashboard" page-description="Overview of your system">
+    <!-- Loading State -->
+    <div v-if="dashboardStore.isLoading" class="flex items-center justify-center py-12">
+      <div class="text-center">
+        <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#27e9b5]"></div>
+        <p class="text-gray-400 mt-4">Loading dashboard statistics...</p>
+      </div>
+    </div>
+
     <!-- Stats Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       <StatCard
-        title="Total Users"
-        value="1,234"
-        icon="users"
-        trend="+12%"
-        trendUp
-      />
-      <StatCard
-        title="Active Sessions"
-        value="456"
-        icon="activity"
-        trend="+5%"
-        trendUp
-      />
-      <StatCard
-        title="Revenue"
-        value="$12,345"
-        icon="trending-up"
-        trend="+8%"
-        trendUp
-      />
-      <StatCard
-        title="Conversion Rate"
-        value="3.24%"
-        icon="target"
-        trend="-2%"
-        :trendUp="false"
+        v-for="stat in dashboardStore.statistics"
+        :key="stat.title"
+        :title="stat.title"
+        :value="stat.value.toString()"
+        :icon="stat.icon"
+        :trend="stat.trend"
+        :trend-up="stat.trend_up"
       />
     </div>
 
@@ -49,14 +38,19 @@
         <template #header>
           <h2 class="text-lg font-bold text-white">Recent Activity</h2>
         </template>
-        <div class="space-y-4">
-          <div v-for="i in 5" :key="i" class="flex items-start gap-3 pb-4 border-b border-[#3b5265] last:border-0">
+        <div v-if="dashboardStore.recentActivity.length > 0" class="space-y-4">
+          <div v-for="activity in dashboardStore.recentActivity" :key="activity.id" class="flex items-start gap-3 pb-4 border-b border-[#3b5265] last:border-0">
             <div class="w-2 h-2 rounded-full bg-[#27e9b5] mt-2 flex-shrink-0"></div>
             <div class="flex-1 min-w-0">
-              <p class="text-white text-sm font-semibold">User activity {{ i }}</p>
-              <p class="text-gray-400 text-xs">2 hours ago</p>
+              <p class="text-white text-sm font-semibold">
+                {{ activity.user_name }} <span class="text-gray-400">{{ activity.action }}</span> {{ activity.model_type }}
+              </p>
+              <p class="text-gray-400 text-xs">{{ activity.timestamp }}</p>
             </div>
           </div>
+        </div>
+        <div v-else class="text-center py-8">
+          <p class="text-gray-400">No recent activity</p>
         </div>
       </Card>
     </div>
@@ -109,9 +103,17 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue';
 import DashboardLayout from '../../components/layout/DashboardLayout.vue';
 import Card from '../../components/ui/Card.vue';
 import Button from '../../components/ui/Button.vue';
 import StatCard from '../../components/dashboard/StatCard.vue';
+import { useDashboardStore } from '../../stores/dashboardStore';
+
+const dashboardStore = useDashboardStore();
+
+onMounted(() => {
+  dashboardStore.fetchStatistics();
+});
 </script>
 

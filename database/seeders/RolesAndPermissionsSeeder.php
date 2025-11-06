@@ -24,18 +24,6 @@ class RolesAndPermissionsSeeder extends Seeder
                 ['name' => 'users.edit', 'description' => 'Edit users'],
                 ['name' => 'users.delete', 'description' => 'Delete users'],
             ],
-            'products' => [
-                ['name' => 'products.view', 'description' => 'View products'],
-                ['name' => 'products.create', 'description' => 'Create products'],
-                ['name' => 'products.edit', 'description' => 'Edit products'],
-                ['name' => 'products.delete', 'description' => 'Delete products'],
-            ],
-            'categories' => [
-                ['name' => 'categories.view', 'description' => 'View categories'],
-                ['name' => 'categories.create', 'description' => 'Create categories'],
-                ['name' => 'categories.edit', 'description' => 'Edit categories'],
-                ['name' => 'categories.delete', 'description' => 'Delete categories'],
-            ],
             'roles' => [
                 ['name' => 'roles.view', 'description' => 'View roles'],
                 ['name' => 'roles.create', 'description' => 'Create roles'],
@@ -48,12 +36,7 @@ class RolesAndPermissionsSeeder extends Seeder
                 ['name' => 'permissions.edit', 'description' => 'Edit permissions'],
                 ['name' => 'permissions.delete', 'description' => 'Delete permissions'],
             ],
-            'api_routes' => [
-                ['name' => 'api_routes.view', 'description' => 'View API routes'],
-                ['name' => 'api_routes.create', 'description' => 'Create API routes'],
-                ['name' => 'api_routes.edit', 'description' => 'Edit API routes'],
-                ['name' => 'api_routes.delete', 'description' => 'Delete API routes'],
-            ],
+
         ];
 
         // Create permissions

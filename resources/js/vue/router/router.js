@@ -10,7 +10,6 @@ import UsersPage from '../pages/admin/UsersPage.vue';
 import SettingsPage from '../pages/admin/SettingsPage.vue';
 import RolesPage from '../pages/admin/RolesPage.vue';
 import PermissionsPage from '../pages/admin/PermissionsPage.vue';
-import ApiRoutesPage from '../pages/admin/ApiRoutesPage.vue';
 
 const routes = [
   {
@@ -59,12 +58,6 @@ const routes = [
     path: '/permissions',
     name: 'Permissions',
     component: PermissionsPage,
-    meta: { requiresAuth: true },
-  },
-  {
-    path: '/api-routes',
-    name: 'ApiRoutes',
-    component: ApiRoutesPage,
     meta: { requiresAuth: true },
   },
   {

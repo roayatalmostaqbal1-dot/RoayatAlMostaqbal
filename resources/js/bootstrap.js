@@ -9,23 +9,23 @@ import Echo from "laravel-echo";
 import Pusher from 'pusher-js';
 
 
-// const echo = new Echo({
-//     broadcaster: 'reverb',
-//     key: import.meta.env.VITE_REVERB_APP_KEY,
-//     wsHost: import.meta.env.VITE_REVERB_HOST,
-//     wsPort: import.meta.env.VITE_REVERB_PORT ?? 80,
-//     wssPort: import.meta.env.VITE_REVERB_PORT ?? 443,
-//     forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
-//     enabledTransports: ['ws', 'wss'],
-// });
 const echo = new Echo({
     broadcaster: 'reverb',
-    host: window.location.hostname + '/reverb', // مسار Reverb في Nginx
-    wsHost: window.location.hostname,
+    key: import.meta.env.VITE_REVERB_APP_KEY,
+    wsHost: import.meta.env.VITE_REVERB_HOST,
     wsPort: 443,
-    wss: true,
-    disableStats: true,                         // 🔹 مسار البروكسي الصحيح
+    wssPort: 443,
+    forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
+    enabledTransports: ['ws', 'wss'],
 });
+// const echo = new Echo({
+//     broadcaster: 'reverb',
+//     host: window.location.hostname + '/reverb', // مسار Reverb في Nginx
+//     wsHost: window.location.hostname,
+//     wsPort: 443,
+//     wss: true,
+//     disableStats: true,                         // 🔹 مسار البروكسي الصحيح
+// });
 
 // Export as a Vue plugin with install function
 export default {

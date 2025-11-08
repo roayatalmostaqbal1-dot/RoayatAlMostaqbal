@@ -172,10 +172,13 @@ const handleLogin = async (event) => {
   if (result.success) {
     // Check if 2FA is required
     if (result.data?.two_factor_enabled) {
+      // Store user data in auth store for 2FA verification
+      authStore.user = result.data;
       show2FAModal.value = true;
       twoFactorUserId.value = result.data.id;
     } else {
-      router.push('/admin/dashboard');
+      // User is fully logged in, redirect to dashboard
+      router.push('/dashboard');
     }
   } else {
     // Error is already set in the auth store, no need to do anything else

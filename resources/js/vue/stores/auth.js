@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import apiClient from '../services/api';
+import router from '../router/router';
 
 export const useAuthStore = defineStore('auth', () => {
     // State
@@ -175,25 +176,34 @@ export const useAuthStore = defineStore('auth', () => {
         twoFactorRequired.value = false;
         twoFactorUserId.value = null;
     };
-    const verify = async (code, userId) => {
+    const verify = async (code) => {
         isLoading.value = true;
         error.value = null;
         try {
+            // Get user_id from the stored user data (set during login)
+            const userId = user.value?.id || user.value?.user_id;
+
+            if (!userId) {
+                throw new Error('User ID not found. Please login again.');
+            }
+
             const response = await apiClient.post('/auth/two-factor/verify', {
                 code: code,
-                user_id: user.value.user_id, // ✅ استخدم userId القادم من login
+                user_id: userId,
             });
 
             if (response.data.success) {
-                const { token, user } = response.data;
-                token.value = token;
-                user.value = user;
-                localStorage.setItem('auth_token', token);
-                localStorage.setItem('user', JSON.stringify(user));
+                const { token: newToken, user: userData } = response.data;
 
-                router.push('/dashboard')
+                // Update store with new token and user data
+                token.value = newToken;
+                user.value = userData;
 
-            return { success: true, user }
+                // Persist to localStorage
+                localStorage.setItem('auth_token', newToken);
+                localStorage.setItem('user', JSON.stringify(userData));
+
+                return { success: true, user: userData };
             } else {
                 throw new Error(response.data.message || 'Invalid verification code');
             }

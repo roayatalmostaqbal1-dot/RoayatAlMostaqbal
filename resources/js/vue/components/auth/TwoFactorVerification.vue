@@ -93,6 +93,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useAuthStore } from '../../stores/auth';
+import { useToastStore } from '../../stores/toastStore';
 
 const props = defineProps({
   userId: {
@@ -104,6 +105,7 @@ const props = defineProps({
 const emit = defineEmits(['verified', 'cancel']);
 
 const authStore = useAuthStore();
+const toastStore = useToastStore();
 const totpCode = ref('');
 const recoveryCode = ref('');
 const showRecoveryCodeInput = ref(false);
@@ -119,9 +121,12 @@ const verifyCode = async () => {
   const result = await authStore.verify(totpCode.value);
 
   if (result.success) {
+    toastStore.success('Success', '2FA verification successful! Logging you in...');
+    // Emit verified event - LoginPage will handle the redirect
     emit('verified');
   } else {
     error.value = result.error || 'Invalid code. Please try again.';
+    toastStore.error('Error', error.value);
     totpCode.value = '';
   }
 
@@ -137,9 +142,12 @@ const verifyRecoveryCode = async () => {
   const result = await authStore.verify(recoveryCode.value);
 
   if (result.success) {
+    toastStore.success('Success', 'Recovery code verified! Logging you in...');
+    // Emit verified event - LoginPage will handle the redirect
     emit('verified');
   } else {
     error.value = result.error || 'Invalid recovery code. Please try again.';
+    toastStore.error('Error', error.value);
     recoveryCode.value = '';
   }
 

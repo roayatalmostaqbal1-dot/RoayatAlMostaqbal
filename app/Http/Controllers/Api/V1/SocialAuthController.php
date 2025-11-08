@@ -47,6 +47,17 @@ class SocialAuthController extends Controller
                     ]);
                 }
             }
+            if($user->two_factor_enabled){
+                return response()->json([
+                    'response_code' => 200,
+                    'status' => 'success',
+                    'message' => '2FA required',
+                    'data' => [
+                        'two_factor_enabled' => true,
+                        'user_id' => $user->id,
+                    ],
+                ]);;
+            }
             $token = $user->createToken('authToken')->accessToken;
 
             // Prepare user data

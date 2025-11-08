@@ -38,7 +38,9 @@
           Step 1: Scan this QR code with your authenticator app (Google Authenticator, Authy, Microsoft Authenticator, etc.)
         </p>
         <div v-if="twoFactorStore.qrCode" class="flex justify-center p-4 bg-white rounded-lg">
-          <div v-html="twoFactorStore.qrCode"></div>
+          <div >
+            <img :src="twoFactorStore.qrCode" alt="QR Code" class="w-48 h-auto">
+          </div>
         </div>
         <div v-else class="text-center py-8">
           <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#27e9b5]"></div>

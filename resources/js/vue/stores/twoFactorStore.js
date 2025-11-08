@@ -24,7 +24,7 @@ export const useTwoFactorStore = defineStore('twoFactor', () => {
         error.value = null;
         try {
             const response = await apiClient.get('/SuperAdmin/two-factor/status');
-            
+
             if (response.data.success) {
                 isEnabled.value = response.data.data.two_factor_enabled;
                 return { success: true };
@@ -45,7 +45,7 @@ export const useTwoFactorStore = defineStore('twoFactor', () => {
         error.value = null;
         try {
             const response = await apiClient.post('/SuperAdmin/two-factor/enable');
-            
+
             if (response.data.success) {
                 secret.value = response.data.data.secret;
                 qrCode.value = response.data.data.qr_code;
@@ -71,7 +71,7 @@ export const useTwoFactorStore = defineStore('twoFactor', () => {
                 secret: secret.value,
                 code: code,
             });
-            
+
             if (response.data.success) {
                 isEnabled.value = true;
                 recoveryCodes.value = response.data.data.recovery_codes;
@@ -97,7 +97,7 @@ export const useTwoFactorStore = defineStore('twoFactor', () => {
             const response = await apiClient.post('/SuperAdmin/two-factor/disable', {
                 password: password,
             });
-            
+
             if (response.data.success) {
                 isEnabled.value = false;
                 secret.value = null;
@@ -118,28 +118,7 @@ export const useTwoFactorStore = defineStore('twoFactor', () => {
         }
     };
 
-    const verify = async (code, userId) => {
-        isLoading.value = true;
-        error.value = null;
-        try {
-            const response = await apiClient.post('/SuperAdmin/two-factor/verify', {
-                code: code,
-                user_id: userId,
-            });
-            
-            if (response.data.success) {
-                return { success: true };
-            } else {
-                throw new Error(response.data.message || 'Invalid verification code');
-            }
-        } catch (err) {
-            const errorMessage = err.response?.data?.message || err.message || 'Invalid verification code';
-            error.value = errorMessage;
-            return { success: false, error: errorMessage };
-        } finally {
-            isLoading.value = false;
-        }
-    };
+
 
     const generateRecoveryCodes = async (password) => {
         isLoading.value = true;
@@ -148,7 +127,7 @@ export const useTwoFactorStore = defineStore('twoFactor', () => {
             const response = await apiClient.post('/SuperAdmin/two-factor/recovery-codes', {
                 password: password,
             });
-            
+
             if (response.data.success) {
                 recoveryCodes.value = response.data.data.recovery_codes;
                 toastStore.success('Recovery Codes Generated', 'New recovery codes have been generated');
@@ -195,7 +174,6 @@ export const useTwoFactorStore = defineStore('twoFactor', () => {
         enableSetup,
         confirmSetup,
         disable,
-        verify,
         generateRecoveryCodes,
         clearError,
         reset,

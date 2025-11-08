@@ -7,7 +7,7 @@ use App\Http\Requests\Api\V1\Auth\RegisterRequest;
 use App\Http\Resources\Api\V1\User\UserInfoResource;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\{Auth,Log,Hash};
+use Illuminate\Support\Facades\{Auth, Hash, Log};
 
 
 class AuthenticationController extends Controller
@@ -47,20 +47,32 @@ class AuthenticationController extends Controller
     /**
      * Login request.
      */
-    public function login(Request $request)
+   public function login(Request $request)
     {
         $request->validate([
             'email' => 'required|email',
             'password' => 'required|string',
         ]);
+
         try {
             $user = User::where('email', $request->email)->first();
-            if (! $user || ! Hash::check($request->password, $user->password)) {
+            if (!$user || !Hash::check($request->password, $user->password)) {
                 return response()->json([
                     'response_code' => 401,
                     'status' => 'error',
                     'message' => 'Unauthorized',
                 ], 401);
+            }
+            if ($user->two_factor_enabled) {
+                return response()->json([
+                    'response_code' => 200,
+                    'status' => 'success',
+                    'message' => '2FA required',
+                    'data' => [
+                        'two_factor_enabled' => true,
+                        'user_id' => $user->id,
+                    ],
+                ]);
             }
             $token = $user->createToken('authToken')->accessToken;
             return (new UserInfoResource($user))
@@ -76,6 +88,7 @@ class AuthenticationController extends Controller
             ], 500);
         }
     }
+
 
     public function logOut(Request $request)
     {

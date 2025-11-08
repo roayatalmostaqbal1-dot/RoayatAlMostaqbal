@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="fixed inset-0  bg-opacity-50 flex items-center justify-center z-50">
     <div class="bg-[#162936] rounded-lg p-8 max-w-md w-full mx-4 border border-[#3b5265]">
       <h2 class="text-2xl font-bold text-white mb-2">Two-Factor Authentication</h2>
       <p class="text-gray-400 mb-6">Enter the 6-digit code from your authenticator app</p>
@@ -92,7 +92,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useTwoFactorStore } from '../../stores/twoFactorStore';
+import { useAuthStore } from '../../stores/auth';
 
 const props = defineProps({
   userId: {
@@ -103,7 +103,7 @@ const props = defineProps({
 
 const emit = defineEmits(['verified', 'cancel']);
 
-const twoFactorStore = useTwoFactorStore();
+const authStore = useAuthStore();
 const totpCode = ref('');
 const recoveryCode = ref('');
 const showRecoveryCodeInput = ref(false);
@@ -116,7 +116,7 @@ const verifyCode = async () => {
   isLoading.value = true;
   error.value = '';
 
-  const result = await twoFactorStore.verify(totpCode.value, props.userId);
+  const result = await authStore.verify(totpCode.value);
 
   if (result.success) {
     emit('verified');
@@ -134,7 +134,7 @@ const verifyRecoveryCode = async () => {
   isLoading.value = true;
   error.value = '';
 
-  const result = await twoFactorStore.verify(recoveryCode.value, props.userId);
+  const result = await authStore.verify(recoveryCode.value);
 
   if (result.success) {
     emit('verified');

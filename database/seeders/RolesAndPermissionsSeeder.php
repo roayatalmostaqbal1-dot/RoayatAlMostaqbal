@@ -19,24 +19,23 @@ class RolesAndPermissionsSeeder extends Seeder
         // Define permissions grouped by resource
         $permissions = [
             'users' => [
-                ['name' => 'users.view', 'description' => 'View users'],
-                ['name' => 'users.create', 'description' => 'Create users'],
-                ['name' => 'users.edit', 'description' => 'Edit users'],
-                ['name' => 'users.delete', 'description' => 'Delete users'],
+                ['name' => 'users.view', ],
+                ['name' => 'users.create'],
+                ['name' => 'users.edit', ],
+                ['name' => 'users.delete'],
             ],
             'roles' => [
-                ['name' => 'roles.view', 'description' => 'View roles'],
-                ['name' => 'roles.create', 'description' => 'Create roles'],
-                ['name' => 'roles.edit', 'description' => 'Edit roles'],
-                ['name' => 'roles.delete', 'description' => 'Delete roles'],
+                ['name' => 'roles.view', ],
+                ['name' => 'roles.create'],
+                ['name' => 'roles.edit', ],
+                ['name' => 'roles.delete'],
             ],
             'permissions' => [
-                ['name' => 'permissions.view', 'description' => 'View permissions'],
-                ['name' => 'permissions.create', 'description' => 'Create permissions'],
-                ['name' => 'permissions.edit', 'description' => 'Edit permissions'],
-                ['name' => 'permissions.delete', 'description' => 'Delete permissions'],
+                ['name' => 'permissions.view', ],
+                ['name' => 'permissions.create'],
+                ['name' => 'permissions.edit', ],
+                ['name' => 'permissions.delete'],
             ],
-
         ];
 
         // Create permissions

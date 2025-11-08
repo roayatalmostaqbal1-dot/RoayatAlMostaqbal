@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AuthenticationController;
+use App\Http\Controllers\Api\V1\TwoFactorAuthController;
 use App\Http\Resources\Api\V1\User\UserInfoResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -17,5 +18,7 @@ Route::middleware('auth:api')->group(function () {
 Route::prefix('auth')->group(function () {
     Route::post('register', [AuthenticationController::class, 'register'])->name('register');
     Route::post('login', [AuthenticationController::class, 'login']);
+    Route::post('/two-factor/verify', [TwoFactorAuthController::class, 'verify']);
+
 });
 

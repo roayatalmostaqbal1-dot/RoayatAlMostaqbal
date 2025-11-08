@@ -175,6 +175,36 @@ export const useAuthStore = defineStore('auth', () => {
         twoFactorRequired.value = false;
         twoFactorUserId.value = null;
     };
+    const verify = async (code, userId) => {
+        isLoading.value = true;
+        error.value = null;
+        try {
+            const response = await apiClient.post('/auth/two-factor/verify', {
+                code: code,
+                user_id: user.value.user_id, // ✅ استخدم userId القادم من login
+            });
+
+            if (response.data.success) {
+                const { token, user } = response.data;
+                token.value = token;
+                user.value = user;
+                localStorage.setItem('auth_token', token);
+                localStorage.setItem('user', JSON.stringify(user));
+
+                router.push('/dashboard')
+
+            return { success: true, user }
+            } else {
+                throw new Error(response.data.message || 'Invalid verification code');
+            }
+        } catch (err) {
+            const errorMessage = err.response?.data?.message || err.message || 'Invalid verification code';
+            error.value = errorMessage;
+            return { success: false, error: errorMessage };
+        } finally {
+            isLoading.value = false;
+        }
+    };
 
     return {
         // State
@@ -199,6 +229,7 @@ export const useAuthStore = defineStore('auth', () => {
         restoreSession,
         clearError,
         resetTwoFactor,
+        verify
     };
 }, {
     persist: true,

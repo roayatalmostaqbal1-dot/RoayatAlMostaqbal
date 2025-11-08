@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\V1\SuperAdmin\RoleController;
 use App\Http\Controllers\Api\V1\SuperAdmin\RolePermissionController;
 use App\Http\Controllers\Api\V1\SuperAdmin\UserController;
 use App\Http\Controllers\Api\V1\SuperAdmin\Dashboard\DashboardController;
-use App\Http\Controllers\Api\V1\SuperAdmin\TwoFactorAuthController;
+use App\Http\Controllers\Api\V1\TwoFactorAuthController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -48,7 +48,7 @@ Route::prefix('SuperAdmin')->middleware(['auth:api'])->group(function () {
         Route::post('/enable', [TwoFactorAuthController::class, 'enable'])->name('two-factor.enable');
         Route::post('/confirm', [TwoFactorAuthController::class, 'confirm'])->name('two-factor.confirm');
         Route::post('/disable', [TwoFactorAuthController::class, 'disable'])->name('two-factor.disable');
-        Route::post('/verify', [TwoFactorAuthController::class, 'verify'])->name('two-factor.verify');
+        // Route::post('/verify', [TwoFactorAuthController::class, 'verify'])->name('two-factor.verify');
         Route::post('/recovery-codes', [TwoFactorAuthController::class, 'generateRecoveryCodes'])->name('two-factor.recovery-codes');
     });
 

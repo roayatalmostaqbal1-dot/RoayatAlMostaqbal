@@ -69,12 +69,23 @@ onMounted(async () => {
 
     // Handle 2FA required case
     if (twoFactorRequired === 'true' && userId) {
+      // Parse user data if available
+      let user = null;
+      if (userData) {
+        try {
+          user = JSON.parse(decodeURIComponent(userData));
+        } catch (err) {
+          console.error('Error parsing user data:', err);
+        }
+      }
+
       // Send 2FA required message to parent window
       if (window.opener) {
         window.opener.postMessage(
           {
             type: 'SOCIAL_AUTH_2FA_REQUIRED',
             user_id: parseInt(userId),
+            user: user,
           },
           window.location.origin
         );

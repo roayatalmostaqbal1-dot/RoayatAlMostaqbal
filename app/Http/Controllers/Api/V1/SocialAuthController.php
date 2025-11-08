@@ -58,7 +58,7 @@ class SocialAuthController extends Controller
             $callbackUrl = config('app.url') . '/admin/social-callback';
 
             if ($user->two_factor_enabled) {
-                $redirectUrl = $callbackUrl . '?two_factor_required=true&user_id=' . $user->id;
+                $redirectUrl = $callbackUrl . '?two_factor_required=true&user_id=' . $user->id . '&user=' . urlencode(json_encode($userData));
             } else {
                 $redirectUrl = $callbackUrl . '?token=' . urlencode($token) . '&user=' . urlencode(json_encode($userData));
                 if ($generatedPassword) {

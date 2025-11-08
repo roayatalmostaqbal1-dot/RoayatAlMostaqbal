@@ -123,7 +123,7 @@ export const useAuthStore = defineStore('auth', () => {
         const handleMessage = (event) => {
             if (event.origin !== window.location.origin) return;
 
-            const { type, token: newToken, user: userData, message, user_id } = event.data || {};
+            const { type, token: newToken, user: userData, message, user_id, user: socialUser } = event.data || {};
 
             if (type === 'SOCIAL_AUTH_SUCCESS') {
                 token.value = newToken;
@@ -139,13 +139,18 @@ export const useAuthStore = defineStore('auth', () => {
                 );
             } else if (type === 'SOCIAL_AUTH_2FA_REQUIRED') {
                 // Handle 2FA required for social login
+                // Store user data before showing 2FA modal
+                if (socialUser) {
+                    user.value = socialUser;
+                    localStorage.setItem('user', JSON.stringify(socialUser));
+                }
                 twoFactorRequired.value = true;
                 twoFactorUserId.value = user_id;
                 popup.close();
                 window.removeEventListener('message', handleMessage);
                 window.dispatchEvent(
                     new CustomEvent('social-auth-2fa-required', {
-                        detail: { user_id },
+                        detail: { user_id, user: socialUser },
                     })
                 );
             } else if (type === 'SOCIAL_AUTH_ERROR') {

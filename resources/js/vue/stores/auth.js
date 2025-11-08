@@ -106,13 +106,10 @@ export const useAuthStore = defineStore('auth', () => {
         const API_BASE_URL = '/api/v1';
         const callbackUrl = `${window.location.origin}/admin/social-callback`;
         const redirectUrl = `${API_BASE_URL}/social-auth/${provider}?callback=${encodeURIComponent(callbackUrl)}`;
-
-        // Open in popup window
-        const width = 500;
-        const height = 600;
+        const width = 550;
+        const height = 650;
         const left = window.screenX + (window.outerWidth - width) / 2;
         const top = window.screenY + (window.outerHeight - height) / 2;
-
         const popup = window.open(
             redirectUrl,
             `${provider}-login`,
@@ -120,36 +117,50 @@ export const useAuthStore = defineStore('auth', () => {
         );
 
         if (!popup) {
-            error.value = 'Popup blocked. Please allow popups for this site.';
+            error.value = '❌ تم حظر النوافذ المنبثقة. الرجاء السماح بالنوافذ لهذا الموقع.';
             return;
         }
-
-        // Listen for message from popup
         const handleMessage = (event) => {
             if (event.origin !== window.location.origin) return;
 
-            if (event.data.type === 'SOCIAL_AUTH_SUCCESS') {
-                const { token: newToken, data } = event.data;
+            const { type, token: newToken, user: userData, message, user_id } = event.data || {};
 
+            if (type === 'SOCIAL_AUTH_SUCCESS') {
                 token.value = newToken;
-                user.value = data;
-
+                user.value = userData;
                 localStorage.setItem('auth_token', newToken);
-                localStorage.setItem('user', JSON.stringify(data));
-
+                localStorage.setItem('user', JSON.stringify(userData));
                 popup.close();
                 window.removeEventListener('message', handleMessage);
-
-                // Emit success event or redirect
-                window.dispatchEvent(new CustomEvent('social-auth-success', { detail: { token: newToken, user: data } }));
-            } else if (event.data.type === 'SOCIAL_AUTH_ERROR') {
-                error.value = event.data.message || 'Social authentication failed';
+                window.dispatchEvent(
+                    new CustomEvent('social-auth-success', {
+                        detail: { token: newToken, user: userData },
+                    })
+                );
+            } else if (type === 'SOCIAL_AUTH_2FA_REQUIRED') {
+                // Handle 2FA required for social login
+                twoFactorRequired.value = true;
+                twoFactorUserId.value = user_id;
+                popup.close();
+                window.removeEventListener('message', handleMessage);
+                window.dispatchEvent(
+                    new CustomEvent('social-auth-2fa-required', {
+                        detail: { user_id },
+                    })
+                );
+            } else if (type === 'SOCIAL_AUTH_ERROR') {
+                error.value = message || 'فشل تسجيل الدخول عبر المنصة الاجتماعية.';
                 popup.close();
                 window.removeEventListener('message', handleMessage);
             }
         };
-
         window.addEventListener('message', handleMessage);
+        const popupChecker = setInterval(() => {
+            if (popup.closed) {
+                clearInterval(popupChecker);
+                window.removeEventListener('message', handleMessage);
+            }
+        }, 500);
     };
 
     const restoreSession = () => {

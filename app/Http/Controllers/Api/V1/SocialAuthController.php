@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Models\SocialAccount;
 use App\Models\User;
-use Illuminate\Support\Facades\{Log,Hash};
+use Illuminate\Support\Facades\{Log, Hash};
 use Laravel\Socialite\Facades\Socialite;
 
 class SocialAuthController extends Controller
@@ -47,32 +47,23 @@ class SocialAuthController extends Controller
                     ]);
                 }
             }
-            if($user->two_factor_enabled){
-                return response()->json([
-                    'response_code' => 200,
-                    'status' => 'success',
-                    'message' => '2FA required',
-                    'data' => [
-                        'two_factor_enabled' => true,
-                        'user_id' => $user->id,
-                    ],
-                ]);;
-            }
             $token = $user->createToken('authToken')->accessToken;
-
-            // Prepare user data
             $userData = [
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
+                'two_factor_enabled' => $user->two_factor_enabled,
             ];
 
-            // Build callback URL with token and user data
             $callbackUrl = config('app.url') . '/admin/social-callback';
-            $redirectUrl = $callbackUrl . '?token=' . urlencode($token) . '&user=' . urlencode(json_encode($userData));
 
-            if ($generatedPassword) {
-                $redirectUrl .= '&generated_password=' . urlencode($generatedPassword);
+            if ($user->two_factor_enabled) {
+                $redirectUrl = $callbackUrl . '?two_factor_required=true&user_id=' . $user->id;
+            } else {
+                $redirectUrl = $callbackUrl . '?token=' . urlencode($token) . '&user=' . urlencode(json_encode($userData));
+                if ($generatedPassword) {
+                    $redirectUrl .= '&generated_password=' . urlencode($generatedPassword);
+                }
             }
 
             return redirect($redirectUrl);
@@ -101,7 +92,7 @@ class SocialAuthController extends Controller
         for ($i = 4; $i < $length; $i++) {
             $password .= $chars[random_int(0, $maxIndex)];
         }
-        $password = str_shuffle($password);
-        return $password;
+
+        return str_shuffle($password);
     }
 }

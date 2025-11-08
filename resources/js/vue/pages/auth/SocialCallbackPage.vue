@@ -58,10 +58,32 @@ onMounted(async () => {
     const token = getQueryParam('token');
     const userData = getQueryParam('user');
     const errorMessage = getQueryParam('error');
+    const twoFactorRequired = getQueryParam('two_factor_required');
+    const userId = getQueryParam('user_id');
 
     if (errorMessage) {
       error.value = decodeURIComponent(errorMessage);
       isLoading.value = false;
+      return;
+    }
+
+    // Handle 2FA required case
+    if (twoFactorRequired === 'true' && userId) {
+      // Send 2FA required message to parent window
+      if (window.opener) {
+        window.opener.postMessage(
+          {
+            type: 'SOCIAL_AUTH_2FA_REQUIRED',
+            user_id: parseInt(userId),
+          },
+          window.location.origin
+        );
+      }
+      isLoading.value = false;
+      // Close window after 1 second
+      setTimeout(() => {
+        window.close();
+      }, 1000);
       return;
     }
 

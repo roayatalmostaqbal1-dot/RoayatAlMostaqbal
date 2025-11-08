@@ -1,4 +1,12 @@
 <template>
+  <!-- 2FA Verification Modal for Social Login -->
+  <TwoFactorVerification
+    v-if="show2FAModal"
+    :user-id="twoFactorUserId"
+    @verified="handle2FAVerified"
+    @cancel="handle2FACancel"
+  />
+
   <button
     @click="handleSocialLogin"
     :disabled="isLoading"
@@ -28,7 +36,9 @@
 import { computed, ref, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../../stores/auth';
+import { useToastStore } from '../../stores/toastStore';
 import SocialIcons from '../icons/SocialIcons.vue';
+import TwoFactorVerification from './TwoFactorVerification.vue';
 
 const props = defineProps({
   provider: {
@@ -40,7 +50,10 @@ const props = defineProps({
 
 const router = useRouter();
 const authStore = useAuthStore();
+const toastStore = useToastStore();
 const isLoading = ref(false);
+const show2FAModal = ref(false);
+const twoFactorUserId = ref(null);
 
 const label = computed(() => {
   const labels = {
@@ -58,9 +71,31 @@ const label = computed(() => {
 const handleSocialAuthSuccess = (event) => {
   if (event.detail && event.detail.token) {
     isLoading.value = false;
+    toastStore.success('Success', 'Social login successful! Redirecting...');
     // Redirect to dashboard after successful social auth
-    router.push('/admin/dashboard');
+    router.push('/dashboard');
   }
+};
+
+const handleSocialAuth2FARequired = (event) => {
+  if (event.detail && event.detail.user_id) {
+    isLoading.value = false;
+    twoFactorUserId.value = event.detail.user_id;
+    show2FAModal.value = true;
+  }
+};
+
+const handle2FAVerified = () => {
+  show2FAModal.value = false;
+  twoFactorUserId.value = null;
+  toastStore.success('Success', 'Social login with 2FA successful! Redirecting...');
+  router.push('/dashboard');
+};
+
+const handle2FACancel = () => {
+  show2FAModal.value = false;
+  twoFactorUserId.value = null;
+  isLoading.value = false;
 };
 
 const handleSocialLogin = () => {
@@ -70,10 +105,12 @@ const handleSocialLogin = () => {
 
 onMounted(() => {
   window.addEventListener('social-auth-success', handleSocialAuthSuccess);
+  window.addEventListener('social-auth-2fa-required', handleSocialAuth2FARequired);
 });
 
 onUnmounted(() => {
   window.removeEventListener('social-auth-success', handleSocialAuthSuccess);
+  window.removeEventListener('social-auth-2fa-required', handleSocialAuth2FARequired);
 });
 </script>
 

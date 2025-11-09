@@ -10,6 +10,49 @@ class RolesAndPermissionsSeeder extends Seeder
 {
     /**
      * Run the database seeds.
+     *
+     * This seeder creates all core permissions for the application.
+     * Permissions are marked as "seeded" and cannot be edited or deleted via UI.
+     *
+     * API Route Mappings:
+     * ==================
+     *
+     * USERS MANAGEMENT:
+     * - users.view    → GET /api/v1/SuperAdmin/users (list users)
+     * - users.view    → GET /api/v1/SuperAdmin/users/{id} (view single user)
+     * - users.create  → POST /api/v1/SuperAdmin/users (create user)
+     * - users.edit    → PUT /api/v1/SuperAdmin/users/{id} (update user)
+     * - users.delete  → DELETE /api/v1/SuperAdmin/users/{id} (delete user)
+     *
+     * ROLES MANAGEMENT:
+     * - roles.view    → GET /api/v1/SuperAdmin/roles (list roles)
+     * - roles.view    → GET /api/v1/SuperAdmin/roles/{id} (view single role)
+     * - roles.create  → POST /api/v1/SuperAdmin/roles (create role)
+     * - roles.edit    → PUT /api/v1/SuperAdmin/roles/{id} (update role)
+     * - roles.delete  → DELETE /api/v1/SuperAdmin/roles/{id} (delete role)
+     *
+     * PERMISSIONS MANAGEMENT:
+     * - permissions.view    → GET /api/v1/SuperAdmin/permissions (list permissions)
+     * - permissions.view    → GET /api/v1/SuperAdmin/permissions/{id} (view single permission)
+     * - permissions.create  → POST /api/v1/SuperAdmin/permissions (create permission)
+     * - permissions.edit    → PUT /api/v1/SuperAdmin/permissions/{id} (update permission)
+     * - permissions.delete  → DELETE /api/v1/SuperAdmin/permissions/{id} (delete permission)
+     *
+     * ROLE-PERMISSION ASSIGNMENT:
+     * - roles.edit    → GET /api/v1/SuperAdmin/roles/{role}/permissions (view role permissions)
+     * - roles.edit    → POST /api/v1/SuperAdmin/roles/{role}/permissions (assign permissions to role)
+     *
+     * DASHBOARD:
+     * - dashboard.view → GET /api/v1/SuperAdmin/dashboard/statistics (view dashboard stats)
+     *
+     * SETTINGS:
+     * - settings.view → GET /api/v1/SuperAdmin/settings (view settings)
+     * - settings.edit → PUT /api/v1/SuperAdmin/settings (update settings)
+     *
+     * TWO-FACTOR AUTHENTICATION:
+     * - auth.2fa.enable  → POST /api/v1/auth/two-factor/enable (enable 2FA)
+     * - auth.2fa.disable → POST /api/v1/auth/two-factor/disable (disable 2FA)
+     * - auth.2fa.verify  → POST /api/v1/auth/two-factor/verify (verify 2FA code)
      */
     public function run(): void
     {
@@ -17,36 +60,50 @@ class RolesAndPermissionsSeeder extends Seeder
         app()['cache']->forget('spatie.permission.cache');
 
         // Define permissions grouped by resource
+        // All permissions are marked as seeded and cannot be edited/deleted via UI
         $permissions = [
             'users' => [
-                ['name' => 'users.view', ],
-                ['name' => 'users.create'],
-                ['name' => 'users.edit', ],
-                ['name' => 'users.delete'],
+                ['name' => 'users.view', 'description' => 'View users list and details'],
+                ['name' => 'users.create', 'description' => 'Create new users'],
+                ['name' => 'users.edit', 'description' => 'Edit user information'],
+                ['name' => 'users.delete', 'description' => 'Delete users'],
             ],
             'roles' => [
-                ['name' => 'roles.view', ],
-                ['name' => 'roles.create'],
-                ['name' => 'roles.edit', ],
-                ['name' => 'roles.delete'],
+                ['name' => 'roles.view', 'description' => 'View roles list and details'],
+                ['name' => 'roles.create', 'description' => 'Create new roles'],
+                ['name' => 'roles.edit', 'description' => 'Edit roles and assign permissions'],
+                ['name' => 'roles.delete', 'description' => 'Delete roles'],
             ],
             'permissions' => [
-                ['name' => 'permissions.view', ],
-                ['name' => 'permissions.create'],
-                ['name' => 'permissions.edit', ],
-                ['name' => 'permissions.delete'],
+                ['name' => 'permissions.view', 'description' => 'View permissions list'],
+                ['name' => 'permissions.create', 'description' => 'Create new permissions'],
+                ['name' => 'permissions.edit', 'description' => 'Edit permissions'],
+                ['name' => 'permissions.delete', 'description' => 'Delete permissions'],
+            ],
+            'dashboard' => [
+                ['name' => 'dashboard.view', 'description' => 'View dashboard and statistics'],
+            ],
+            'settings' => [
+                ['name' => 'settings.view', 'description' => 'View application settings'],
+                ['name' => 'settings.edit', 'description' => 'Edit application settings'],
+            ],
+            'auth' => [
+                ['name' => 'auth.2fa.enable', 'description' => 'Enable two-factor authentication'],
+                ['name' => 'auth.2fa.disable', 'description' => 'Disable two-factor authentication'],
+                ['name' => 'auth.2fa.verify', 'description' => 'Verify two-factor authentication code'],
             ],
         ];
 
         // Create permissions
         foreach ($permissions as $group => $groupPermissions) {
             foreach ($groupPermissions as $permission) {
-                Permission::firstOrCreate(
+                Permission::updateOrCreate(
                     ['name' => $permission['name']],
                     [
-                        'description' => $permission['description'],
+                        'description' => $permission['description'] ?? '',
                         'group' => $group,
                         'guard_name' => 'api',
+                        'is_seeded' => true,  // Mark as seeded - cannot be edited/deleted via UI
                     ]
                 );
             }

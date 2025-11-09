@@ -29,7 +29,7 @@
       <div
         :class="[
           'w-12 h-12 rounded-lg flex items-center justify-center',
-          'bg-[#27e9b5] bg-opacity-20 text-[#27e9b5]',
+          'bg-[#27e9b5] bg-opacity-20 text-[#fff]',
         ]"
       >
         <component :is="iconComponent" class="w-6 h-6" />
@@ -57,6 +57,18 @@ const IconUsers = {
   ])
 };
 
+const IconRoles = {
+  render: () => h('svg', { fill: 'currentColor', viewBox: '0 0 24 24' }, [
+    h('path', { d: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z' })
+  ])
+};
+
+const IconPermissions = {
+  render: () => h('svg', { fill: 'currentColor', viewBox: '0 0 24 24' }, [
+    h('path', { d: 'M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.72-7 8.77V12H5V6.3l7-3.11v8.8z' })
+  ])
+};
+
 const IconActivity = {
   render: () => h('svg', { fill: 'currentColor', viewBox: '0 0 24 24' }, [
     h('path', { d: 'M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z' }),
@@ -66,8 +78,8 @@ const IconActivity = {
 
 const IconTrendingUp = {
   render: () => h('svg', { fill: 'currentColor', viewBox: '0 0 24 24' }, [
-    h('path', { d: 'M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z' }),
-    h('polyline', { points: '13 2 13 9 20 9', style: 'fill:none;stroke:currentColor;stroke-width:2' })
+    h('polyline', { points: '23 6 13.5 15.5 8.5 10.5 1 17', style: 'fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round' }),
+    h('polyline', { points: '17 6 23 6 23 12', style: 'fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round' })
   ])
 };
 
@@ -82,6 +94,8 @@ const IconTarget = {
 const iconComponent = computed(() => {
   const icons = {
     users: IconUsers,
+    roles: IconRoles,
+    permissions: IconPermissions,
     activity: IconActivity,
     'trending-up': IconTrendingUp,
     target: IconTarget,

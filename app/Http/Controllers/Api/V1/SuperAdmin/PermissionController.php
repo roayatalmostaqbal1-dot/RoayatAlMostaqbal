@@ -16,7 +16,7 @@ class PermissionController extends Controller
     public function index(Request $request)
     {
         $permissions = Permission::with('roles:id,name')
-            ->select(['id', 'name', 'guard_name'])
+            ->select(['id', 'name', 'guard_name', 'group', 'is_seeded'])
             ->orderBy('id', 'asc')
             ->paginate(perPage: $request->per_page ?? 10,page: $request->page ?? 1);
     return PermissionResource::collection($permissions);
@@ -44,7 +44,7 @@ class PermissionController extends Controller
         //
 
         $permission = Permission::with('roles:id,name')
-        ->select(['id', 'name', 'guard_name'])
+        ->select(['id', 'name', 'guard_name', 'group', 'is_seeded'])
         ->findOrFail($permission->id);
         return new PermissionResource($permission);
     }
@@ -56,6 +56,16 @@ class PermissionController extends Controller
     {
         //
         $permission = Permission::findOrFail($permission->id);
+
+        // Prevent editing seeded permissions
+        if ($permission->is_seeded) {
+            return response()->json([
+                'response_code' => 403,
+                'status' => 'error',
+                'message' => 'Seeded permissions cannot be edited. Please update the seeder file instead.',
+            ], 403);
+        }
+
         $permission->update([
             'name' => $request->name,
         ]);
@@ -76,6 +86,16 @@ class PermissionController extends Controller
             ], 403);
         }
         $permission = Permission::findOrFail($permission->id);
+
+        // Prevent deleting seeded permissions
+        if ($permission->is_seeded) {
+            return response()->json([
+                'response_code' => 403,
+                'status' => 'error',
+                'message' => 'Seeded permissions cannot be deleted. Please update the seeder file instead.',
+            ], 403);
+        }
+
         $permission->delete();
         return response()->json([
             'response_code' => 200,

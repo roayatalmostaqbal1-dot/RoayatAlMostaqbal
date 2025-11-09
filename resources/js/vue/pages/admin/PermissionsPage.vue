@@ -36,7 +36,7 @@
             <tr class="border-b border-[#3b5265]">
               <th class="text-left py-3 px-4 text-gray-300 font-semibold">Name</th>
               <th class="text-left py-3 px-4 text-gray-300 font-semibold">Group</th>
-              <th class="text-left py-3 px-4 text-gray-300 font-semibold">Description</th>
+              <th class="text-left py-3 px-4 text-gray-300 font-semibold">Status</th>
               <th class="text-left py-3 px-4 text-gray-300 font-semibold">Roles</th>
               <th class="text-left py-3 px-4 text-gray-300 font-semibold">Actions</th>
             </tr>
@@ -49,13 +49,21 @@
                   {{ permission.group || 'general' }}
                 </span>
               </td>
-              <td class="py-3 px-4 text-gray-300 text-sm">{{ permission.description }}</td>
+              <td class="py-3 px-4">
+                <span v-if="permission.is_seeded" class="inline-block bg-blue-500 bg-opacity-20 text-blue-400 px-2 py-1 rounded text-xs border border-blue-500">
+                  🔒 Seeded
+                </span>
+                <span v-else class="inline-block bg-gray-600 bg-opacity-20 text-gray-400 px-2 py-1 rounded text-xs border border-gray-600">
+                  Custom
+                </span>
+              </td>
               <td class="py-3 px-4 text-gray-300">
                 <span class="text-sm">{{ permission.roles_count || 0 }}</span>
               </td>
               <td class="py-3 px-4">
                 <div class="flex items-center gap-2 flex-wrap">
                   <Button
+                    v-if="!permission.is_seeded"
                     variant="secondary"
                     size="sm"
                     @click="openEditModal(permission)"
@@ -65,6 +73,7 @@
                     ✏️ Edit
                   </Button>
                   <Button
+                    v-if="!permission.is_seeded"
                     variant="danger"
                     size="sm"
                     @click="handleDelete(permission)"
@@ -73,6 +82,9 @@
                   >
                     🗑️ Delete
                   </Button>
+                  <span v-if="permission.is_seeded" class="text-gray-500 text-xs italic">
+                    Read-only
+                  </span>
                 </div>
               </td>
             </tr>
@@ -131,7 +143,6 @@ const selectedPermissionForModal = ref(null);
 
 const permissionFields = [
   { name: 'name', label: 'Permission Name', type: 'text', required: true, placeholder: 'e.g., users.view' },
-  { name: 'description', label: 'Description', type: 'textarea', required: false },
   {
     name: 'group',
     label: 'Group',
@@ -141,6 +152,8 @@ const permissionFields = [
       { value: 'users', label: 'Users' },
       { value: 'roles', label: 'Roles' },
       { value: 'permissions', label: 'Permissions' },
+      { value: 'settings', label: 'Settings' },
+      { value: 'dashboard', label: 'Dashboard' },
     ]
   },
 ];

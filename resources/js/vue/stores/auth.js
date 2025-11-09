@@ -6,7 +6,7 @@ import router from '../router/router';
 export const useAuthStore = defineStore('auth', () => {
     // State
     const user = ref(null);
-    const token = ref(localStorage.getItem('auth_token') || null);
+    const token = ref(null);
     const isLoading = ref(false);
     const error = ref(null);
     const twoFactorRequired = ref(false);
@@ -26,10 +26,7 @@ export const useAuthStore = defineStore('auth', () => {
             const { token: newToken, data } = response.data;
 
             token.value = newToken;
-            user.value = data;
-
-            localStorage.setItem('auth_token', newToken);
-            localStorage.setItem('user', JSON.stringify(data));
+            user.value = data.user_info;
 
             return { success: true, data };
         } catch (err) {
@@ -49,9 +46,6 @@ export const useAuthStore = defineStore('auth', () => {
 
             token.value = newToken;
             user.value = data;
-
-            localStorage.setItem('auth_token', newToken);
-            localStorage.setItem('user', JSON.stringify(data));
 
             return { success: true, data };
         } catch (err) {
@@ -74,8 +68,6 @@ export const useAuthStore = defineStore('auth', () => {
         } finally {
             token.value = null;
             user.value = null;
-            localStorage.removeItem('auth_token');
-            localStorage.removeItem('user');
             isLoading.value = false;
         }
     };
@@ -90,12 +82,10 @@ export const useAuthStore = defineStore('auth', () => {
         try {
             const response = await apiClient.get('/user');
             user.value = response.data.data;
-            localStorage.setItem('user', JSON.stringify(user.value));
             return { success: true, data: user.value };
         } catch (err) {
             error.value = err.response?.data?.message || 'Failed to fetch user';
             token.value = null;
-            localStorage.removeItem('auth_token');
             return { success: false, error: error.value };
         } finally {
             isLoading.value = false;
@@ -128,8 +118,6 @@ export const useAuthStore = defineStore('auth', () => {
             if (type === 'SOCIAL_AUTH_SUCCESS') {
                 token.value = newToken;
                 user.value = userData;
-                localStorage.setItem('auth_token', newToken);
-                localStorage.setItem('user', JSON.stringify(userData));
                 popup.close();
                 window.removeEventListener('message', handleMessage);
                 window.dispatchEvent(
@@ -142,7 +130,6 @@ export const useAuthStore = defineStore('auth', () => {
                 // Store user data before showing 2FA modal
                 if (socialUser) {
                     user.value = socialUser;
-                    localStorage.setItem('user', JSON.stringify(socialUser));
                 }
                 twoFactorRequired.value = true;
                 twoFactorUserId.value = user_id;
@@ -166,22 +153,6 @@ export const useAuthStore = defineStore('auth', () => {
                 window.removeEventListener('message', handleMessage);
             }
         }, 500);
-    };
-
-    const restoreSession = () => {
-        const savedToken = localStorage.getItem('auth_token');
-        const savedUser = localStorage.getItem('user');
-
-        if (savedToken) {
-            token.value = savedToken;
-        }
-        if (savedUser) {
-            try {
-                user.value = JSON.parse(savedUser);
-            } catch (err) {
-                console.error('Error parsing saved user:', err);
-            }
-        }
     };
 
     const clearError = () => {
@@ -214,10 +185,6 @@ export const useAuthStore = defineStore('auth', () => {
                 // Update store with new token and user data
                 token.value = newToken;
                 user.value = userData;
-
-                // Persist to localStorage
-                localStorage.setItem('auth_token', newToken);
-                localStorage.setItem('user', JSON.stringify(userData));
 
                 return { success: true, user: userData };
             } else {
@@ -252,7 +219,6 @@ export const useAuthStore = defineStore('auth', () => {
         logout,
         fetchUser,
         socialAuthRedirect,
-        restoreSession,
         clearError,
         resetTwoFactor,
         verify

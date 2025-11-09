@@ -24,9 +24,6 @@ class User extends Authenticatable implements OAuthenticatable
         'name',
         'email',
         'password',
-        'two_factor_enabled',
-        'two_factor_secret',
-        'two_factor_recovery_codes',
     ];
 
     /**
@@ -37,8 +34,6 @@ class User extends Authenticatable implements OAuthenticatable
     protected $hidden = [
         'password',
         'remember_token',
-        'two_factor_secret',
-        'two_factor_recovery_codes',
     ];
 
     /**
@@ -58,6 +53,21 @@ class User extends Authenticatable implements OAuthenticatable
         return $this->hasMany(SocialAccount::class);
     }
 
+    /**
+     * Get the user's two-factor authentication configuration.
+     */
+    public function twoFactorAuth()
+    {
+        return $this->hasOne(UserTwoFactorAuth::class);
+    }
+
+    /**
+     * Check if user has 2FA enabled.
+     */
+    public function hasTwoFactorEnabled(): bool
+    {
+        return $this->twoFactorAuth?->two_factor_enabled ?? false;
+    }
 
     /**
      * Get the user's permissions through their role

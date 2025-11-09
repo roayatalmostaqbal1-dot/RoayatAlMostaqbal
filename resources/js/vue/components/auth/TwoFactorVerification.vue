@@ -15,7 +15,6 @@
             maxlength="6"
             placeholder="000000"
             class="w-full px-4 py-3 rounded-lg border-2 border-[#3b5265] bg-[#051824] text-white placeholder-gray-500 focus:outline-none focus:border-[#27e9b5] text-center text-2xl tracking-widest"
-            @keyup.enter="verifyCode"
           />
         </div>
 
@@ -59,7 +58,6 @@
           type="text"
           placeholder="XXXXXXXX"
           class="w-full px-4 py-3 rounded-lg border-2 border-[#3b5265] bg-[#051824] text-white placeholder-gray-500 focus:outline-none focus:border-[#27e9b5] mb-3"
-          @keyup.enter="verifyRecoveryCode"
         />
         <button
           @click="verifyRecoveryCode"

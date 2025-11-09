@@ -42,7 +42,11 @@
           </thead>
           <tbody>
             <tr v-for="role in items" :key="role.id" class="border-b border-[#162936] hover:bg-[#162936] transition">
-              <td class="py-3 px-4 text-white">{{ role.name }}</td>
+              <td class="py-3 px-4">
+                <span class="inline-block max-w-xs font-semibold text-[#27e9b5] truncate" :title="role.name">
+                  {{ role.name }}
+                </span>
+              </td>
               <td class="py-3 px-4 text-gray-300">
                 <span class="inline-block bg-[#3b5265] text-[#27e9b5] px-2 py-1 rounded text-sm">
                   {{ role.permissions?.length || 0 }} permissions

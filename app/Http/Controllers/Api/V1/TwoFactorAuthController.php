@@ -13,6 +13,7 @@ use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Renderer\Image\SvgImageBackEnd;
 use BaconQrCode\Writer;
 use App\Models\User;
+use App\Models\UserTwoFactorAuth;
 use App\Http\Resources\Api\V1\User\UserInfoResource;
 
 class TwoFactorAuthController extends Controller
@@ -92,11 +93,15 @@ class TwoFactorAuthController extends Controller
 
             $recoveryCodes = $this->generateRandomCodes();
 
-            $user->update([
-                'two_factor_enabled' => true,
-                'two_factor_secret' => encrypt($request->secret),
-                'two_factor_recovery_codes' => encrypt(json_encode($recoveryCodes)),
+            // Get or create 2FA record for user
+            $twoFactorAuth = $user->twoFactorAuth ?? UserTwoFactorAuth::create([
+                'user_id' => $user->id,
             ]);
+
+            // Update 2FA configuration
+            $twoFactorAuth->setEncryptedSecret($request->secret);
+            $twoFactorAuth->setEncryptedRecoveryCodes($recoveryCodes);
+            $twoFactorAuth->enable();
 
             return response()->json([
                 'success' => true,
@@ -133,11 +138,13 @@ class TwoFactorAuthController extends Controller
                 ], 422);
             }
 
-            $user->update([
-                'two_factor_enabled' => false,
-                'two_factor_secret' => null,
-                'two_factor_recovery_codes' => null,
+            // Get or create 2FA record for user
+            $twoFactorAuth = $user->twoFactorAuth ?? UserTwoFactorAuth::create([
+                'user_id' => $user->id,
             ]);
+
+            // Disable 2FA
+            $twoFactorAuth->disable();
 
             return response()->json([
                 'success' => true,
@@ -164,15 +171,16 @@ class TwoFactorAuthController extends Controller
 
         try {
             $user = User::findOrFail($request->user_id);
+            $twoFactorAuth = $user->twoFactorAuth;
 
-            if (!$user->two_factor_enabled) {
+            if (!$twoFactorAuth || !$twoFactorAuth->two_factor_enabled) {
                 return response()->json([
                     'success' => false,
                     'message' => '2FA is not enabled for this user',
                 ], 422);
             }
 
-            $secret = decrypt($user->two_factor_secret);
+            $secret = $twoFactorAuth->getDecryptedSecret();
 
             if ($this->google2fa->verifyKey($secret, $request->code)) {
                 $token = $user->createToken('authToken')->accessToken;
@@ -185,13 +193,11 @@ class TwoFactorAuthController extends Controller
                 ]);
             }
 
-            // التحقق من كود الاسترجاع
-            $recoveryCodes = json_decode(decrypt($user->two_factor_recovery_codes), true);
+            // Check recovery codes
+            $recoveryCodes = $twoFactorAuth->getDecryptedRecoveryCodes();
             if (in_array($request->code, $recoveryCodes)) {
                 $recoveryCodes = array_filter($recoveryCodes, fn($code) => $code !== $request->code);
-                $user->update([
-                    'two_factor_recovery_codes' => encrypt(json_encode($recoveryCodes)),
-                ]);
+                $twoFactorAuth->setEncryptedRecoveryCodes($recoveryCodes);
 
                 $token = $user->createToken('authToken')->accessToken;
 
@@ -220,7 +226,7 @@ class TwoFactorAuthController extends Controller
     /**
      * Generate new recovery codes
      */
-    public function generateRecoveryCodes(Request $request = null)
+    public function generateRecoveryCodes(?Request $request = null)
     {
         try {
             $user = Auth::user();
@@ -236,9 +242,13 @@ class TwoFactorAuthController extends Controller
 
             $recoveryCodes = $this->generateRandomCodes();
 
-            $user->update([
-                'two_factor_recovery_codes' => encrypt(json_encode($recoveryCodes)),
+            // Get or create 2FA record for user
+            $twoFactorAuth = $user->twoFactorAuth ?? UserTwoFactorAuth::create([
+                'user_id' => $user->id,
             ]);
+
+            // Update recovery codes
+            $twoFactorAuth->setEncryptedRecoveryCodes($recoveryCodes);
 
             return response()->json([
                 'success' => true,
@@ -265,11 +275,12 @@ class TwoFactorAuthController extends Controller
     {
         try {
             $user = Auth::user();
+            $twoFactorAuth = $user->twoFactorAuth;
 
             return response()->json([
                 'success' => true,
                 'data' => [
-                    'two_factor_enabled' => $user->two_factor_enabled,
+                    'two_factor_enabled' => $twoFactorAuth?->two_factor_enabled ?? false,
                 ],
             ]);
         } catch (\Exception $e) {

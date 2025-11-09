@@ -18,8 +18,11 @@ class PermissionResource extends JsonResource
             'id'         => $this->id,
             'name'       => $this->name,
             'guard_name' => $this->guard_name,
+            'group'      => $this->group ?? 'general',
+            'is_seeded'  => (bool) $this->is_seeded,
+            'roles_count' => $this->roles->count(),
             'roles'      => $this->roles->pluck('name'),
         ];
-          
+
     }
 }

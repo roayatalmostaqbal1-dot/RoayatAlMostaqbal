@@ -87,14 +87,14 @@ class DashboardController extends Controller
                         [
                             'title' => 'Total Roles',
                             'value' => $totalRoles,
-                            'icon' => 'activity',
+                            'icon' => 'roles',
                             'trend' => '+0%',
                             'trend_up' => true,
                         ],
                         [
                             'title' => 'Total Permissions',
                             'value' => $totalPermissions,
-                            'icon' => 'trending-up',
+                            'icon' => 'permissions',
                             'trend' => '+0%',
                             'trend_up' => true,
                         ],

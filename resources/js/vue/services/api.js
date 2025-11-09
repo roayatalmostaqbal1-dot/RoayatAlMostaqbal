@@ -21,19 +21,14 @@ apiClient.interceptors.request.use((config) => {
         config.headers['X-CSRF-TOKEN'] = csrfToken.getAttribute('content');
     }
 
-    // Add auth token from localStorage or Pinia store
-    let token = localStorage.getItem('auth_token');
-    if (!token) {
-        try {
-            const authStore = useAuthStore();
-            token = authStore.token;
-        } catch (e) {
-            // Store not available yet
+    // Add auth token from Pinia store
+    try {
+        const authStore = useAuthStore();
+        if (authStore.token) {
+            config.headers.Authorization = `Bearer ${authStore.token}`;
         }
-    }
-
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+    } catch (e) {
+        // Store not available yet
     }
 
     return config;
@@ -45,8 +40,13 @@ apiClient.interceptors.response.use(
     (error) => {
         if (error.response?.status === 401) {
             // Clear auth data on unauthorized
-            localStorage.removeItem('auth_token');
-            localStorage.removeItem('user');
+            try {
+                const authStore = useAuthStore();
+                authStore.token = null;
+                authStore.user = null;
+            } catch (e) {
+                // Store not available
+            }
             window.location.href = '/admin/login';
         }
         return Promise.reject(error);

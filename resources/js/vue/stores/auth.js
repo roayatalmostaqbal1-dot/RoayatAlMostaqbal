@@ -224,6 +224,8 @@ export const useAuthStore = defineStore('auth', () => {
         verify
     };
 }, {
-    persist: true,
+    persist: {
+        storage: sessionStorage,
+    },
 });
 

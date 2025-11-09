@@ -9,8 +9,9 @@ import App from "@/vue/app.vue";
 
 
 const app = createApp(App);
-const pinia = createPinia(piniaPluginPersistedstate);
+const pinia = createPinia();
 
+pinia.use(piniaPluginPersistedstate);
 pinia.use(({ store }) => {
   store.router = markRaw(router);
 });

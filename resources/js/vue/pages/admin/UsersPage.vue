@@ -61,7 +61,7 @@
               <td class="py-3 px-4 text-white">{{ user.name }}</td>
               <td class="py-3 px-4 text-gray-400">{{ user.email }}</td>
               <td class="py-3 px-4">
-                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-[#27e9b5] bg-opacity-20 text-[#27e9b5]">
+                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-[#27e9b5] bg-opacity-20 text-[#000]">
                   {{ user.roles && user.roles.length > 0 ? user.roles[0] : 'User' }}
                 </span>
               </td>

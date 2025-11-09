@@ -50,10 +50,10 @@
                 </span>
               </td>
               <td class="py-3 px-4">
-                <span v-if="permission.is_seeded" class="inline-block bg-blue-500 bg-opacity-20 text-blue-400 px-2 py-1 rounded text-xs border border-blue-500">
+                <span v-if="permission.is_seeded" class="inline-block bg-blue-500 bg-opacity-20 text-white px-2 py-1 rounded text-xs border border-blue-500">
                   🔒 Seeded
                 </span>
-                <span v-else class="inline-block bg-gray-600 bg-opacity-20 text-gray-400 px-2 py-1 rounded text-xs border border-gray-600">
+                <span v-else class="inline-block bg-gray-600 bg-opacity-20 text-white px-2 py-1 rounded text-xs border border-gray-600">
                   Custom
                 </span>
               </td>

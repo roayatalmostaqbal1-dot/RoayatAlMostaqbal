@@ -29,7 +29,7 @@
       <div
         :class="[
           'w-12 h-12 rounded-lg flex items-center justify-center',
-          'bg-[#27e9b5] bg-opacity-20 text-[#fff]',
+          'bg-[#27e9b5] bg-opacity-20 text-[#000]',
         ]"
       >
         <component :is="iconComponent" class="w-6 h-6" />

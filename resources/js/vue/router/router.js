@@ -10,6 +10,8 @@ import UsersPage from '../pages/admin/UsersPage.vue';
 import SettingsPage from '../pages/admin/SettingsPage.vue';
 import RolesPage from '../pages/admin/RolesPage.vue';
 import PermissionsPage from '../pages/admin/PermissionsPage.vue';
+import EncryptedDataPage from '../pages/admin/EncryptedDataPage.vue';
+import EncryptionDebugPage from '../pages/admin/EncryptionDebugPage.vue';
 
 const routes = [
   {
@@ -58,6 +60,18 @@ const routes = [
     path: '/permissions',
     name: 'Permissions',
     component: PermissionsPage,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/encrypted-data',
+    name: 'EncryptedData',
+    component: EncryptedDataPage,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/encryption-debug',
+    name: 'EncryptionDebug',
+    component: EncryptionDebugPage,
     meta: { requiresAuth: true },
   },
   {

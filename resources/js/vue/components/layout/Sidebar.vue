@@ -113,6 +113,20 @@ const IconSettings = {
   ])
 };
 
+// Encryption icon - lock with key
+const IconEncryption = {
+  render: () => h('svg', { fill: 'currentColor', viewBox: '0 0 24 24' }, [
+    h('path', { d: 'M12 1C6.48 1 2 5.48 2 11s4.48 10 10 10 10-4.48 10-10S17.52 1 12 1zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 7 15.5 7 14 7.67 14 8.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 7 8.5 7 7 7.67 7 8.5 7.67 10 8.5 10zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z' })
+  ])
+};
+
+// Debug icon - bug/wrench
+const IconDebug = {
+  render: () => h('svg', { fill: 'currentColor', viewBox: '0 0 24 24' }, [
+    h('path', { d: 'M11.99 5V1h-1v4H8.01V1H7v4c-1.1 0-2 .9-2 2v3h-.01C2.9 10 2 10.9 2 12s.9 2 2 2v3c0 1.1.9 2 2 2h1v4h1v-4h3.98v4h1v-4c1.1 0 2-.9 2-2v-3h.01c1.1 0 2-.9 2-2s-.9-2-2-2V7c0-1.1-.9-2-2-2h-1V1h-1v4h-3.01zm3.01 14H8.01V7h5.98v12z' })
+  ])
+};
+
 const router = useRouter();
 const route = useRoute();
 const authStore = useAuthStore();
@@ -128,6 +142,8 @@ const menuItems = [
   { path: '/roles', label: 'Roles', icon: IconRoles },
   { path: '/permissions', label: 'Permissions', icon: IconPermissions },
   { path: '/settings', label: 'Settings', icon: IconSettings },
+  { path: '/encrypted-data', label: 'Encrypted Data', icon: IconEncryption },
+  { path: '/encryption-debug', label: 'Encryption Debug', icon: IconDebug },
 ];
 
 const userInitial = computed(() => {

@@ -18,18 +18,21 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-
         $this->call([RolesAndPermissionsSeeder::class]);
-                User::create([
+
+        User::create([
             'name' => 'dynamite',
             'email' => 'dynamite@gmail.com',
             'password' => Hash::make('password123')
         ])->assignRole('super-admin');
+
         User::create([
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
             'password' => Hash::make('password123')
         ])->assignRole('super-admin');
 
+        // Seed encrypted data for testing
+        $this->call([EncryptedDataSeeder::class]);
     }
 }

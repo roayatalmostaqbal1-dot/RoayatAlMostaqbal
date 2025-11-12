@@ -28,11 +28,11 @@ class PermissionController extends Controller
      */
     public function store(StoreRequest $request)
     {
-         $permission = Permission::firstOrCreate([
-            'name' => $request->name ,
-            'guard_name' => 'api',
-        ]);
-        return new PermissionResource($permission);
+    //      $permission = Permission::firstOrCreate([
+    //         'name' => $request->name ,
+    //         'guard_name' => 'api',
+    //     ]);
+    //     return new PermissionResource($permission);
     }
 
 
@@ -54,22 +54,22 @@ class PermissionController extends Controller
      */
     public function update(UpdateRequest $request, Permission $permission)
     {
-        //
-        $permission = Permission::findOrFail($permission->id);
+    //     //
+    //     $permission = Permission::findOrFail($permission->id);
 
-        // Prevent editing seeded permissions
-        if ($permission->is_seeded) {
-            return response()->json([
-                'response_code' => 403,
-                'status' => 'error',
-                'message' => 'Seeded permissions cannot be edited. Please update the seeder file instead.',
-            ], 403);
-        }
+    //     // Prevent editing seeded permissions
+    //     if ($permission->is_seeded) {
+    //         return response()->json([
+    //             'response_code' => 403,
+    //             'status' => 'error',
+    //             'message' => 'Seeded permissions cannot be edited. Please update the seeder file instead.',
+    //         ], 403);
+    //     }
 
-        $permission->update([
-            'name' => $request->name,
-        ]);
-        return new PermissionResource($permission);
+    //     $permission->update([
+    //         'name' => $request->name,
+    //     ]);
+    //     return new PermissionResource($permission);
     }
 
     /**
@@ -77,30 +77,30 @@ class PermissionController extends Controller
      */
     public function destroy( Permission $permission)
     {
-        //
-        if(!Auth::user()->hasRole('super-admin')||!Auth::user()->hasPermissionTo('delete-permission')){
-            return response()->json([
-                'response_code' => 403,
-                'status' => 'error',
-                'message' => 'You are not authorized to delete this permission',
-            ], 403);
-        }
-        $permission = Permission::findOrFail($permission->id);
+    //     //
+    //     if(!Auth::user()->hasRole('super-admin')||!Auth::user()->hasPermissionTo('delete-permission')){
+    //         return response()->json([
+    //             'response_code' => 403,
+    //             'status' => 'error',
+    //             'message' => 'You are not authorized to delete this permission',
+    //         ], 403);
+    //     }
+    //     $permission = Permission::findOrFail($permission->id);
 
-        // Prevent deleting seeded permissions
-        if ($permission->is_seeded) {
-            return response()->json([
-                'response_code' => 403,
-                'status' => 'error',
-                'message' => 'Seeded permissions cannot be deleted. Please update the seeder file instead.',
-            ], 403);
-        }
+    //     // Prevent deleting seeded permissions
+    //     if ($permission->is_seeded) {
+    //         return response()->json([
+    //             'response_code' => 403,
+    //             'status' => 'error',
+    //             'message' => 'Seeded permissions cannot be deleted. Please update the seeder file instead.',
+    //         ], 403);
+    //     }
 
-        $permission->delete();
-        return response()->json([
-            'response_code' => 200,
-            'status' => 'success',
-            'message' => 'Permission deleted successfully',
-        ]);
+    //     $permission->delete();
+    //     return response()->json([
+    //         'response_code' => 200,
+    //         'status' => 'success',
+    //         'message' => 'Permission deleted successfully',
+    //     ]);
     }
 }

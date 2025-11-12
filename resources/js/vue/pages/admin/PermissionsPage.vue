@@ -38,7 +38,7 @@
               <th class="text-left py-3 px-4 text-gray-300 font-semibold">Group</th>
               <th class="text-left py-3 px-4 text-gray-300 font-semibold">Status</th>
               <th class="text-left py-3 px-4 text-gray-300 font-semibold">Roles</th>
-              <th class="text-left py-3 px-4 text-gray-300 font-semibold">Actions</th>
+              <!-- <th class="text-left py-3 px-4 text-gray-300 font-semibold">Actions</th> -->
             </tr>
           </thead>
           <tbody>
@@ -60,7 +60,7 @@
               <td class="py-3 px-4 text-gray-300">
                 <span class="text-sm">{{ permission.roles_count || 0 }}</span>
               </td>
-              <td class="py-3 px-4">
+              <!-- <td class="py-3 px-4">
                 <div class="flex items-center gap-2 flex-wrap">
                   <Button
                     v-if="!permission.is_seeded"
@@ -86,7 +86,7 @@
                     Read-only
                   </span>
                 </div>
-              </td>
+              </td> -->
             </tr>
           </tbody>
         </table>

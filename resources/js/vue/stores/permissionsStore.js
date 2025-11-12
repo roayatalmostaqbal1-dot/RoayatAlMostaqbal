@@ -169,9 +169,9 @@ export const usePermissionsStore = defineStore('permissions', () => {
         // Actions
         fetchPermissions,
         fetchAllPermissions,
-        createPermission,
-        updatePermission,
-        deletePermission,
+        // createPermission,
+        // updatePermission,
+        // deletePermission,
         assignPermissionsToRole,
         fetchRolePermissions,
     };

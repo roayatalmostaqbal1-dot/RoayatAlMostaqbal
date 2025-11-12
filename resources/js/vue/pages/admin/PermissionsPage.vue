@@ -4,14 +4,7 @@
       <template #header>
         <div class="flex items-center justify-between">
           <h2 class="text-lg font-bold text-white">Permissions List</h2>
-          <Button
-            variant="primary"
-            size="sm"
-            @click="openCreateModal"
-            :disabled="isLoading"
-          >
-            + Add Permission
-          </Button>
+           
         </div>
       </template>
 

@@ -1,231 +1,271 @@
-import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
-import apiClient from '../services/api';
-import router from '../router/router';
+import { defineStore } from "pinia";
+import apiClient from "../services/api";
+import router from "../router/router";
 
-export const useAuthStore = defineStore('auth', () => {
+export const useAuthStore = defineStore("auth", {
+    // =====================
     // State
-    const user = ref(null);
-    const token = ref(null);
-    const isLoading = ref(false);
-    const error = ref(null);
-    const twoFactorRequired = ref(false);
-    const twoFactorUserId = ref(null);
+    // =====================
+    state: () => ({
+        authUser: null,
+        authToken: localStorage.getItem("token") || null,
+        isLoading: false,
+        authErrors: null,
 
-    // Computed
-    const isAuthenticated = computed(() => !!token.value);
-    const userName = computed(() => user.value?.name || '');
-    const userEmail = computed(() => user.value?.email || '');
+        authRole: null,
+        authPermissions: null,
 
+        twoFactorRequired: false,
+        twoFactorUserId: null,
+    }),
+
+    // =====================
+    // Getters
+    // =====================
+    getters: {
+        user: (state) => state.authUser,
+        errors: (state) => state.authErrors,
+        roles: (state) => state.authRole,
+        token: (state) => state.authToken,
+        permissions: (state) => state.authPermissions,
+
+        isAuthenticated: (state) => !!state.authToken,
+        userName: (state) => state.authUser?.name || "",
+        userEmail: (state) => state.authUser?.email || "",
+    },
+
+    // =====================
     // Actions
-    const login = async (email, password) => {
-        isLoading.value = true;
-        error.value = null;
-        try {
-            const response = await apiClient.post('/auth/login', { email, password });
-            const { token: newToken, data } = response.data;
+    // =====================
+    actions: {
+        // ------------------------------------
+        // Login
+        // ------------------------------------
+        async login(email, password) {
+            this.isLoading = true;
+            this.authErrors = null;
 
-            token.value = newToken;
-            user.value = data.user_info;
+            try {
+                const response = await apiClient.post("/auth/login", {
+                    email,
+                    password,
+                });
 
-            return { success: true, data };
-        } catch (err) {
-            error.value = err.response?.data?.message || 'Login failed';
-            return { success: false, error: error.value };
-        } finally {
-            isLoading.value = false;
-        }
-    };
+                this.authToken = response.data.token;
+                this.authUser = response.data.data.user_info;
 
-    const register = async (userData) => {
-        isLoading.value = true;
-        error.value = null;
-        try {
-            const response = await apiClient.post('/auth/register', userData);
-            const { token: newToken, data } = response.data;
+                localStorage.setItem("token", this.authToken);
 
-            token.value = newToken;
-            user.value = data;
+                return { success: true, data: response.data };
+            } catch (err) {
+                this.authErrors =
+                    err.response?.data?.message || "Login failed";
+                return { success: false, error: this.authErrors };
+            } finally {
+                this.isLoading = false;
+            }
+        },
 
-            return { success: true, data };
-        } catch (err) {
-            error.value = err.response?.data?.message || 'Registration failed';
-            return { success: false, error: error.value };
-        } finally {
-            isLoading.value = false;
-        }
-    };
+        // ------------------------------------
+        // Register
+        // ------------------------------------
+        async register(userData) {
+            this.isLoading = true;
+            this.authErrors = null;
 
-    const logout = async () => {
-        isLoading.value = true;
-        error.value = null;
-        try {
-            await apiClient.post('/logout');
-            return { success: true };
-        } catch (err) {
-            error.value = err.response?.data?.message || 'Logout failed';
-            return { success: false, error: error.value };
-        } finally {
-            token.value = null;
-            user.value = null;
-            isLoading.value = false;
-        }
-    };
+            try {
+                const response = await apiClient.post(
+                    "/auth/register",
+                    userData
+                );
 
-    const fetchUser = async () => {
-        if (!token.value) {
-            return { success: false, error: 'No token available' };
-        }
+                this.authToken = response.data.token;
+                this.authUser = response.data.data;
 
-        isLoading.value = true;
-        error.value = null;
-        try {
-            const response = await apiClient.get('/user');
-            user.value = response.data.data;
-            return { success: true, data: user.value };
-        } catch (err) {
-            error.value = err.response?.data?.message || 'Failed to fetch user';
-            token.value = null;
-            return { success: false, error: error.value };
-        } finally {
-            isLoading.value = false;
-        }
-    };
+                localStorage.setItem("token", this.authToken);
 
-    const socialAuthRedirect = (provider) => {
-        const API_BASE_URL = '/api/v1';
-        const callbackUrl = `${window.location.origin}/admin/social-callback`;
-        const redirectUrl = `${API_BASE_URL}/social-auth/${provider}?callback=${encodeURIComponent(callbackUrl)}`;
-        const width = 550;
-        const height = 650;
-        const left = window.screenX + (window.outerWidth - width) / 2;
-        const top = window.screenY + (window.outerHeight - height) / 2;
-        const popup = window.open(
-            redirectUrl,
-            `${provider}-login`,
-            `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
-        );
+                return { success: true, data: response.data };
+            } catch (err) {
+                this.authErrors =
+                    err.response?.data?.message || "Registration failed";
+                return { success: false, error: this.authErrors };
+            } finally {
+                this.isLoading = false;
+            }
+        },
 
-        if (!popup) {
-            error.value = '❌ تم حظر النوافذ المنبثقة. الرجاء السماح بالنوافذ لهذا الموقع.';
-            return;
-        }
-        const handleMessage = (event) => {
+        // ------------------------------------
+        // Logout
+        // ------------------------------------
+        async logout() {
+            this.isLoading = true;
+            this.authErrors = null;
+
+            try {
+                await apiClient.post("/logout");
+            } catch (err) {
+                this.authErrors =
+                    err.response?.data?.message || "Logout failed";
+            } finally {
+                this.authToken = null;
+                this.authUser = null;
+                this.isLoading = false;
+                localStorage.removeItem("token");
+            }
+        },
+
+        // ------------------------------------
+        // Fetch User
+        // ------------------------------------
+        async fetchUser() {
+            if (!this.authToken) {
+                return { success: false, error: "No token available" };
+            }
+
+            this.isLoading = true;
+            this.authErrors = null;
+
+            try {
+                const response = await apiClient.get("/user");
+                this.authUser = response.data.data;
+
+                return { success: true, data: this.authUser };
+            } catch (err) {
+                this.authErrors =
+                    err.response?.data?.message ||
+                    "Failed to fetch user";
+
+                this.authToken = null;
+                localStorage.removeItem("token");
+
+                return { success: false, error: this.authErrors };
+            } finally {
+                this.isLoading = false;
+            }
+        },
+
+        // ------------------------------------
+        // Clear Error
+        // ------------------------------------
+        clearError() {
+            this.authErrors = null;
+        },
+
+        // ------------------------------------
+        // Two Factor Reset
+        // ------------------------------------
+        resetTwoFactor() {
+            this.twoFactorRequired = false;
+            this.twoFactorUserId = null;
+        },
+
+        // ------------------------------------
+        // Verify 2FA
+        // ------------------------------------
+        async verify(code) {
+            this.isLoading = true;
+            this.authErrors = null;
+
+            try {
+                const userId =
+                    this.authUser?.id || this.authUser?.user_id;
+
+                if (!userId) {
+                    throw new Error("User ID not found. Please login again.");
+                }
+
+                const response = await apiClient.post(
+                    "/auth/two-factor/verify",
+                    { code, user_id: userId }
+                );
+
+                if (response.data.success) {
+                    this.authToken = response.data.token;
+                    this.authUser = response.data.user;
+
+                    localStorage.setItem("token", this.authToken);
+
+                    return { success: true, user: response.data.user };
+                } else {
+                    throw new Error(
+                        response.data.message ||
+                        "Invalid verification code"
+                    );
+                }
+            } catch (err) {
+                this.authErrors =
+                    err.response?.data?.message || err.message;
+                return { success: false, error: this.authErrors };
+            } finally {
+                this.isLoading = false;
+            }
+        },
+
+        // ------------------------------------
+        // Social Auth Redirect
+        // ------------------------------------
+        socialAuthRedirect(provider) {
+            const API_BASE_URL = "/api/v1";
+            const callbackUrl = `${window.location.origin}/admin/social-callback`;
+
+            const redirectUrl = `${API_BASE_URL}/social-auth/${provider}?callback=${encodeURIComponent(callbackUrl)}`;
+
+            const width = 550;
+            const height = 650;
+            const left = window.screenX + (window.outerWidth - width) / 2;
+            const top = window.screenY + (window.outerHeight - height) / 2;
+
+            const popup = window.open(
+                redirectUrl,
+                `${provider}-login`,
+                `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
+            );
+
+            if (!popup) {
+                this.authErrors = "❌ تم حظر النوافذ المنبثقة. الرجاء السماح للنوافذ لهذا الموقع.";
+                return;
+            }
+
+            // IMPORTANT — bind context
+            this.boundHandleMessage = this.handleMessage.bind(this);
+
+            window.addEventListener("message", this.boundHandleMessage);
+        },
+
+        handleMessage(event) {
             if (event.origin !== window.location.origin) return;
 
-            const { type, token: newToken, user: userData, message, user_id, user: socialUser } = event.data || {};
+            const { type, token, user, message, user_id } = event.data || {};
 
-            if (type === 'SOCIAL_AUTH_SUCCESS') {
-                token.value = newToken;
-                user.value = userData;
-                popup.close();
-                window.removeEventListener('message', handleMessage);
+            if (type === "SOCIAL_AUTH_SUCCESS") {
+                this.authToken = token;
+                this.authUser = user;
+                localStorage.setItem("token", token);
+
+                window.removeEventListener("message", this.boundHandleMessage);
+
                 window.dispatchEvent(
-                    new CustomEvent('social-auth-success', {
-                        detail: { token: newToken, user: userData },
-                    })
+                    new CustomEvent("social-auth-success", { detail: { token, user } })
                 );
-            } else if (type === 'SOCIAL_AUTH_2FA_REQUIRED') {
-                // Handle 2FA required for social login
-                // Store user data before showing 2FA modal
-                if (socialUser) {
-                    user.value = socialUser;
-                }
-                twoFactorRequired.value = true;
-                twoFactorUserId.value = user_id;
-                popup.close();
-                window.removeEventListener('message', handleMessage);
+            }
+
+            else if (type === "SOCIAL_AUTH_CANCELLED") {
+                this.authErrors = null;
+                window.removeEventListener("message", this.boundHandleMessage);
+            }
+
+            else if (type === "SOCIAL_AUTH_2FA_REQUIRED") {
+                this.twoFactorRequired = true;
+                this.twoFactorUserId = user_id;
+                this.authUser = user;
+
+                window.removeEventListener("message", this.boundHandleMessage);
+
                 window.dispatchEvent(
-                    new CustomEvent('social-auth-2fa-required', {
-                        detail: { user_id, user: socialUser },
-                    })
+                    new CustomEvent("social-auth-2fa-required", { detail: { user_id, user } })
                 );
-            } else if (type === 'SOCIAL_AUTH_ERROR') {
-                error.value = message || 'فشل تسجيل الدخول عبر المنصة الاجتماعية.';
-                popup.close();
-                window.removeEventListener('message', handleMessage);
             }
-        };
-        window.addEventListener('message', handleMessage);
-        const popupChecker = setInterval(() => {
-            if (popup.closed) {
-                clearInterval(popupChecker);
-                window.removeEventListener('message', handleMessage);
-            }
-        }, 500);
-    };
+        },
 
-    const clearError = () => {
-        error.value = null;
-    };
-
-    const resetTwoFactor = () => {
-        twoFactorRequired.value = false;
-        twoFactorUserId.value = null;
-    };
-    const verify = async (code) => {
-        isLoading.value = true;
-        error.value = null;
-        try {
-            // Get user_id from the stored user data (set during login)
-            const userId = user.value?.id || user.value?.user_id;
-
-            if (!userId) {
-                throw new Error('User ID not found. Please login again.');
-            }
-
-            const response = await apiClient.post('/auth/two-factor/verify', {
-                code: code,
-                user_id: userId,
-            });
-
-            if (response.data.success) {
-                const { token: newToken, user: userData } = response.data;
-
-                // Update store with new token and user data
-                token.value = newToken;
-                user.value = userData;
-
-                return { success: true, user: userData };
-            } else {
-                throw new Error(response.data.message || 'Invalid verification code');
-            }
-        } catch (err) {
-            const errorMessage = err.response?.data?.message || err.message || 'Invalid verification code';
-            error.value = errorMessage;
-            return { success: false, error: errorMessage };
-        } finally {
-            isLoading.value = false;
-        }
-    };
-
-    return {
-        // State
-        user,
-        token,
-        isLoading,
-        error,
-        twoFactorRequired,
-        twoFactorUserId,
-
-        // Computed
-        isAuthenticated,
-        userName,
-        userEmail,
-
-        // Actions
-        login,
-        register,
-        logout,
-        fetchUser,
-        socialAuthRedirect,
-        clearError,
-        resetTwoFactor,
-        verify
-    };
-}, {
-    persist: {
-        storage: sessionStorage,
     },
 });
-

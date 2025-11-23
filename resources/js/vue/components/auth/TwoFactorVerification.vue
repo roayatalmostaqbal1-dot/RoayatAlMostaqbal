@@ -3,8 +3,6 @@
     <div class="bg-[#162936] rounded-lg p-8 max-w-md w-full mx-4 border border-[#3b5265]">
       <h2 class="text-2xl font-bold text-white mb-2">Two-Factor Authentication</h2>
       <p class="text-gray-400 mb-6">Enter the 6-digit code from your authenticator app</p>
-
-      <!-- TOTP Code Input -->
       <form @submit.prevent="verifyCode">
         <div class="mb-6">
           <label class="block text-white font-semibold mb-2">Authentication Code</label>
@@ -17,8 +15,7 @@
             class="w-full px-4 py-3 rounded-lg border-2 border-[#3b5265] bg-[#051824] text-white placeholder-gray-500 focus:outline-none focus:border-[#27e9b5] text-center text-2xl tracking-widest"
           />
         </div>
-
-        <!-- Error Message -->
+        
         <div v-if="error" class="mb-4 p-3 rounded-lg bg-red-500 bg-opacity-10 border border-red-500 text-red-400 text-sm">
           {{ error }}
         </div>

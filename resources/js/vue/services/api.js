@@ -13,15 +13,11 @@ const apiClient = axios.create({
     },
 });
 
-// Add CSRF token and auth token to requests
 apiClient.interceptors.request.use((config) => {
-    // Add CSRF token if available
     const csrfToken = document.querySelector('meta[name="csrf-token"]');
     if (csrfToken) {
         config.headers['X-CSRF-TOKEN'] = csrfToken.getAttribute('content');
     }
-
-    // Add auth token from Pinia store
     try {
         const authStore = useAuthStore();
         if (authStore.token) {
@@ -29,12 +25,11 @@ apiClient.interceptors.request.use((config) => {
         }
     } catch (e) {
         // Store not available yet
+        console.error("Auth store not ready:", e);
     }
-
     return config;
 });
 
-// Handle response errors
 apiClient.interceptors.response.use(
     (response) => response,
     (error) => {
@@ -45,45 +40,13 @@ apiClient.interceptors.response.use(
                 authStore.token = null;
                 authStore.user = null;
             } catch (e) {
-                // Store not available
+                console.error('Failed to clear auth data:', e);
             }
             window.location.href = '/admin/login';
         }
         return Promise.reject(error);
     }
 );
-
-export const authService = {
-    // Standard login
-    login: (email, password) => {
-        return apiClient.post('/auth/login', { email, password });
-    },
-
-    // Standard registration
-    register: (data) => {
-        return apiClient.post('/auth/register', data);
-    },
-
-    // Get current user
-    getUser: () => {
-        return apiClient.get('/user');
-    },
-
-    // Logout
-    logout: () => {
-        return apiClient.post('/logout');
-    },
-
-    // Social auth redirect
-    socialAuthRedirect: (provider) => {
-        window.location.href = `${API_BASE_URL}/social-auth/${provider}`;
-    },
-
-    // Social auth callback handler
-    handleSocialAuthCallback: (provider) => {
-        return apiClient.get(`/social-auth/${provider}/callback`);
-    },
-};
 
 export default apiClient;
 

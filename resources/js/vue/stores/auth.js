@@ -205,10 +205,10 @@ export const useAuthStore = defineStore("auth", {
         // Social Auth Redirect
         // ------------------------------------
         socialAuthRedirect(provider) {
-            const API_BASE_URL = "/api/v1";
             const callbackUrl = `${window.location.origin}/admin/social-callback`;
 
-            const redirectUrl = `${API_BASE_URL}/social-auth/${provider}?callback=${encodeURIComponent(callbackUrl)}`;
+            const redirectUrl =
+                `/api/v1/social-auth/${provider}?callback=${encodeURIComponent(callbackUrl)}`;
 
             const width = 550;
             const height = 650;
@@ -222,15 +222,14 @@ export const useAuthStore = defineStore("auth", {
             );
 
             if (!popup) {
-                this.authErrors = "❌ تم حظر النوافذ المنبثقة. الرجاء السماح للنوافذ لهذا الموقع.";
+                this.authErrors = "❌ الرجاء السماح للنوافذ المنبثقة.";
                 return;
             }
 
-            // IMPORTANT — bind context
             this.boundHandleMessage = this.handleMessage.bind(this);
-
             window.addEventListener("message", this.boundHandleMessage);
         },
+
 
         handleMessage(event) {
             if (event.origin !== window.location.origin) return;

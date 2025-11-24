@@ -8,17 +8,23 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:api')->group(function () {
-    Route::get('/user', function () {
-        $user = Auth::user();
-        return new UserInfoResource($user);
-    });
+    // =====================
+    // User Profile Routes
+    // =====================
+    Route::get('/user', fn() => new UserInfoResource(Auth::user()));
     Route::post('logout', [AuthenticationController::class, 'logOut'])->name('logout');
 
-    // Encrypted data routes
-    Route::post('/encrypted-data', [EncryptedDataController::class, 'store']);
-    Route::get('/encrypted-data', [EncryptedDataController::class, 'show']);
-    Route::put('/encrypted-data/{id}', [EncryptedDataController::class, 'update']);
-    Route::get('/admin/encrypted-data/{userId}', [EncryptedDataController::class, 'adminShow']);
+    // =====================
+    // Encrypted Data Routes
+    // =====================
+    Route::post('/encrypted-data', [EncryptedDataController::class, 'store'])
+        ->middleware('permission:encrypted_data.create');
+    Route::get('/encrypted-data', [EncryptedDataController::class, 'show'])
+        ->middleware('permission:encrypted_data.view');
+    Route::put('/encrypted-data/{id}', [EncryptedDataController::class, 'update'])
+        ->middleware('permission:encrypted_data.edit');
+    Route::get('/admin/encrypted-data/{userId}', [EncryptedDataController::class, 'adminShow'])
+        ->middleware('permission:encrypted_data.view');
 });
 
 Route::prefix('auth')->group(function () {

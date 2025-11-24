@@ -50,9 +50,15 @@ class RolesAndPermissionsSeeder extends Seeder
      * - settings.edit → PUT /api/v1/SuperAdmin/settings (update settings)
      *
      * TWO-FACTOR AUTHENTICATION:
-     * - auth.2fa.enable  → POST /api/v1/auth/two-factor/enable (enable 2FA)
-     * - auth.2fa.disable → POST /api/v1/auth/two-factor/disable (disable 2FA)
+     * - auth.2fa.enable  → POST /api/v1/SuperAdmin/two-factor/enable (enable 2FA)
+     * - auth.2fa.disable → POST /api/v1/SuperAdmin/two-factor/disable (disable 2FA)
      * - auth.2fa.verify  → POST /api/v1/auth/two-factor/verify (verify 2FA code)
+     *
+     * ENCRYPTED DATA:
+     * - encrypted_data.view   → GET /api/v1/auth/encrypted-data (view encrypted data)
+     * - encrypted_data.view   → GET /api/v1/auth/admin/encrypted-data/{userId} (admin view user encrypted data)
+     * - encrypted_data.create → POST /api/v1/auth/encrypted-data (create encrypted data)
+     * - encrypted_data.edit   → PUT /api/v1/auth/encrypted-data/{id} (update encrypted data)
      */
     public function run(): void
     {
@@ -91,6 +97,11 @@ class RolesAndPermissionsSeeder extends Seeder
                 ['name' => 'auth.2fa.enable', 'description' => 'Enable two-factor authentication'],
                 ['name' => 'auth.2fa.disable', 'description' => 'Disable two-factor authentication'],
                 ['name' => 'auth.2fa.verify', 'description' => 'Verify two-factor authentication code'],
+            ],
+            'encrypted_data' => [
+                ['name' => 'encrypted_data.view', 'description' => 'View encrypted data'],
+                ['name' => 'encrypted_data.create', 'description' => 'Create encrypted data'],
+                ['name' => 'encrypted_data.edit', 'description' => 'Edit encrypted data'],
             ],
         ];
 

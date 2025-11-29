@@ -229,11 +229,9 @@ const savePermissions = async (permissionIds) => {
     permissionIds
   );
   if (result.success) {
-    alert('Permissions assigned successfully');
     isPermissionsModalOpen.value = false;
     await rolesStore.fetchRoles();
   } else {
-    alert(`Error: ${result.error}`);
   }
 };
 </script>

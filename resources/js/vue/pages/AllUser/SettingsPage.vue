@@ -52,9 +52,15 @@
             <div class="p-4 bg-[#1f3a4a] rounded-lg border border-[#3b5265]">
               <h3 class="text-white font-semibold mb-2">Change Password</h3>
               <p class="text-gray-400 text-sm mb-4">Update your password regularly</p>
-              <Button variant="secondary">Change Password</Button>
+              <Button variant="secondary" @click="isChangePasswordModalOpen = true">Change Password</Button>
             </div>
           </div>
+
+          <!-- Change Password Modal -->
+          <ChangePasswordModal
+            :is-open="isChangePasswordModalOpen"
+            @close="isChangePasswordModalOpen = false"
+          />
 
           <!-- Notification Settings -->
           <div v-if="activeTab === 'notifications'" class="space-y-4">
@@ -86,8 +92,10 @@ import Card from '../../components/ui/Card.vue';
 import Input from '../../components/ui/Input.vue';
 import Button from '../../components/ui/Button.vue';
 import TwoFactorSettings from '../../components/settings/TwoFactorSettings.vue';
+import ChangePasswordModal from '../../components/settings/ChangePasswordModal.vue';
 
 const activeTab = ref('general');
+const isChangePasswordModalOpen = ref(false);
 
 const settingsMenu = [
   { id: 'general', label: 'General' },

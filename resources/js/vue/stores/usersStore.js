@@ -44,7 +44,7 @@ export const useUsersStore = defineStore("users", {
             this.error = null;
 
             try {
-                const response = await apiClient.get("/SuperAdmin/users", {
+                const response = await apiClient.get("/admin/users", {
                     params: { page, per_page: perPage },
                 });
                 this.users = response.data.data;

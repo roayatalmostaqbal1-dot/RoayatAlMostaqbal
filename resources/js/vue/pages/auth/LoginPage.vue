@@ -169,21 +169,16 @@ const handleLogin = async (event) => {
 
   const result = await authStore.login(form.email, form.password);
 
-  if (result.success) {
-    // Check if 2FA is required
-    if (result.data?.two_factor_enabled) {
-      // Store user data in auth store for 2FA verification
-      authStore.user = result.data;
-      show2FAModal.value = true;
-      twoFactorUserId.value = result.data.id;
-    } else {
-      // User is fully logged in, redirect to dashboard
-      router.push('/dashboard');
+if (result.success) {
+    if (result.twoFactor) {
+        show2FAModal.value = true;
+        twoFactorUserId.value = result.data.user_id;
+        return;
     }
-  } else {
-    // Error is already set in the auth store, no need to do anything else
-    // The error will be displayed in the template via authStore.error
-  }
+
+    router.push('/dashboard');
+}
+
 };
 
 const handle2FAVerified = () => {

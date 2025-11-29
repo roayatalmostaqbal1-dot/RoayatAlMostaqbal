@@ -96,20 +96,6 @@ Route::prefix('SuperAdmin')->middleware(['auth:api','role:super-admin'])->group(
     // =====================
     // Two-Factor Authentication Routes
     // =====================
-    Route::prefix('two-factor')->group(function () {
-        Route::get('/status', [TwoFactorAuthController::class, 'status'])->name('two-factor.status');
-        Route::post('/enable', [TwoFactorAuthController::class, 'enable'])
-            ->middleware('permission:auth.2fa.enable')
-            ->name('two-factor.enable');
-        Route::post('/confirm', [TwoFactorAuthController::class, 'confirm'])
-            ->middleware('permission:auth.2fa.enable')
-            ->name('two-factor.confirm');
-        Route::post('/disable', [TwoFactorAuthController::class, 'disable'])
-            ->middleware('permission:auth.2fa.disable')
-            ->name('two-factor.disable');
-        Route::post('/recovery-codes', [TwoFactorAuthController::class, 'generateRecoveryCodes'])
-            ->middleware('permission:auth.2fa.enable')
-            ->name('two-factor.recovery-codes');
-    });
+
 
 });

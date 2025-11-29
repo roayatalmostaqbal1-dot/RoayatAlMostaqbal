@@ -14,7 +14,7 @@ class StoreUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::user()->hasRole('super-admin')|| Auth::user()->hasPermissionTo('create-user') ;
+        return Auth::user()->hasRole('super-admin')|| Auth::user()->hasPermissionTo('users.create') ;
     }
 
     /**

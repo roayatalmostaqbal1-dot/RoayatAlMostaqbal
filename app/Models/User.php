@@ -70,15 +70,29 @@ class User extends Authenticatable implements OAuthenticatable
     }
 
     /**
-     * Get the user's permissions through their role
+     * Get all user permissions through their roles
+     * Returns a collection of all unique permissions from all assigned roles
+     */
+    public function getAllPermissions()
+    {
+        return $this->roles()
+            ->with('permissions')
+            ->get()
+            ->flatMap(fn($role) => $role->permissions)
+            ->unique('id');
+    }
+
+    /**
+     * Get the user's permissions through their role (attribute accessor)
+     * Used for serialization and API responses
      */
     public function getPermissionsAttribute()
     {
-        if ($this->roles->isEmpty()) {
+        if ($this->relationLoaded('roles') && $this->roles->isEmpty()) {
             return collect();
         }
 
-        return $this->roles->first()->permissions ?? collect();
+        return $this->getAllPermissions();
     }
 
     /**
@@ -86,7 +100,7 @@ class User extends Authenticatable implements OAuthenticatable
      */
     public function hasPermission($permission)
     {
-        return $this->roles->first()?->permissions->contains('name', $permission) ?? false;
+        return $this->getAllPermissions()->contains('name', $permission);
     }
 
     /**
@@ -94,7 +108,7 @@ class User extends Authenticatable implements OAuthenticatable
      */
     public function hasAnyPermission($permissions)
     {
-        $userPermissions = $this->getPermissionsAttribute();
+        $userPermissions = $this->getAllPermissions();
         return collect($permissions)->intersect($userPermissions->pluck('name'))->isNotEmpty();
     }
 
@@ -103,7 +117,23 @@ class User extends Authenticatable implements OAuthenticatable
      */
     public function hasAllPermissions($permissions)
     {
-        $userPermissions = $this->getPermissionsAttribute();
+        $userPermissions = $this->getAllPermissions();
         return collect($permissions)->diff($userPermissions->pluck('name'))->isEmpty();
+    }
+
+    /**
+     * Get user's role names as array
+     */
+    public function getRoleNames()
+    {
+        return $this->roles()->pluck('name')->toArray();
+    }
+
+    /**
+     * Get user's permission names as array
+     */
+    public function getPermissionNames()
+    {
+        return $this->getAllPermissions()->pluck('name')->toArray();
     }
 }

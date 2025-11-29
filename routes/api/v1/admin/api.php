@@ -3,7 +3,7 @@
 use App\Http\Controllers\Api\V1\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('admin')->middleware(['auth:api','role:admin|super-admin'])->group(function () {
+Route::prefix('admin')->middleware(['auth:api'])->group(function () {
     // =====================
     // Users Management (Admin)
     // =====================

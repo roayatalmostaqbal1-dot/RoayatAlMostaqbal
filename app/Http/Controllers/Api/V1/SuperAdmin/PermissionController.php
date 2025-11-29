@@ -16,7 +16,7 @@ class PermissionController extends Controller
     public function index(Request $request)
     {
         $permissions = Permission::with('roles:id,name')
-            ->select(['id', 'name', 'guard_name', 'group', 'is_seeded'])
+            ->select(['id', 'name', 'guard_name'])
             ->orderBy('id', 'asc')
             ->paginate(perPage: $request->per_page ?? 10,page: $request->page ?? 1);
     return PermissionResource::collection($permissions);
@@ -44,7 +44,7 @@ class PermissionController extends Controller
         //
 
         $permission = Permission::with('roles:id,name')
-        ->select(['id', 'name', 'guard_name', 'group', 'is_seeded'])
+        ->select(['id', 'name', 'guard_name'])
         ->findOrFail($permission->id);
         return new PermissionResource($permission);
     }

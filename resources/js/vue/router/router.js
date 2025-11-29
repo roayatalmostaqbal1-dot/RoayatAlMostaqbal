@@ -7,7 +7,7 @@ import RegisterPage from '../pages/auth/RegisterPage.vue';
 import SocialCallbackPage from '../pages/auth/SocialCallbackPage.vue';
 import DashboardPage from '../pages/admin/DashboardPage.vue';
 import UsersPage from '../pages/admin/UsersPage.vue';
-import SettingsPage from '../pages/admin/SettingsPage.vue';
+import SettingsPage from '../pages/AllUser/SettingsPage.vue';
 import RolesPage from '../pages/admin/RolesPage.vue';
 import PermissionsPage from '../pages/admin/PermissionsPage.vue';
 import EncryptedDataPage from '../pages/admin/EncryptedDataPage.vue';

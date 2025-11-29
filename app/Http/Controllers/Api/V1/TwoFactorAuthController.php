@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\{Auth, Log, Hash};
 use Illuminate\Support\Str;
 use PragmaRX\Google2FA\Google2FA;
 use BaconQrCode\Renderer\ImageRenderer;
@@ -33,7 +32,6 @@ class TwoFactorAuthController extends Controller
         try {
             $user = Auth::user();
 
-            // Generate secret key
             $secret = $this->google2fa->generateSecretKey();
 
             // Generate QR code URL
@@ -63,6 +61,8 @@ class TwoFactorAuthController extends Controller
                 ],
             ]);
         } catch (\Exception $e) {
+            Log::error('2FA Setup Error: ' . $e->getMessage());
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to generate 2FA setup',
@@ -171,6 +171,7 @@ class TwoFactorAuthController extends Controller
 
         try {
             $user = User::findOrFail($request->user_id);
+
             $twoFactorAuth = $user->twoFactorAuth;
 
             if (!$twoFactorAuth || !$twoFactorAuth->two_factor_enabled) {

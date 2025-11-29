@@ -86,7 +86,7 @@ class DashboardController extends Controller
     protected function getRecentActivity(int $limit = 10): array
     {
         return AuditLog::with('user:id,name,email')
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->limit($limit)
             ->get()
             ->map(function ($log) {

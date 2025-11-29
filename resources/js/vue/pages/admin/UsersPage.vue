@@ -149,7 +149,7 @@ import Button from '../../components/ui/Button.vue';
 import Pagination from '../../components/ui/Pagination.vue';
 import CrudModal from '../../components/crud/CrudModal.vue';
 import { useUsersStore } from '../../stores/usersStore';
-
+import { useRolesStore } from '../../stores/rolesStore';
 // Initialize users store
 const usersStore = useUsersStore();
 
@@ -158,6 +158,7 @@ const isModalOpen = ref(false);
 const modalMode = ref('create');
 const selectedUser = ref(null);
 const modalErrors = ref({});
+const rolesStore = useRolesStore();
 
 // Define form fields for user creation/editing
 const userFields = [
@@ -191,10 +192,8 @@ const userFields = [
     type: 'select',
     required: true,
     options: [
-      { value: 'admin', label: 'Administrator' },
-      { value: 'user', label: 'User' },
-      { value: 'guest', label: 'Guest' },
-    ],
+      ...rolesStore.rolesList.map(role => ({ value: role.name, label: role.name })),
+     ],
   },
   {
     name: 'is_active',

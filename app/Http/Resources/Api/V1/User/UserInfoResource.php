@@ -15,18 +15,28 @@ class UserInfoResource extends JsonResource
      */
     public function toArray($request)
     {
-        $user = User::findOrFail($this->id);
+        // Load user with roles and permissions relationships
+        $user = User::with(['roles.permissions'])->findOrFail($this->id);
+
         $only_user_data = ['id', 'name', 'email'];
-        $accessToken =$this->additional['token'] ?? null;
+        $accessToken = $this->additional['token'] ?? null;
+
+        // Get all unique permissions from user's roles
+        $permissions = $user->roles
+            ->flatMap(fn($role) => $role->permissions)
+            ->unique('id')
+            ->pluck('name')
+            ->values();
+
         return [
             'response_code' => 200,
             'status'        => 'success',
             'message'       => 'Login successful',
-            'user_info'     => $user->only($only_user_data),
-            'role_name'       => $user->roles->pluck('name'),
-         ];
-
- 
-
+            'data'          => [
+                'user_info'     => $user->only($only_user_data),
+                'roles'         => $user->roles->pluck('name')->values(),
+                'permissions'   => $permissions,
+            ],
+        ];
     }
 }

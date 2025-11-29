@@ -37,7 +37,7 @@ export const useTwoFactorStore = defineStore("twoFactor", {
             this.error = null;
 
             try {
-                const response = await apiClient.get("/SuperAdmin/two-factor/status");
+                const response = await apiClient.get("/two-factor/status");
 
                 if (response.data.success) {
                     this.isEnabled = response.data.data.two_factor_enabled;
@@ -62,7 +62,7 @@ export const useTwoFactorStore = defineStore("twoFactor", {
             this.error = null;
 
             try {
-                const response = await apiClient.post("/SuperAdmin/two-factor/enable");
+                const response = await apiClient.post("/two-factor/enable");
 
                 if (response.data.success) {
                     this.secret = response.data.data.secret;
@@ -90,7 +90,7 @@ export const useTwoFactorStore = defineStore("twoFactor", {
             this.error = null;
 
             try {
-                const response = await apiClient.post("/SuperAdmin/two-factor/confirm", {
+                const response = await apiClient.post("/two-factor/confirm", {
                     secret: this.secret,
                     code: code,
                 });
@@ -123,7 +123,7 @@ export const useTwoFactorStore = defineStore("twoFactor", {
             this.error = null;
 
             try {
-                const response = await apiClient.post("/SuperAdmin/two-factor/disable", {
+                const response = await apiClient.post("/two-factor/disable", {
                     password: password,
                 });
 
@@ -157,7 +157,7 @@ export const useTwoFactorStore = defineStore("twoFactor", {
             this.error = null;
 
             try {
-                const response = await apiClient.post("/SuperAdmin/two-factor/recovery-codes", {
+                const response = await apiClient.post("/two-factor/recovery-codes", {
                     password: password,
                 });
 

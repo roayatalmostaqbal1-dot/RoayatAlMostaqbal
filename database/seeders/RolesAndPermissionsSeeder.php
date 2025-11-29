@@ -112,7 +112,6 @@ class RolesAndPermissionsSeeder extends Seeder
                     ['name' => $permission['name']],
                     [
                         'description' => $permission['description'] ?? '',
-                        'group' => $group,
                         'guard_name' => 'api',
                         'is_seeded' => true,  // Mark as seeded - cannot be edited/deleted via UI
                     ]

@@ -142,7 +142,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import DashboardLayout from '../../components/layout/DashboardLayout.vue';
 import Card from '../../components/ui/Card.vue';
 import Button from '../../components/ui/Button.vue';
@@ -150,18 +150,27 @@ import Pagination from '../../components/ui/Pagination.vue';
 import CrudModal from '../../components/crud/CrudModal.vue';
 import { useUsersStore } from '../../stores/usersStore';
 import { useRolesStore } from '../../stores/rolesStore';
-// Initialize users store
+
+// Initialize stores
 const usersStore = useUsersStore();
+const rolesStore = useRolesStore();
 
 // Modal state
 const isModalOpen = ref(false);
 const modalMode = ref('create');
 const selectedUser = ref(null);
 const modalErrors = ref({});
-const rolesStore = useRolesStore();
+
+// Computed property for dynamic role options
+const roleOptions = computed(() => {
+  return rolesStore.rolesList.map(role => ({
+    value: role.name,
+    label: role.name
+  }));
+});
 
 // Define form fields for user creation/editing
-const userFields = [
+const userFields = computed(() => [
   {
     name: 'name',
     label: 'Full Name',
@@ -183,45 +192,69 @@ const userFields = [
     label: 'Password',
     type: 'password',
     placeholder: 'Enter password',
-    required: true,
-    hint: 'Minimum 8 characters',
+    required: modalMode.value === 'create',
+    hint: modalMode.value === 'create' ? 'Minimum 8 characters' : 'Leave empty to keep current password',
   },
   {
     name: 'role',
     label: 'Role',
     type: 'select',
     required: true,
-    options: [
-      ...rolesStore.rolesList.map(role => ({ value: role.name, label: role.name })),
-     ],
+    options: roleOptions.value,
   },
   {
     name: 'is_active',
     label: 'Active',
     type: 'checkbox',
   },
-];
+]);
 
-// Modal functions
-const openCreateModal = () => {
+const openCreateModal = async () => {
+  // Ensure roles are loaded
+  if (rolesStore.rolesList.length === 0) {
+    await rolesStore.fetchRoles(1, 100);
+  }
+
   modalMode.value = 'create';
   selectedUser.value = null;
   modalErrors.value = {};
   isModalOpen.value = true;
 };
 
-const openEditModal = (user) => {
-  modalMode.value = 'edit';
-  selectedUser.value = { ...user };
-  modalErrors.value = {};
-  isModalOpen.value = true;
+const openEditModal = async (user) => {
+  // Ensure roles are loaded
+  if (rolesStore.rolesList.length === 0) {
+    await rolesStore.fetchRoles(1, 100);
+  }
+
+  // Fetch fresh user data from API
+  const result = await usersStore.fetchUserById(user.id);
+  if (result.success) {
+    modalMode.value = 'edit';
+    selectedUser.value = { ...result.data };
+    modalErrors.value = {};
+    isModalOpen.value = true;
+  } else {
+    console.error('Failed to fetch user:', result.error);
+  }
 };
 
-const openViewModal = (user) => {
-  modalMode.value = 'view';
-  selectedUser.value = { ...user };
-  modalErrors.value = {};
-  isModalOpen.value = true;
+const openViewModal = async (user) => {
+  // Ensure roles are loaded
+  if (rolesStore.rolesList.length === 0) {
+    await rolesStore.fetchRoles(1, 100);
+  }
+
+  // Fetch fresh user data from API
+  const result = await usersStore.fetchUserById(user.id);
+  if (result.success) {
+    modalMode.value = 'view';
+    selectedUser.value = { ...result.data };
+    modalErrors.value = {};
+    isModalOpen.value = true;
+  } else {
+    console.error('Failed to fetch user:', result.error);
+  }
 };
 
 const closeModal = () => {
@@ -252,9 +285,13 @@ const handleSubmit = async (formData) => {
   }
 };
 
-// Fetch users on component mount
-onMounted(() => {
-  usersStore.fetchUsers();
+// Fetch users and roles on component mount
+onMounted(async () => {
+  await usersStore.fetchUsers();
+  // Load roles for the role dropdown
+  if (rolesStore.rolesList.length === 0) {
+    await rolesStore.fetchRoles(1, 100);
+  }
 });
 
 // Handle delete with confirmation

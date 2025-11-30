@@ -4,12 +4,8 @@ use App\Http\Controllers\Api\V1\SuperAdmin\PermissionController;
 use App\Http\Controllers\Api\V1\SuperAdmin\PermissionRoleController;
 use App\Http\Controllers\Api\V1\SuperAdmin\RoleController;
 use App\Http\Controllers\Api\V1\SuperAdmin\RolePermissionController;
-use App\Http\Controllers\Api\V1\SuperAdmin\UserController;
 use App\Http\Controllers\Api\V1\SuperAdmin\Dashboard\DashboardController;
-use App\Http\Controllers\Api\V1\TwoFactorAuthController;
-
 use Illuminate\Support\Facades\Route;
-
 Route::prefix('SuperAdmin')->middleware(['auth:api','role:super-admin'])->group(function () {
     // =====================
     // Roles Management
@@ -50,18 +46,7 @@ Route::prefix('SuperAdmin')->middleware(['auth:api','role:super-admin'])->group(
         ]
     ]);
 
-    // =====================
-    // Users Management
-    // =====================
-    Route::apiResource('users', UserController::class, [
-        'middleware' => [
-            'index' => 'permission:users.view',
-            'show' => 'permission:users.view',
-            'store' => 'permission:users.create',
-            'update' => 'permission:users.edit',
-            'destroy' => 'permission:users.delete',
-        ]
-    ]);
+
     // =====================
     // Role Permissions Management
     // =====================

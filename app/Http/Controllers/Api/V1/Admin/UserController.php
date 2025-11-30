@@ -3,36 +3,41 @@
 namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use Illuminate\Http\Request;
 use App\Http\Requests\Api\V1\Admin\Users\StoreUserRequest;
 use App\Http\Resources\Api\V1\Admin\Users\InfoAllUsersResponse;
 use App\Http\Resources\Api\V1\User\UserInfoResource;
-
-use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
     /**
      *  Api\V1\Admin\Users\Admin\PermissionRole\
      * Display a listing of the resource.
-     *
      */
-    public function index()
+    public function index(Request $request)
     {
-       $users = User::with('roles')
-        ->select(['id', 'name', 'email'])
-        ->paginate(2);
+        $users = User::with('roles')
+            ->select(['id', 'name', 'email', 'is_active'])
+            ->paginate(perPage: $request->per_page ?? 10, page: $request->page ?? 1);
 
-    return new InfoAllUsersResponse($users);
+        return new InfoAllUsersResponse($users);
+    }
+    public function getRoles()
+    {
+        $roles = Role::select(['id', 'name'])->get();
+
+        return response()->json([
+            'response_code' => 200,
+            'status' => 'success',
+            'message' => 'Fetched roles successfully',
+            'data' => $roles,
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreUserRequest $request)
     {
-        //
         try {
             $user = User::create([
                 'name' => $request->name,
@@ -49,7 +54,6 @@ class UserController extends Controller
                 'error' => $e->getMessage(),
             ], 500);
         }
-
     }
 
     /**
@@ -57,7 +61,9 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        //
+        // Load roles relationship
+        $user->load('roles');
+        return new UserInfoResource($user);
     }
 
     /**
@@ -65,7 +71,34 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        try {
+            $updateData = [
+                'name' => $request->name,
+                'email' => $request->email,
+                'is_active' => $request->is_active,
+            ];
+
+            // Only update password if provided
+            if ($request->filled('password')) {
+                $updateData['password'] = bcrypt($request->password);
+            }
+
+            $user->update($updateData);
+            $user->syncRoles($request->role ?? 'user');
+            $user->save();
+
+            // Reload with roles
+            $user->load('roles');
+
+            return new UserInfoResource($user);
+        } catch (\Exception $e) {
+            return response()->json([
+                'response_code' => 500,
+                'status' => 'error',
+                'message' => 'Update failed',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**
@@ -73,6 +106,21 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        try {
+            $user->delete();
+
+            return response()->json([
+                'response_code' => 200,
+                'status' => 'success',
+                'message' => 'User deleted successfully',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'response_code' => 500,
+                'status' => 'error',
+                'message' => 'Delete failed',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 }

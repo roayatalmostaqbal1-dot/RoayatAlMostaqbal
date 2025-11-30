@@ -11,6 +11,7 @@ export const useUsersStore = defineStore("users", {
         selectedUser: null,
         isLoading: false,
         error: null,
+        roles: [],
         pagination: {
             current_page: 1,
             per_page: 10,
@@ -64,6 +65,61 @@ export const useUsersStore = defineStore("users", {
         },
 
         // ------------------------------------
+        // Fetch Single User by ID
+        // ------------------------------------
+        async fetchUserById(userId) {
+            this.isLoading = true;
+            this.error = null;
+
+            try {
+                const response = await apiClient.get(`/admin/users/${userId}`);
+                let userData = response.data.data || response.data;
+
+                // Handle nested response structure from UserInfoResource
+                if (userData.user_info && userData.roles) {
+                    // Flatten the nested structure
+                    userData = {
+                        ...userData.user_info,
+                        roles: userData.roles,
+                        role: userData.roles && userData.roles.length > 0 ? userData.roles[0] : null,
+                    };
+                }
+
+                // Ensure roles is an array of objects with id and name
+                if (userData.roles && Array.isArray(userData.roles)) {
+                    if (userData.roles.length > 0 && typeof userData.roles[0] === 'string') {
+                        // Convert string roles to objects
+                        userData.roles = userData.roles.map(roleName => ({
+                            id: roleName,
+                            name: roleName
+                        }));
+                    }
+                }
+
+                this.selectedUser = userData;
+                return { success: true, data: this.selectedUser };
+            } catch (err) {
+                this.error = err.response?.data?.message || "Failed to fetch user";
+                return { success: false, error: this.error };
+            } finally {
+                this.isLoading = false;
+            }
+        },
+        async fetchRoles() {
+            this.isLoading = true;
+            this.error = null;
+            try {
+                const response = await apiClient.get("/admin/users/roles");
+                this.roles = response.data.data;
+                return { success: true, data: response.data };
+            } catch (err) {
+                this.error = err.response?.data?.message || "Failed to fetch roles";
+                return { success: false, error: this.error };
+            } finally {
+                this.isLoading = false;
+            }
+        },
+        // ------------------------------------
         // Create User
         // ------------------------------------
         async createUser(userData) {
@@ -71,10 +127,23 @@ export const useUsersStore = defineStore("users", {
             this.error = null;
 
             try {
-                const response = await apiClient.post("/SuperAdmin/users", userData);
+                const response = await apiClient.post("/admin/users", userData);
+
+                // Extract and flatten the response data
+                let newUserData = response.data.data || response.data;
+
+                // Handle nested response structure from UserInfoResource
+                if (newUserData.user_info && newUserData.roles) {
+                    // Flatten the nested structure
+                    newUserData = {
+                        ...newUserData.user_info,
+                        roles: newUserData.roles,
+                    };
+                }
+
                 // Add the new user to the current list if we're on the first page
                 if (this.pagination.current_page === 1) {
-                    this.users.unshift(response.data.data || response.data);
+                    this.users.unshift(newUserData);
                 }
                 // Update total count
                 this.pagination.total += 1;
@@ -82,7 +151,7 @@ export const useUsersStore = defineStore("users", {
                 const toast = useToastStore();
                 toast.success("User Created", response.data.message || "User has been created successfully");
 
-                return { success: true, data: response.data.data || response.data };
+                return { success: true, data: newUserData };
             } catch (err) {
                 const errorMessage = err.response?.data?.message || "Failed to create user";
                 this.error = errorMessage;
@@ -104,16 +173,36 @@ export const useUsersStore = defineStore("users", {
             this.error = null;
 
             try {
-                const response = await apiClient.put(`/SuperAdmin/users/${userId}`, userData);
+                // Remove password if it's empty (optional on edit)
+                const updateData = { ...userData };
+                if (!updateData.password) {
+                    delete updateData.password;
+                }
+
+                const response = await apiClient.put(`/admin/users/${userId}`, updateData);
+
+                // Extract and flatten the response data
+                let updatedUserData = response.data.data || response.data;
+
+                // Handle nested response structure from UserInfoResource
+                if (updatedUserData.user_info && updatedUserData.roles) {
+                    // Flatten the nested structure
+                    updatedUserData = {
+                        ...updatedUserData.user_info,
+                        roles: updatedUserData.roles,
+                    };
+                }
+
+                // Update the user in the users array
                 const index = this.users.findIndex(user => user.id === userId);
                 if (index !== -1) {
-                    this.users[index] = response.data.data || response.data;
+                    this.users[index] = updatedUserData;
                 }
 
                 const toast = useToastStore();
                 toast.success("User Updated", response.data.message || "User has been updated successfully");
 
-                return { success: true, data: response.data.data || response.data };
+                return { success: true, data: updatedUserData };
             } catch (err) {
                 const errorMessage = err.response?.data?.message || "Failed to update user";
                 this.error = errorMessage;
@@ -135,7 +224,7 @@ export const useUsersStore = defineStore("users", {
             this.error = null;
 
             try {
-                const response = await apiClient.delete(`/SuperAdmin/users/${userId}`);
+                const response = await apiClient.delete(`/admin/users/${userId}`);
                 this.users = this.users.filter(user => user.id !== userId);
                 this.pagination.total -= 1;
 

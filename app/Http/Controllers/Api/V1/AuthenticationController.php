@@ -69,7 +69,7 @@ class AuthenticationController extends Controller
                 return response()->json([
                     'response_code' => 401,
                     'status' => 'error',
-                    'message' => 'Unauthorized',
+                    'message' => 'Invalid credentials',
                 ], 401);
             }
             if ($user->hasTwoFactorEnabled()) {
@@ -83,7 +83,7 @@ class AuthenticationController extends Controller
                     ],
                 ]);
             }
-             $token = $user->createToken('authToken')->accessToken;
+            $token = $user->createToken('authToken')->accessToken;
             $response = (new UserInfoResource($user))
                 ->additional(['token' => $token])
                 ->toArray($request);
@@ -134,7 +134,7 @@ class AuthenticationController extends Controller
         }
     }
 
-     public function changePassword(Request $request)
+    public function changePassword(Request $request)
     {
         try {
             // Validate input
@@ -170,7 +170,7 @@ class AuthenticationController extends Controller
                 ], 422);
             }
 
-            // Check if new password is same as current
+
             if (Hash::check($request->new_password, $user->password)) {
                 return response()->json([
                     'response_code' => 422,

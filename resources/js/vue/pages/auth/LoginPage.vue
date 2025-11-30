@@ -20,8 +20,8 @@
       <Card class="mb-6">
         <form @submit.prevent="handleLogin">
           <!-- Error Alert -->
-          <div v-if="authStore.error" class="mb-4 p-4 bg-red-500 bg-opacity-20 border border-red-500 rounded-lg">
-            <p class="text-red-400 text-sm">{{ authStore.error }}</p>
+          <div v-if="authStore.errors" class="mb-4 p-4 bg-red-500 bg-opacity-20 border border-red-500 rounded-lg">
+            <p class="text-red-400 text-sm">{{ authStore.errors }}</p>
           </div>
 
           <!-- Email Input -->
@@ -164,21 +164,27 @@ const handleLogin = async (event) => {
 
   if (!validateForm()) return;
 
-  // Clear any previous auth errors
+  // Clear any previous auth errors before attempting login
   authStore.clearError();
 
   const result = await authStore.login(form.email, form.password);
 
-if (result.success) {
+  if (result.success) {
     if (result.twoFactor) {
-        show2FAModal.value = true;
-        twoFactorUserId.value = result.data.user_id;
-        return;
+      show2FAModal.value = true;
+      twoFactorUserId.value = result.data.user_id;
+      return;
     }
 
+    // Clear password field on successful login for security
+    form.password = '';
     router.push('/dashboard');
-}
-
+  } else {
+    // Error is automatically set in authStore.error by the login action
+    // The error alert will display due to v-if="authStore.error" binding
+    // Keep the email field filled for user convenience, but clear password for security
+    form.password = '';
+  }
 };
 
 const handle2FAVerified = () => {

@@ -34,15 +34,23 @@ apiClient.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response?.status === 401) {
-            // Clear auth data on unauthorized
-            try {
-                const authStore = useAuthStore();
-                authStore.token = null;
-                authStore.user = null;
-            } catch (e) {
-                console.error('Failed to clear auth data:', e);
+            // Don't redirect on login/register endpoints - let them handle their own errors
+            const requestUrl = error.config?.url || '';
+            const isAuthEndpoint = requestUrl.includes('/auth/login') ||
+                                   requestUrl.includes('/auth/register') ||
+                                   requestUrl.includes('/auth/two-factor');
+
+            if (!isAuthEndpoint) {
+                // Clear auth data on unauthorized for other endpoints
+                try {
+                    const authStore = useAuthStore();
+                    authStore.token = null;
+                    authStore.user = null;
+                } catch (e) {
+                    console.error('Failed to clear auth data:', e);
+                }
+                window.location.href = '/admin/login';
             }
-            window.location.href = '/admin/login';
         }
         return Promise.reject(error);
     }

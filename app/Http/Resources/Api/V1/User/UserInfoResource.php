@@ -18,7 +18,7 @@ class UserInfoResource extends JsonResource
         // Load user with roles and permissions relationships
         $user = User::with(['roles.permissions'])->findOrFail($this->id);
 
-        $only_user_data = ['id', 'name', 'email'];
+        $only_user_data = ['id', 'name', 'email', 'is_active'];
         $accessToken = $this->additional['token'] ?? null;
 
         // Get all unique permissions from user's roles

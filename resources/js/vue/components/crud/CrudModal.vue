@@ -136,7 +136,14 @@ watch(
   (newVal) => {
     if (newVal) {
       // Initialize form data from initialData or empty object
-      formData.value = { ...props.initialData };
+      const data = { ...props.initialData };
+
+      // Handle role field - convert array to single value
+      if (data.role && Array.isArray(data.role)) {
+        data.role = data.role.length > 0 ? (typeof data.role[0] === 'object' ? data.role[0].name : data.role[0]) : '';
+      }
+
+      formData.value = data;
     }
   },
   { immediate: true }
@@ -157,7 +164,20 @@ const deleteItem = () => {
 };
 
 const getFieldValue = (fieldName) => {
-  return props.initialData[fieldName];
+  const value = props.initialData[fieldName];
+
+  // Handle special cases for display
+  if (fieldName === 'role' && Array.isArray(value)) {
+    // If role is an array, return the first role name
+    return value.length > 0 ? (typeof value[0] === 'object' ? value[0].name : value[0]) : 'N/A';
+  }
+
+  if (fieldName === 'is_active') {
+    // Convert boolean to readable format
+    return value === true ? 'Active' : value === false ? 'Inactive' : 'N/A';
+  }
+
+  return value;
 };
 </script>
 

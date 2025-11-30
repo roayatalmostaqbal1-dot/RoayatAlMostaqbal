@@ -19,6 +19,20 @@ export const useAuthStore = defineStore("auth", {
     }),
 
     // =====================
+    // Persistence
+    // =====================
+    persist: {
+        enabled: true,
+        strategies: [
+            {
+                key: 'auth',
+                storage: localStorage,
+                paths: ['authUser', 'authToken', 'authRoles', 'authPermissions'],
+            },
+        ],
+    },
+
+    // =====================
     // Getters
     // =====================
     getters: {
@@ -31,6 +45,8 @@ export const useAuthStore = defineStore("auth", {
         isAuthenticated: (state) => !!state.authToken,
         userName: (state) => state.authUser?.name || "",
         userEmail: (state) => state.authUser?.email || "",
+        userRoles: (state) => state.authRoles || [],
+        userAvatar: (state) => state.authUser?.avatar || null,
 
         // =====================
         // Permission Checkers

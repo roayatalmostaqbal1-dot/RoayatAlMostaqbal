@@ -36,7 +36,7 @@
           <div class="flex items-center gap-3 pl-4 border-l border-[#3b5265]">
             <div class="text-right hidden sm:block">
               <p class="text-white text-sm font-semibold">{{ authStore.userName }}</p>
-              <p class="text-gray-400 text-xs">Admin</p>
+              <p class="text-gray-400 text-xs">{{ formattedRoles }}</p>
             </div>
             <div class="w-10 h-10 rounded-full bg-[#27e9b5] flex items-center justify-center text-[#051824] font-bold">
               {{ userInitial }}
@@ -56,7 +56,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import { useAuthStore } from '../../stores/auth';
 import Sidebar from './Sidebar.vue';
 
@@ -70,7 +70,15 @@ const props = defineProps({
     default: 'Welcome to your admin dashboard',
   },
 });
-
+const formattedRoles = computed(() => {
+    if (!authStore.userRoles || authStore.userRoles.length === 0) {
+        return '';
+    }
+    // Format roles: capitalize first letter and replace hyphens with spaces
+    return authStore.userRoles
+        .map(role => role.charAt(0).toUpperCase() + role.slice(1).replace(/-/g, ' '))
+        .join(', ');
+});
 const authStore = useAuthStore();
 const sidebarRef = ref(null);
 
@@ -83,5 +91,13 @@ const toggleSidebar = () => {
     sidebarRef.value.toggleSidebar();
   }
 };
+
+// Fetch user data on mount to ensure data persists across page refreshes
+onMounted(async () => {
+  // Only fetch if we have a token but no user data
+  if (authStore.isAuthenticated && !authStore.user) {
+    await authStore.fetchUser();
+  }
+});
 </script>
 

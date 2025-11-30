@@ -31,10 +31,10 @@
                 <template #header>
                     <h2 class="text-lg font-bold text-white">Recent Activity</h2>
                 </template>
-                <div v-if="dashboardStore.recentActivity.length > 0" class="space-y-4">
+                <div v-if="dashboardStore.recentActivity.length > 0" class="space-y-4 overflow-y-scroll h-72 ">
                     <div v-for="activity in dashboardStore.recentActivity" :key="activity.id"
-                        class="flex items-start gap-3 pb-4 border-b border-[#3b5265] last:border-0">
-                        <div class="w-2 h-2 rounded-full bg-[#27e9b5] mt-2 flex-shrink-0"></div>
+                        class="flex items-start gap-3 pb-4 border-b  border-[#3b5265] last:border-0">
+                        <div class="w-2 h-2 rounded-full bg-[#27e9b5] mt-2 shrink-0"></div>
                         <div class="flex-1 min-w-0">
                             <p class="text-white text-sm font-semibold">
                                 {{ activity.user_name }} <span class="text-gray-400">{{ activity.action }}</span> {{

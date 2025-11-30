@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import apiClient from "../services/api";
-import router from "../router/router";
 
 export const useAuthStore = defineStore("auth", {
     // =====================
@@ -337,7 +336,7 @@ export const useAuthStore = defineStore("auth", {
         handleMessage(event) {
             if (event.origin !== window.location.origin) return;
 
-            const { type, token, user, message, user_id, roles, permissions } = event.data || {};
+            const { type, token, user, user_id, roles, permissions, error } = event.data || {};
 
             if (type === "SOCIAL_AUTH_SUCCESS") {
                 this.authToken = token;
@@ -356,6 +355,21 @@ export const useAuthStore = defineStore("auth", {
             else if (type === "SOCIAL_AUTH_CANCELLED") {
                 this.authErrors = null;
                 window.removeEventListener("message", this.boundHandleMessage);
+
+                // Dispatch event so SocialLoginButton can reset loading state
+                window.dispatchEvent(
+                    new CustomEvent("social-auth-cancelled", { detail: { message: "Social login cancelled" } })
+                );
+            }
+
+            else if (type === "SOCIAL_AUTH_ERROR") {
+                this.authErrors = error || "Social login failed";
+                window.removeEventListener("message", this.boundHandleMessage);
+
+                // Dispatch event so SocialLoginButton can reset loading state
+                window.dispatchEvent(
+                    new CustomEvent("social-auth-error", { detail: { error: error || "Social login failed" } })
+                );
             }
 
             else if (type === "SOCIAL_AUTH_2FA_REQUIRED") {
@@ -371,6 +385,7 @@ export const useAuthStore = defineStore("auth", {
                     new CustomEvent("social-auth-2fa-required", { detail: { user_id, user, roles, permissions } })
                 );
             }
+
         },
 
     },

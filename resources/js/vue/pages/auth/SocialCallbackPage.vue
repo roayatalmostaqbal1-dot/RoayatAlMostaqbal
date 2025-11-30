@@ -44,7 +44,19 @@ const closeWindow = () => window.close();
 
 const getQueryParam = (name) => {
     const params = new URLSearchParams(window.location.search);
-    return params.get(name);
+
+    if (params.get("two_factor_required")) {
+        window.opener.postMessage(
+            {
+                type: "SOCIAL_AUTH_2FA_REQUIRED",
+                user_id: params.get("user_id"),
+                email: params.get("email")
+            },
+            window.location.origin
+        );
+
+        window.close();
+    }
 };
 
 onMounted(async () => {
@@ -76,7 +88,19 @@ onMounted(async () => {
 
         if (errorMessage) {
             error.value = decodeURIComponent(errorMessage);
-            isLoading.value = false;isLoading.value = false;
+            isLoading.value = false;
+
+            // Send error message to parent window
+            if (window.opener) {
+                window.opener.postMessage(
+                    {
+                        type: 'SOCIAL_AUTH_ERROR',
+                        error: error.value,
+                    },
+                    window.location.origin
+                );
+            }
+
             setTimeout(() => window.close(), 300);
 
             return;
@@ -84,7 +108,6 @@ onMounted(async () => {
 
         if (twoFactorRequired === 'true' && userId) {
             let user = null;
-
             if (userData) {
                 try {
                     user = JSON.parse(decodeURIComponent(userData));

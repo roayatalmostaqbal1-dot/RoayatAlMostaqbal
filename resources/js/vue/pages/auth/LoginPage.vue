@@ -107,7 +107,7 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue';
+import { reactive, ref, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../../stores/auth';
 import Card from '../../components/ui/Card.vue';
@@ -125,6 +125,7 @@ const logoUrl = '/RoayatAlMostaqbal.svg';
 // 2FA state
 const show2FAModal = ref(false);
 const twoFactorUserId = ref(null);
+const isSocialLogin2FA = ref(false);
 
 const form = reactive({
   email: '',
@@ -188,15 +189,44 @@ const handleLogin = async (event) => {
 };
 
 const handle2FAVerified = () => {
+  // Check if this was social login 2FA before resetting the flag
+  const wasSocialLogin = isSocialLogin2FA.value;
+
   show2FAModal.value = false;
   twoFactorUserId.value = null;
-  router.push('/admin/dashboard');
+  isSocialLogin2FA.value = false;
+
+  // If this was social login 2FA, redirect to dashboard
+  // Otherwise, the regular login flow will handle it
+  if (wasSocialLogin) {
+    router.push('/dashboard');
+  } else {
+    router.push('/admin/dashboard');
+  }
 };
 
 const handle2FACancel = () => {
   show2FAModal.value = false;
   twoFactorUserId.value = null;
+  isSocialLogin2FA.value = false;
   authStore.resetTwoFactor();
 };
+
+// Handle social login 2FA requirement
+const handleSocialAuth2FARequired = (event) => {
+  if (event.detail && event.detail.user_id) {
+    isSocialLogin2FA.value = true;
+    twoFactorUserId.value = event.detail.user_id;
+    show2FAModal.value = true;
+  }
+};
+
+onMounted(() => {
+  window.addEventListener('social-auth-2fa-required', handleSocialAuth2FARequired);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('social-auth-2fa-required', handleSocialAuth2FARequired);
+});
 </script>
 

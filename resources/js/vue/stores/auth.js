@@ -350,11 +350,17 @@ export const useAuthStore = defineStore("auth", {
 
 
         handleMessage(event) {
+            console.log('=== Auth Store handleMessage ===');
+            console.log('Event origin:', event.origin);
+            console.log('Window origin:', window.location.origin);
+            console.log('Event data:', event.data);
+
             if (event.origin !== window.location.origin) return;
 
             const { type, token, user, user_id, roles, permissions, error } = event.data || {};
 
             if (type === "SOCIAL_AUTH_SUCCESS") {
+                console.log('Handling SOCIAL_AUTH_SUCCESS');
                 this.authToken = token;
                 this.authUser = user;
                 this.authRoles = roles || [];
@@ -369,6 +375,7 @@ export const useAuthStore = defineStore("auth", {
             }
 
             else if (type === "SOCIAL_AUTH_CANCELLED") {
+                console.log('Handling SOCIAL_AUTH_CANCELLED');
                 this.authErrors = null;
                 window.removeEventListener("message", this.boundHandleMessage);
 
@@ -379,6 +386,7 @@ export const useAuthStore = defineStore("auth", {
             }
 
             else if (type === "SOCIAL_AUTH_ERROR") {
+                console.log('Handling SOCIAL_AUTH_ERROR');
                 this.authErrors = error || "Social login failed";
                 window.removeEventListener("message", this.boundHandleMessage);
 
@@ -389,6 +397,7 @@ export const useAuthStore = defineStore("auth", {
             }
 
             else if (type === "SOCIAL_AUTH_2FA_REQUIRED") {
+                console.log('Handling SOCIAL_AUTH_2FA_REQUIRED');
                 this.twoFactorRequired = true;
                 this.twoFactorUserId = user_id;
                 this.authUser = user;
@@ -399,6 +408,19 @@ export const useAuthStore = defineStore("auth", {
 
                 window.dispatchEvent(
                     new CustomEvent("social-auth-2fa-required", { detail: { user_id, user, roles, permissions } })
+                );
+            }
+
+            else if (type === "SOCIAL_AUTH_PASSWORD_SETUP_REQUIRED") {
+                console.log('Handling SOCIAL_AUTH_PASSWORD_SETUP_REQUIRED');
+                console.log('User:', user);
+                console.log('Token:', token);
+
+                window.removeEventListener("message", this.boundHandleMessage);
+
+                // Dispatch event so SocialLoginButton can redirect to password setup
+                window.dispatchEvent(
+                    new CustomEvent("social-auth-password-setup-required", { detail: { user, token } })
                 );
             }
 

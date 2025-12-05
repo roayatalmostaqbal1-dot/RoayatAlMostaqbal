@@ -5,6 +5,9 @@ import { useAuthStore } from '../stores/auth';
 import LoginPage from '../pages/auth/LoginPage.vue';
 import RegisterPage from '../pages/auth/RegisterPage.vue';
 import SocialCallbackPage from '../pages/auth/SocialCallbackPage.vue';
+import SetPasswordPage from '../pages/auth/SetPasswordPage.vue';
+import ForgotPasswordPage from '../pages/auth/ForgotPasswordPage.vue';
+import ResetPasswordPage from '../pages/auth/ResetPasswordPage.vue';
 import DashboardPage from '../pages/admin/DashboardPage.vue';
 import UsersPage from '../pages/admin/UsersPage.vue';
 import SettingsPage from '../pages/AllUser/SettingsPage.vue';
@@ -30,6 +33,24 @@ const routes = [
     path: '/social-callback',
     name: 'SocialCallback',
     component: SocialCallbackPage,
+    meta: { requiresAuth: false, layout: 'blank' },
+  },
+  {
+    path: '/set-password',
+    name: 'SetPassword',
+    component: SetPasswordPage,
+    meta: { requiresAuth: false, layout: 'blank' },
+  },
+  {
+    path: '/forgot-password',
+    name: 'ForgotPassword',
+    component: ForgotPasswordPage,
+    meta: { requiresAuth: false, layout: 'blank' },
+  },
+  {
+    path: '/reset-password/:token',
+    name: 'ResetPassword',
+    component: ResetPasswordPage,
     meta: { requiresAuth: false, layout: 'blank' },
   },
   {

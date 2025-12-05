@@ -7,6 +7,7 @@ use App\Models\SocialAccount;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 
 class SocialAuthController extends Controller
@@ -21,7 +22,7 @@ class SocialAuthController extends Controller
         try {
             $socialUser = $this->getSocialUser($provider);
 
-            [$user, $generatedPassword] = $this->findOrCreateUser($provider, $socialUser);
+            [$user, $generatedPassword, $needsPasswordSetup] = $this->findOrCreateUser($provider, $socialUser);
 
             $this->linkSocialAccountIfNeeded($provider, $socialUser, $user);
 
@@ -40,7 +41,7 @@ class SocialAuthController extends Controller
             $redirectUrl = $this->buildRedirectUrl(
                 user: $user,
                 token: $token,
-                generatedPassword: $generatedPassword
+                needsPasswordSetup: $needsPasswordSetup
             );
 
             return redirect($redirectUrl);
@@ -63,26 +64,70 @@ class SocialAuthController extends Controller
 
     private function findOrCreateUser(string $provider, $socialUser): array
     {
+        Log::info('=== findOrCreateUser started ===', [
+            'provider' => $provider,
+            'social_email' => $socialUser->getEmail(),
+            'social_id' => $socialUser->getId(),
+        ]);
+
         $existingAccount = SocialAccount::where('provider_id', $socialUser->getId())
             ->where('provider_name', $provider)
             ->first();
 
         if ($existingAccount) {
-            return [$existingAccount->user, null];
+            $user = $existingAccount->user;
+
+            // Check if user has set their own password
+            $needsPasswordSetup = is_null($user->password_set_at);
+
+            Log::info('Existing social account found', [
+                'user_id' => $user->id,
+                'user_email' => $user->email,
+                'password_set_at' => $user->password_set_at,
+                'needs_password_setup' => $needsPasswordSetup,
+            ]);
+
+            return [$user, null, $needsPasswordSetup];
         }
 
-        $generatedPassword = $this->generateRandomPassword(25);
+        // Check if user already exists by email
+        $user = User::where('email', $socialUser->getEmail())->first();
 
-        $user = User::firstOrCreate(
-            ['email' => $socialUser->getEmail()],
-            [
-                'name' => $socialUser->getName() ?? $socialUser->getNickname() ?? 'No Name',
-                'email_verified_at' => now(),
-                'password' => Hash::make($generatedPassword),
-            ]
-        );
+        if ($user) {
+            // Check if user has set their own password
+            $needsPasswordSetup = is_null($user->password_set_at);
 
-        return [$user, $generatedPassword];
+            Log::info('User exists by email but no social account', [
+                'user_id' => $user->id,
+                'user_email' => $user->email,
+                'password_set_at' => $user->password_set_at,
+                'needs_password_setup' => $needsPasswordSetup,
+            ]);
+
+            return [$user, null, $needsPasswordSetup];
+        }
+
+        // Create new user with temporary unusable password
+        Log::info('Creating new user from social login', [
+            'email' => $socialUser->getEmail(),
+            'name' => $socialUser->getName() ?? $socialUser->getNickname() ?? 'No Name',
+        ]);
+
+        $user = User::create([
+            'name' => $socialUser->getName() ?? $socialUser->getNickname() ?? 'No Name',
+            'email' => $socialUser->getEmail(),
+            'email_verified_at' => now(),
+            'password' => Hash::make(Str::random(64)), // Temporary password
+            'password_set_at' => null, // User hasn't set password yet
+        ]);
+
+        Log::info('New user created - needs password setup', [
+            'user_id' => $user->id,
+            'user_email' => $user->email,
+            'needs_password_setup' => true,
+        ]);
+
+        return [$user, null, true]; // true = needs password setup
     }
 
     private function linkSocialAccountIfNeeded(string $provider, $socialUser, User $user): void
@@ -100,7 +145,7 @@ class SocialAuthController extends Controller
         }
     }
 
-    private function buildRedirectUrl(User $user, string $token, ?string $generatedPassword): string
+    private function buildRedirectUrl(User $user, string $token, bool $needsPasswordSetup = false): string
     {
         $callbackUrl = config('app.url').'/admin/social-callback';
 
@@ -111,12 +156,32 @@ class SocialAuthController extends Controller
             'two_factor_enabled' => $user->two_factor_enabled,
         ];
 
+        Log::info('=== buildRedirectUrl ===', [
+            'user_id' => $user->id,
+            'needs_password_setup' => $needsPasswordSetup,
+            'two_factor_enabled' => $user->two_factor_enabled,
+        ]);
+
         // 2FA Redirect
         if ($user->two_factor_enabled) {
-            return $callbackUrl
+            $url = $callbackUrl
                 .'?two_factor_required=true'
                 .'&user_id='.$user->id
                 .'&user='.urlencode(json_encode($userData));
+
+            Log::info('Redirecting to 2FA', ['url' => $url]);
+            return $url;
+        }
+
+        // Password Setup Required for New Users
+        if ($needsPasswordSetup) {
+            $url = $callbackUrl
+                .'?needs_password_setup=true'
+                .'&token='.urlencode($token)
+                .'&user='.urlencode(json_encode($userData));
+
+            Log::info('Redirecting to password setup', ['url' => $url]);
+            return $url;
         }
 
         // Normal Login Redirect
@@ -124,10 +189,7 @@ class SocialAuthController extends Controller
             .'?token='.urlencode($token)
             .'&user='.urlencode(json_encode($userData));
 
-        if ($generatedPassword) {
-            $url .= '&generated_password='.urlencode($generatedPassword);
-        }
-
+        Log::info('Redirecting to normal login', ['url' => $url]);
         return $url;
     }
 

@@ -44,32 +44,34 @@ const closeWindow = () => window.close();
 
 const getQueryParam = (name) => {
     const params = new URLSearchParams(window.location.search);
-
-    if (params.get("two_factor_required")) {
-        window.opener.postMessage(
-            {
-                type: "SOCIAL_AUTH_2FA_REQUIRED",
-                user_id: params.get("user_id"),
-                email: params.get("email")
-            },
-            window.location.origin
-        );
-
-        window.close();
-    }
+    return params.get(name);
 };
 
 onMounted(async () => {
     try {
+        console.log('=== Social Callback Started ===');
+        console.log('Full URL:', window.location.href);
+        console.log('Search params:', window.location.search);
+
+        // Parse all query parameters
+        const params = new URLSearchParams(window.location.search);
+        const allParams = {};
+        for (const [key, value] of params.entries()) {
+            allParams[key] = value;
+        }
+        console.log('All query parameters:', allParams);
+
         const googleError = getQueryParam('error');
+        console.log('Error param:', googleError);
 
         // USER CANCELLED LOGIN
         if (googleError === 'access_denied') {
+            console.log('User cancelled login');
             if (window.opener) {
                 window.opener.postMessage(
                     {
                         type: 'SOCIAL_AUTH_CANCELLED',
-                        message: 'تم إلغاء عملية تسجيل الدخول من قبل المستخدم.',
+                        message: 'Login cancelled by user.',
                     },
                     window.location.origin
                 );
@@ -85,8 +87,19 @@ onMounted(async () => {
         const errorMessage = getQueryParam('error');
         const twoFactorRequired = getQueryParam('two_factor_required');
         const userId = getQueryParam('user_id');
+        const needsPasswordSetup = getQueryParam('needs_password_setup');
+
+        console.log('Parsed parameters:', {
+            token: token ? 'EXISTS' : 'NULL',
+            userData: userData ? 'EXISTS' : 'NULL',
+            errorMessage,
+            twoFactorRequired,
+            userId,
+            needsPasswordSetup
+        });
 
         if (errorMessage) {
+            console.log('Error message found:', errorMessage);
             error.value = decodeURIComponent(errorMessage);
             isLoading.value = false;
 
@@ -102,16 +115,20 @@ onMounted(async () => {
             }
 
             setTimeout(() => window.close(), 300);
-
             return;
         }
 
-        if (twoFactorRequired === 'true' && userId) {
+        // 2FA Required
+        if (twoFactorRequired === 'true' || twoFactorRequired === '1') {
+            console.log('2FA required, userId:', userId);
             let user = null;
             if (userData) {
                 try {
                     user = JSON.parse(decodeURIComponent(userData));
-                } catch (e) { }
+                    console.log('Parsed user data for 2FA:', user);
+                } catch (e) {
+                    console.error('Failed to parse user data for 2FA:', e);
+                }
             }
 
             window.opener?.postMessage(
@@ -128,27 +145,80 @@ onMounted(async () => {
             return;
         }
 
+        // Password Setup Required
+        if (needsPasswordSetup === 'true' || needsPasswordSetup === '1') {
+            console.log('Password setup required');
+
+            if (!token || !userData) {
+                console.error('Missing token or userData for password setup');
+                error.value = "Invalid authentication response - missing data";
+                isLoading.value = false;
+                return;
+            }
+
+            try {
+                const user = JSON.parse(decodeURIComponent(userData));
+                console.log('Parsed user data for password setup:', user);
+
+                window.opener?.postMessage(
+                    {
+                        type: "SOCIAL_AUTH_PASSWORD_SETUP_REQUIRED",
+                        user,
+                        token
+                    },
+                    window.location.origin
+                );
+
+                console.log('Sent SOCIAL_AUTH_PASSWORD_SETUP_REQUIRED message');
+                isLoading.value = false;
+                setTimeout(() => window.close(), 500);
+                return;
+            } catch (e) {
+                console.error('Failed to parse user data for password setup:', e);
+                error.value = "Failed to process user data";
+                isLoading.value = false;
+                return;
+            }
+        }
+
+        // Normal Login Flow
+        console.log('Normal login flow');
+
         if (!token || !userData) {
-            error.value = "Invalid authentication response";
+            console.error('Missing token or userData for normal login');
+            console.log('Token:', token);
+            console.log('UserData:', userData);
+            error.value = "Invalid authentication response - missing credentials";
             isLoading.value = false;
             return;
         }
 
-        const user = JSON.parse(decodeURIComponent(userData));
+        try {
+            const user = JSON.parse(decodeURIComponent(userData));
+            console.log('Parsed user data for normal login:', user);
 
-        window.opener?.postMessage(
-            {
-                type: "SOCIAL_AUTH_SUCCESS",
-                token,
-                user,
-            },
-            window.location.origin
-        );
+            window.opener?.postMessage(
+                {
+                    type: "SOCIAL_AUTH_SUCCESS",
+                    token,
+                    user,
+                },
+                window.location.origin
+            );
 
-        isLoading.value = false;
-        setTimeout(() => window.close(), 500);
+            console.log('Sent SOCIAL_AUTH_SUCCESS message');
+            isLoading.value = false;
+            setTimeout(() => window.close(), 500);
+        } catch (e) {
+            console.error('Failed to parse user data for normal login:', e);
+            error.value = "Failed to process authentication data";
+            isLoading.value = false;
+        }
 
     } catch (err) {
+        console.error('=== Social Callback Error ===');
+        console.error('Error:', err);
+        console.error('Stack:', err.stack);
         error.value = "Failed to process authentication response";
         isLoading.value = false;
     }

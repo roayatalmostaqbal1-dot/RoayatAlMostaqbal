@@ -54,15 +54,8 @@ const handleSocialAuthSuccess = (event) => {
     console.log('=== SOCIAL_AUTH_SUCCESS received ===');
     console.log('Event detail:', event.detail);
 
-    if (event.detail && event.detail.token) {
-        isLoading.value = false;
-        toastStore.success('Success', 'Social login successful! Redirecting...');
-        console.log('Redirecting to dashboard');
-        // Redirect to dashboard after successful social auth
-        router.push('/dashboard');
-    } else {
-        console.error('No token in event detail');
-    }
+    // Only reset loading state, notification and redirect handled by LoginPage
+    isLoading.value = false;
 };
 
 const handleSocialAuthCancelled = () => {

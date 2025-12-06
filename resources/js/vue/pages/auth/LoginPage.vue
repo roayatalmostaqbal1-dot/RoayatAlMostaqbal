@@ -89,6 +89,7 @@
 import { reactive, ref, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../../stores/auth';
+import { useToastStore } from '../../stores/toastStore';
 import Card from '../../components/ui/Card.vue';
 import Input from '../../components/ui/Input.vue';
 import Button from '../../components/ui/Button.vue';
@@ -97,6 +98,7 @@ import TwoFactorVerification from '../../components/auth/TwoFactorVerification.v
 
 const router = useRouter();
 const authStore = useAuthStore();
+const toastStore = useToastStore();
 
 // Logo URL - using public asset
 const logoUrl = '/RoayatAlMostaqbal.svg';
@@ -200,11 +202,25 @@ const handleSocialAuth2FARequired = (event) => {
     }
 };
 
+// Handle social login success
+const handleSocialAuthSuccess = (event) => {
+    console.log('=== LoginPage: SOCIAL_AUTH_SUCCESS received ===');
+    console.log('Event detail:', event.detail);
+
+    if (event.detail && event.detail.token) {
+        toastStore.success('Success', 'Social login successful! Redirecting...');
+        console.log('Redirecting to dashboard');
+        router.push('/dashboard');
+    }
+};
+
 onMounted(() => {
     window.addEventListener('social-auth-2fa-required', handleSocialAuth2FARequired);
+    window.addEventListener('social-auth-success', handleSocialAuthSuccess);
 });
 
 onUnmounted(() => {
     window.removeEventListener('social-auth-2fa-required', handleSocialAuth2FARequired);
+    window.removeEventListener('social-auth-success', handleSocialAuthSuccess);
 });
 </script>

@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Http\Requests\Api\V1\Auth\{ResetPasswordRequest,SendPasswordResetLinkRequest,SetupPasswordRequest};
+use App\Models\{User,PasswordResetToken};
 use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -17,13 +16,9 @@ class PasswordResetController extends Controller
     /**
      * Send password reset link via email
      */
-    public function sendResetLinkEmail(Request $request)
+    public function sendResetLinkEmail(SendPasswordResetLinkRequest $request)
     {
         try {
-            $request->validate([
-                'email' => 'required|email',
-            ]);
-
             $user = User::where('email', $request->email)->first();
 
             // Only send email if user exists, but always return success message
@@ -32,12 +27,10 @@ class PasswordResetController extends Controller
                 $token = Str::random(64);
 
                 // Delete old tokens for this email
-                DB::table('password_reset_tokens')
-                    ->where('email', $request->email)
-                    ->delete();
+                PasswordResetToken::forEmail($request->email)->delete();
 
-                // Store new token
-                DB::table('password_reset_tokens')->insert([
+                // Store new token using ORM
+                PasswordResetToken::create([
                     'email' => $request->email,
                     'token' => Hash::make($token),
                     'created_at' => now(),
@@ -62,13 +55,6 @@ class PasswordResetController extends Controller
                 'message' => 'If an account exists with this email, you will receive a password reset link shortly.',
             ]);
 
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json([
-                'response_code' => 422,
-                'status' => 'error',
-                'message' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
         } catch (\Exception $e) {
             Log::error('Password Reset Email Error: '.$e->getMessage());
 
@@ -83,32 +69,11 @@ class PasswordResetController extends Controller
     /**
      * Reset password using token
      */
-    public function reset(Request $request)
+    public function reset(ResetPasswordRequest $request)
     {
         try {
-            $request->validate([
-                'email' => 'required|email',
-                'token' => 'required|string',
-                'password' => [
-                    'required',
-                    'string',
-                    'min:8',
-                    'regex:/[a-z]/',
-                    'regex:/[A-Z]/',
-                    'regex:/[0-9]/',
-                    'regex:/[^a-zA-Z0-9]/',
-                    'confirmed',
-                ],
-            ], [
-                'password.min' => 'Password must be at least 8 characters',
-                'password.regex' => 'Password must contain uppercase, lowercase, numbers, and special characters',
-                'password.confirmed' => 'Password confirmation does not match',
-            ]);
-
-            // Find token record
-            $resetRecord = DB::table('password_reset_tokens')
-                ->where('email', $request->email)
-                ->first();
+            // Find token record using ORM
+            $resetRecord = PasswordResetToken::forEmail($request->email)->first();
 
             if (!$resetRecord) {
                 return response()->json([
@@ -128,11 +93,8 @@ class PasswordResetController extends Controller
             }
 
             // Check if token is expired (60 minutes)
-            $createdAt = \Carbon\Carbon::parse($resetRecord->created_at);
-            if ($createdAt->addMinutes(60)->isPast()) {
-                DB::table('password_reset_tokens')
-                    ->where('email', $request->email)
-                    ->delete();
+            if ($resetRecord->isExpired()) {
+                $resetRecord->delete();
 
                 return response()->json([
                     'response_code' => 400,
@@ -157,9 +119,7 @@ class PasswordResetController extends Controller
             $user->save();
 
             // Delete used token
-            DB::table('password_reset_tokens')
-                ->where('email', $request->email)
-                ->delete();
+            $resetRecord->delete();
 
             event(new PasswordReset($user));
 
@@ -171,13 +131,6 @@ class PasswordResetController extends Controller
                 'message' => 'Password has been reset successfully',
             ]);
 
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json([
-                'response_code' => 422,
-                'status' => 'error',
-                'message' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
         } catch (\Exception $e) {
             Log::error('Password Reset Error: '.$e->getMessage());
 
@@ -192,27 +145,9 @@ class PasswordResetController extends Controller
     /**
      * Setup password for new social login users
      */
-    public function setupPassword(Request $request)
+    public function setupPassword(SetupPasswordRequest $request)
     {
         try {
-            $request->validate([
-                'user_id' => 'required|exists:users,id',
-                'password' => [
-                    'required',
-                    'string',
-                    'min:8',
-                    'regex:/[a-z]/',
-                    'regex:/[A-Z]/',
-                    'regex:/[0-9]/',
-                    'regex:/[^a-zA-Z0-9]/',
-                    'confirmed',
-                ],
-            ], [
-                'password.min' => 'Password must be at least 8 characters',
-                'password.regex' => 'Password must contain uppercase, lowercase, numbers, and special characters',
-                'password.confirmed' => 'Password confirmation does not match',
-            ]);
-
             $user = User::findOrFail($request->user_id);
 
             // Update password and set password_set_at timestamp
@@ -232,13 +167,6 @@ class PasswordResetController extends Controller
                 'token' => $token,
             ]);
 
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json([
-                'response_code' => 422,
-                'status' => 'error',
-                'message' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
         } catch (\Exception $e) {
             Log::error('Password Setup Error: '.$e->getMessage());
 

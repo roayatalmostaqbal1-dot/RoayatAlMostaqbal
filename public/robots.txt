@@ -1,2 +1,74 @@
+# Robots.txt for RoayatAlMostaqbal
+# This file helps search engines understand which pages to crawl and index
+
+# Allow all search engines to crawl the site
 User-agent: *
-Disallow:
+Allow: /
+
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /storage/
+Disallow: /vendor/
+Disallow: /bootstrap/
+Disallow: /config/
+Disallow: /database/
+Disallow: /resources/
+Disallow: /routes/
+Disallow: /tests/
+Disallow: /node_modules/
+
+# Disallow sensitive files
+Disallow: /*.env
+Disallow: /*.json
+Disallow: /*.xml
+Disallow: /*.lock
+Disallow: /.git/
+Disallow: /.gitignore
+Disallow: /.htaccess
+
+# Allow specific public assets
+Allow: /css/
+Allow: /js/
+Allow: /fonts/
+Allow: /images/
+Allow: /build/
+Allow: /storage/app/public/
+
+# Disallow query parameters that might create duplicate content
+Disallow: /*?*sort=
+Disallow: /*?*filter=
+Disallow: /*?*page=
+Disallow: /*?*utm_
+
+# Crawl delay (optional - adjust based on server capacity)
+# Crawl-delay: 1
+
+# Request rate (optional)
+# Request-rate: 1/10
+
+# Sitemap location (update with your actual domain)
+Sitemap: https://royalalmostaqbal.com/sitemap.xml
+Sitemap: https://royalalmostaqbal.com/ar/sitemap.xml
+Sitemap: https://royalalmostaqbal.com/en/sitemap.xml
+
+# Google-specific rules
+User-agent: Googlebot
+Allow: /
+
+# Bing-specific rules
+User-agent: Bingbot
+Allow: /
+
+# Block bad bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /

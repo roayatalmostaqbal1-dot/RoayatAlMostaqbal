@@ -13,7 +13,7 @@ return [
     'header.title' => 'رؤية المستقبل',
     'header.subtitle' => 'حلول أمنية متكاملة',
     'header.address' => 'المنطقة الصناعية، شارع السهام ١، العين ٣٠٩١١',
-    'header.email' => 'Roayatalmostaqbal1@gmail.com',
+    'header.email' => config('mail.from.address'),
     'header.phone' => '971503161818 / 971562266859',
 
     // Hero Section
@@ -270,7 +270,7 @@ return [
     'contact.info.phone.title' => 'الهاتف',
     'contact.info.phone.description' => '971503161818 / 971562266859',
     'contact.info.email.title' => 'البريد الإلكتروني',
-    'contact.info.email.description' => 'Roayatalmostaqbal1@gmail.com',
+    'contact.info.email.description' =>  config('mail.from.address'),
     'contact.info.working_hours.title' => 'ساعات العمل',
     'contact.info.working_hours.description' => 'الأحد - الخميس: 8:00 ص - 6:00 م<br>الجمعة - السبت: مغلق',
 

@@ -14,7 +14,7 @@ return [
     'header.title' => 'Roayat Al Mostaqbal',
     'header.subtitle' => 'Integrated Security Solutions',
     'header.address' => 'Industrial Area, Al Siham Street 1, Al Ain 30911',
-    'header.email' => 'Roayatalmostaqbal1@gmail.com',
+    'header.email' =>  config('mail.from.address'),,
     'header.phone' => '971503161818 / 971562266859',
 
     // Hero Section
@@ -279,7 +279,7 @@ return [
     'contact.info.phone.title' => 'Phone',
     'contact.info.phone.description' => '971503161818 / 971562266859',
     'contact.info.email.title' => 'Email',
-    'contact.info.email.description' => 'Roayatalmostaqbal1@gmail.com',
+    'contact.info.email.description' =>  config('mail.from.address'),,
     'contact.info.working_hours.title' => 'Working Hours',
     'contact.info.working_hours.description' => 'Sunday - Thursday: 8:00 AM - 6:00 PM<br>Friday - Saturday: Closed',
 

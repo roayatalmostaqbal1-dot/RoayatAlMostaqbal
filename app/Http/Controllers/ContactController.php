@@ -26,7 +26,7 @@ class ContactController extends Controller
 
         $data = $request->only('name', 'email', "phone", 'company', 'service','subject', 'message');
 
-        Mail::to('Roayatalmostaqbal1@gmail.com')->send(new ContactMail($data));
+        Mail::to(config('mail.from.address'))->send(new ContactMail($data));
 
 
         return back()->with('success', 'تم إرسال رسالتك بنجاح!');

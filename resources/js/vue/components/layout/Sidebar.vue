@@ -121,6 +121,13 @@ const IconDebug = {
     ])
 };
 
+// OAuth2 icon - key/lock
+const IconOAuth2 = {
+    render: () => h('svg', { fill: 'currentColor', viewBox: '0 0 24 24' }, [
+        h('path', { d: 'M18 8h-1V6c0-2.76-2.24-5-5-5s-5 2.24-5 5v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z' })
+    ])
+};
+
 const router = useRouter();
 const route = useRoute();
 const authStore = useAuthStore();
@@ -135,6 +142,7 @@ const menuItems = [
     { path: '/users', label: 'Users', icon: IconUsers },
     { path: '/roles', label: 'Roles', icon: IconRoles },
     { path: '/permissions', label: 'Permissions', icon: IconPermissions },
+    { path: '/oauth2-clients', label: 'OAuth2 Clients', icon: IconOAuth2 },
     { path: '/settings', label: 'Settings', icon: IconSettings },
     { path: '/encrypted-data', label: 'Encrypted Data', icon: IconEncryption },
     { path: '/encryption-debug', label: 'Encryption Debug', icon: IconDebug },

@@ -15,6 +15,7 @@ import RolesPage from '../pages/admin/RolesPage.vue';
 import PermissionsPage from '../pages/admin/PermissionsPage.vue';
 import EncryptedDataPage from '../pages/admin/EncryptedDataPage.vue';
 import EncryptionDebugPage from '../pages/admin/EncryptionDebugPage.vue';
+import OAuth2ClientsPage from '../pages/admin/OAuth2ClientsPage.vue';
 
 const routes = [
   {
@@ -93,6 +94,12 @@ const routes = [
     path: '/encryption-debug',
     name: 'EncryptionDebug',
     component: EncryptionDebugPage,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/oauth2-clients',
+    name: 'OAuth2Clients',
+    component: OAuth2ClientsPage,
     meta: { requiresAuth: true },
   },
   {

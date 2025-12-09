@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\SuperAdmin\PermissionRoleController;
 use App\Http\Controllers\Api\V1\SuperAdmin\RoleController;
 use App\Http\Controllers\Api\V1\SuperAdmin\RolePermissionController;
 use App\Http\Controllers\Api\V1\SuperAdmin\Dashboard\DashboardController;
+use App\Http\Controllers\Api\V1\SuperAdmin\OAuth2ClientController;
 use Illuminate\Support\Facades\Route;
 Route::prefix('SuperAdmin')->middleware(['auth:api','role:super-admin'])->group(function () {
     // =====================
@@ -77,6 +78,24 @@ Route::prefix('SuperAdmin')->middleware(['auth:api','role:super-admin'])->group(
             'inactive_users' => [20, 30, 25, 40, 35, 45],
         ]));
     });
+
+    // =====================
+    // OAuth2 Clients Management
+    // =====================
+    Route::apiResource('oauth2-clients', OAuth2ClientController::class, [
+        // 'middleware' => [
+        //     'index' => 'permission:oauth2_clients.view|role:super-admin',
+        //     'show' => 'permission:oauth2_clients.view|role:super-admin',
+        //     'store' => 'permission:oauth2_clients.create|role:super-admin',
+        //     'update' => 'permission:oauth2_clients.edit|role:super-admin',
+        //     'destroy' => 'permission:oauth2_clients.delete|role:super-admin',
+        // ]
+    ]);
+
+    // Regenerate OAuth2 Client Secret
+    Route::post('oauth2-clients/{id}/regenerate-secret', [OAuth2ClientController::class, 'regenerateSecret'])
+        // ->middleware('permission:oauth2_clients.edit|role:super-admin')
+        ->name('oauth2-clients.regenerate-secret');
 
     // =====================
     // Two-Factor Authentication Routes

@@ -36,7 +36,7 @@ const props = defineProps({
   variant: {
     type: String,
     default: 'primary',
-    validator: (value) => ['primary', 'secondary', 'danger', 'ghost'].includes(value),
+    validator: (value) => ['primary', 'secondary', 'danger', 'ghost', 'warning'].includes(value),
   },
   size: {
     type: String,
@@ -54,6 +54,7 @@ const variantClasses = computed(() => {
     primary: 'bg-[#27e9b5] text-[#051824] hover:bg-[#1fd4a0] active:bg-[#17b88a] focus:ring-[#27e9b5]',
     secondary: 'bg-[#162936] text-white border border-[#3b5265] hover:bg-[#1f3a4a] active:bg-[#162936] focus:ring-[#3b5265]',
     danger: 'bg-red-600 text-white hover:bg-red-700 active:bg-red-800 focus:ring-red-500',
+    warning: 'bg-yellow-600 text-white hover:bg-yellow-700 active:bg-yellow-800 focus:ring-yellow-500',
     ghost: 'bg-transparent text-white border border-white hover:bg-white hover:text-[#051824] active:bg-gray-200 focus:ring-white',
   };
   return variants[props.variant];

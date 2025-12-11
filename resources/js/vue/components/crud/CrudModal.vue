@@ -143,6 +143,13 @@ watch(
         data.role = data.role.length > 0 ? (typeof data.role[0] === 'object' ? data.role[0].name : data.role[0]) : '';
       }
 
+      // Handle redirect_uris field - convert array to single string value
+      if (data.redirect_uris && Array.isArray(data.redirect_uris)) {
+        data.redirect = data.redirect_uris.length > 0 ? data.redirect_uris[0] : '';
+      } else if (data.redirect_uris && typeof data.redirect_uris === 'string') {
+        data.redirect = data.redirect_uris;
+      }
+
       formData.value = data;
     }
   },
@@ -164,12 +171,22 @@ const deleteItem = () => {
 };
 
 const getFieldValue = (fieldName) => {
-  const value = props.initialData[fieldName];
+  let value = props.initialData[fieldName];
 
   // Handle special cases for display
   if (fieldName === 'role' && Array.isArray(value)) {
     // If role is an array, return the first role name
     return value.length > 0 ? (typeof value[0] === 'object' ? value[0].name : value[0]) : 'N/A';
+  }
+
+  if (fieldName === 'redirect' && !value) {
+    // If redirect field is not set, try to get it from redirect_uris
+    const redirectUris = props.initialData.redirect_uris;
+    if (redirectUris && Array.isArray(redirectUris)) {
+      value = redirectUris.length > 0 ? redirectUris[0] : 'N/A';
+    } else if (redirectUris && typeof redirectUris === 'string') {
+      value = redirectUris;
+    }
   }
 
   if (fieldName === 'is_active') {

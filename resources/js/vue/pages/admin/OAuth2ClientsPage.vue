@@ -121,9 +121,9 @@
         :total="oauth2Store.pagination.total"
         :per-page="oauth2Store.pagination.per_page"
         :is-loading="oauth2Store.isLoading"
-        @prev="oauth2Store.fetchClients(oauth2Store.pagination.current_page - 1)"
-        @next="oauth2Store.fetchClients(oauth2Store.pagination.current_page + 1)"
-        @go-to-page="oauth2Store.fetchClients"
+        @prev="handlePrevPage"
+        @next="handleNextPage"
+        @go-to-page="handleGoToPage"
       />
     </Card>
 
@@ -239,7 +239,14 @@ const openCreateModal = () => {
 
 const openEditModal = (client) => {
   modalMode.value = 'edit';
-  selectedClientForModal.value = { ...client };
+  // Convert redirect_uris array to redirect string for the form
+  const clientData = { ...client };
+  if (clientData.redirect_uris && Array.isArray(clientData.redirect_uris)) {
+    clientData.redirect = clientData.redirect_uris.length > 0 ? clientData.redirect_uris[0] : '';
+  } else if (clientData.redirect_uris && typeof clientData.redirect_uris === 'string') {
+    clientData.redirect = clientData.redirect_uris;
+  }
+  selectedClientForModal.value = clientData;
   isEditModalOpen.value = true;
 };
 
@@ -287,6 +294,26 @@ const confirmRegenerate = async () => {
 const cancelRegenerate = () => {
   isRegenerateConfirmOpen.value = false;
   clientToRegenerate.value = null;
+};
+
+// Pagination handlers
+const handlePrevPage = () => {
+  const prevPage = oauth2Store.pagination.current_page - 1;
+  if (prevPage > 0) {
+    oauth2Store.fetchClients(prevPage, oauth2Store.pagination.per_page);
+  }
+};
+
+const handleNextPage = () => {
+  const nextPage = oauth2Store.pagination.current_page + 1;
+  const totalPages = Math.ceil(oauth2Store.pagination.total / oauth2Store.pagination.per_page);
+  if (nextPage <= totalPages) {
+    oauth2Store.fetchClients(nextPage, oauth2Store.pagination.per_page);
+  }
+};
+
+const handleGoToPage = (page) => {
+  oauth2Store.fetchClients(page, oauth2Store.pagination.per_page);
 };
 </script>
 

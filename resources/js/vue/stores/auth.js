@@ -241,6 +241,20 @@ export const useAuthStore = defineStore("auth", {
         },
 
         // ------------------------------------
+        // Clear Auth Data (for 401 handling)
+        // ------------------------------------
+        clearAuthData() {
+            this.authToken = null;
+            this.authUser = null;
+            this.authRoles = [];
+            this.authPermissions = [];
+            this.authErrors = null;
+            this.twoFactorRequired = false;
+            this.twoFactorUserId = null;
+            localStorage.removeItem('token');
+        },
+
+        // ------------------------------------
         // Two Factor Reset
         // ------------------------------------
         resetTwoFactor() {

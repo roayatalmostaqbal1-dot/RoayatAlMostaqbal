@@ -66,7 +66,13 @@ export const useOAuth2ClientsStore = defineStore("oauth2Clients", {
 
             try {
                 const response = await apiClient.post("/SuperAdmin/oauth2-clients", clientData);
-                this.clients.push(response.data.data);
+
+                // Refresh the clients list to ensure pagination is correct
+                // Add the new client to the beginning of the list
+                this.clients.unshift(response.data.data);
+
+                // Update pagination total
+                this.pagination.total += 1;
 
                 const toast = useToastStore();
                 toast.success("Client Created", response.data.message || "OAuth2 client has been created successfully");
@@ -116,7 +122,10 @@ export const useOAuth2ClientsStore = defineStore("oauth2Clients", {
                 const response = await apiClient.put(`/SuperAdmin/oauth2-clients/${clientId}`, clientData);
                 const index = this.clients.findIndex(c => c.id === clientId);
                 if (index !== -1) {
+                    // Update the client in the list
                     this.clients[index] = response.data.data;
+                    // Ensure reactivity by replacing the array
+                    this.clients = [...this.clients];
                 }
 
                 const toast = useToastStore();
@@ -145,6 +154,11 @@ export const useOAuth2ClientsStore = defineStore("oauth2Clients", {
                 const response = await apiClient.delete(`/SuperAdmin/oauth2-clients/${clientId}`);
                 this.clients = this.clients.filter(c => c.id !== clientId);
 
+                // Update pagination total
+                if (this.pagination.total > 0) {
+                    this.pagination.total -= 1;
+                }
+
                 const toast = useToastStore();
                 toast.success("Client Deleted", response.data?.message || "OAuth2 client has been deleted successfully");
 
@@ -171,7 +185,10 @@ export const useOAuth2ClientsStore = defineStore("oauth2Clients", {
                 const response = await apiClient.post(`/SuperAdmin/oauth2-clients/${clientId}/regenerate-secret`);
                 const index = this.clients.findIndex(c => c.id === clientId);
                 if (index !== -1) {
+                    // Update the client in the list
                     this.clients[index] = response.data.data;
+                    // Ensure reactivity by replacing the array
+                    this.clients = [...this.clients];
                 }
                 this.selectedClient = response.data.data;
 

@@ -145,10 +145,23 @@
 
     <!-- Contact View Modal -->
     <ContactViewModal
-      v-if="selectedContact"
+      :is-open="isViewModalOpen"
       :contact="selectedContact"
-      @close="selectedContact = null"
+      :is-loading="isLoading"
+      @close="closeViewModal"
       @updated="handleContactUpdated"
+    />
+
+    <!-- Delete Confirmation Modal -->
+    <ConfirmationModal
+      :isOpen="isDeleteConfirmOpen"
+      title="Delete Contact"
+      :message="`Are you sure you want to delete the contact from ${contactToDelete?.name}? This action cannot be undone.`"
+      confirmButtonText="Delete"
+      cancelButtonText="Cancel"
+      buttonType="danger"
+      @confirm="confirmDelete"
+      @cancel="cancelDelete"
     />
   </DashboardLayout>
 </template>
@@ -160,6 +173,7 @@ import DashboardLayout from '../../components/layout/DashboardLayout.vue';
 import Card from '../../components/ui/Card.vue';
 import Button from '../../components/ui/Button.vue';
 import ContactViewModal from '../../components/contact/ContactViewModal.vue';
+import ConfirmationModal from '../../components/ui/ConfirmationModal.vue';
 
 const contactsStore = useContactsStore();
 const isLoading = ref(false);
@@ -167,6 +181,11 @@ const error = ref(null);
 const searchQuery = ref('');
 const selectedStatus = ref('');
 const selectedContact = ref(null);
+const isViewModalOpen = ref(false);
+
+// Delete Confirmation Modal States
+const isDeleteConfirmOpen = ref(false);
+const contactToDelete = ref(null);
 
 const contacts = computed(() => contactsStore.contacts);
 const pagination = computed(() => contactsStore.pagination);
@@ -189,14 +208,27 @@ const fetchContacts = async (page = 1) => {
 };
 
 const viewContact = (contact) => {
-  selectedContact.value = contact;
+  selectedContact.value = { ...contact };
+  isViewModalOpen.value = true;
 };
 
-const handleDelete = async (contact) => {
-  if (confirm(`Are you sure you want to delete the contact from ${contact.name}?`)) {
+const closeViewModal = () => {
+  isViewModalOpen.value = false;
+  selectedContact.value = null;
+};
+
+const handleDelete = (contact) => {
+  contactToDelete.value = contact;
+  isDeleteConfirmOpen.value = true;
+};
+
+const confirmDelete = async () => {
+  if (contactToDelete.value) {
     isLoading.value = true;
     try {
-      await contactsStore.deleteContact(contact.id);
+      await contactsStore.deleteContact(contactToDelete.value.id);
+      isDeleteConfirmOpen.value = false;
+      contactToDelete.value = null;
       await fetchContacts();
     } catch (err) {
       error.value = err.message || 'Failed to delete contact';
@@ -206,8 +238,13 @@ const handleDelete = async (contact) => {
   }
 };
 
+const cancelDelete = () => {
+  isDeleteConfirmOpen.value = false;
+  contactToDelete.value = null;
+};
+
 const handleContactUpdated = async () => {
-  selectedContact.value = null;
+  closeViewModal();
   await fetchContacts();
 };
 

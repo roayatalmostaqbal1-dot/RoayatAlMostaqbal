@@ -16,122 +16,128 @@ import PermissionsPage from '../pages/admin/PermissionsPage.vue';
 import EncryptedDataPage from '../pages/admin/EncryptedDataPage.vue';
 import EncryptionDebugPage from '../pages/admin/EncryptionDebugPage.vue';
 import OAuth2ClientsPage from '../pages/admin/OAuth2ClientsPage.vue';
-
+import ContactsPage from '../pages/admin/ContactsPage.vue';
 const routes = [
-  {
-    path: '/login',
-    name: 'Login',
-    component: LoginPage,
-    meta: { requiresAuth: false, layout: 'blank' },
-  },
-  {
-    path: '/register',
-    name: 'Register',
-    component: RegisterPage,
-    meta: { requiresAuth: false, layout: 'blank' },
-  },
-  {
-    path: '/social-callback',
-    name: 'SocialCallback',
-    component: SocialCallbackPage,
-    meta: { requiresAuth: false, layout: 'blank' },
-  },
-  {
-    path: '/set-password',
-    name: 'SetPassword',
-    component: SetPasswordPage,
-    meta: { requiresAuth: false, layout: 'blank' },
-  },
-  {
-    path: '/forgot-password',
-    name: 'ForgotPassword',
-    component: ForgotPasswordPage,
-    meta: { requiresAuth: false, layout: 'blank' },
-  },
-  {
-    path: '/reset-password/:token',
-    name: 'ResetPassword',
-    component: ResetPasswordPage,
-    meta: { requiresAuth: false, layout: 'blank' },
-  },
-  {
-    path: '/dashboard',
-    name: 'Dashboard',
-    component: DashboardPage,
-    meta: { requiresAuth: true },
-  },
-  {
-    path: '/users',
-    name: 'Users',
-    component: UsersPage,
-    meta: { requiresAuth: true },
-  },
-  {
-    path: '/settings',
-    name: 'Settings',
-    component: SettingsPage,
-    meta: { requiresAuth: true },
-  },
-  {
-    path: '/roles',
-    name: 'Roles',
-    component: RolesPage,
-    meta: { requiresAuth: true },
-  },
-  {
-    path: '/permissions',
-    name: 'Permissions',
-    component: PermissionsPage,
-    meta: { requiresAuth: true },
-  },
-  {
-    path: '/encrypted-data',
-    name: 'EncryptedData',
-    component: EncryptedDataPage,
-    meta: { requiresAuth: true },
-  },
-  {
-    path: '/encryption-debug',
-    name: 'EncryptionDebug',
-    component: EncryptionDebugPage,
-    meta: { requiresAuth: true },
-  },
-  {
-    path: '/oauth2-clients',
-    name: 'OAuth2Clients',
-    component: OAuth2ClientsPage,
-    meta: { requiresAuth: true },
-  },
-  {
-    path: '',
-    redirect: '/dashboard',
-  },
-  {
-    path: '/:pathMatch(.*)*',
-    redirect: '/dashboard',
-  },
+    {
+        path: '/login',
+        name: 'Login',
+        component: LoginPage,
+        meta: { requiresAuth: false, layout: 'blank' },
+    },
+    {
+        path: '/register',
+        name: 'Register',
+        component: RegisterPage,
+        meta: { requiresAuth: false, layout: 'blank' },
+    },
+    {
+        path: '/social-callback',
+        name: 'SocialCallback',
+        component: SocialCallbackPage,
+        meta: { requiresAuth: false, layout: 'blank' },
+    },
+    {
+        path: '/set-password',
+        name: 'SetPassword',
+        component: SetPasswordPage,
+        meta: { requiresAuth: false, layout: 'blank' },
+    },
+    {
+        path: '/forgot-password',
+        name: 'ForgotPassword',
+        component: ForgotPasswordPage,
+        meta: { requiresAuth: false, layout: 'blank' },
+    },
+    {
+        path: '/reset-password/:token',
+        name: 'ResetPassword',
+        component: ResetPasswordPage,
+        meta: { requiresAuth: false, layout: 'blank' },
+    },
+    {
+        path: '/dashboard',
+        name: 'Dashboard',
+        component: DashboardPage,
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '/users',
+        name: 'Users',
+        component: UsersPage,
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '/settings',
+        name: 'Settings',
+        component: SettingsPage,
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '/roles',
+        name: 'Roles',
+        component: RolesPage,
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '/permissions',
+        name: 'Permissions',
+        component: PermissionsPage,
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '/encrypted-data',
+        name: 'EncryptedData',
+        component: EncryptedDataPage,
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '/encryption-debug',
+        name: 'EncryptionDebug',
+        component: EncryptionDebugPage,
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '/oauth2-clients',
+        name: 'OAuth2Clients',
+        component: OAuth2ClientsPage,
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '/contacts',
+        name: 'Contacts',
+        component: ContactsPage,
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '',
+        redirect: '/dashboard',
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        redirect: '/dashboard',
+    },
 ];
 
 const router = createRouter({
-  history: createWebHistory('/admin'),
-  routes,
+    history: createWebHistory('/admin'),
+    routes,
 });
 
 // Navigation guards
 router.beforeEach((to, _from, next) => {
-  const authStore = useAuthStore();
-  const isAuthenticated = authStore.isAuthenticated;
-  const requiresAuth = to.meta.requiresAuth !== false;
+    const authStore = useAuthStore();
+    const isAuthenticated = authStore.isAuthenticated;
+    const requiresAuth = to.meta.requiresAuth !== false;
 
-  if (requiresAuth && !isAuthenticated) {
-    // Redirect to login if trying to access protected route
-    next('/login');
-  } else if ((to.path === '/login' || to.path === '/register') && isAuthenticated) {
-    // Redirect to dashboard if already logged in
-    next('/dashboard');
-  } else {
-    next();
-  }
+    if (requiresAuth && !isAuthenticated) {
+        // Redirect to login if trying to access protected route
+        next('/login');
+    } else if ((to.path === '/login' || to.path === '/register') && isAuthenticated) {
+        // Redirect to dashboard if already logged in
+        next('/dashboard');
+    } else {
+        next();
+    }
 });
 
 export default router;

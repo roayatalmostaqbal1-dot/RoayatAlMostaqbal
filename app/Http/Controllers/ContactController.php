@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Mail\ContactMail;
+use App\Models\Contact;
 use Illuminate\Support\Facades\Mail;
+
 class ContactController extends Controller
 {
     public function index()
@@ -23,14 +25,15 @@ class ContactController extends Controller
             'message' => 'required|string|max:1000'
         ]);
 
+        $data = $request->only('name', 'email', 'phone', 'company', 'service', 'message');
 
-        $data = $request->only('name', 'email', "phone", 'company', 'service','subject', 'message');
+        // Store contact in database
+        Contact::create($data);
 
+        // Send email notification
         Mail::to(config('mail.from.address'))->send(new ContactMail($data));
 
-
-        return back()->with('success', 'تم إرسال رسالتك بنجاح!');
-
+        return back()->with('success', 'Your message has been sent successfully!');
     }
 }
 

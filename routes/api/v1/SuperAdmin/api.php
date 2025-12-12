@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\SuperAdmin\RoleController;
 use App\Http\Controllers\Api\V1\SuperAdmin\RolePermissionController;
 use App\Http\Controllers\Api\V1\SuperAdmin\Dashboard\DashboardController;
 use App\Http\Controllers\Api\V1\SuperAdmin\OAuth2ClientController;
+use App\Http\Controllers\Api\V1\SuperAdmin\ContactController;
 use Illuminate\Support\Facades\Route;
 Route::prefix('SuperAdmin')->middleware(['auth:api','role:super-admin'])->group(function () {
     // =====================
@@ -96,6 +97,18 @@ Route::prefix('SuperAdmin')->middleware(['auth:api','role:super-admin'])->group(
     Route::post('oauth2-clients/{id}/regenerate-secret', [OAuth2ClientController::class, 'regenerateSecret'])
         // ->middleware('permission:oauth2_clients.edit|role:super-admin')
         ->name('oauth2-clients.regenerate-secret');
+
+    // =====================
+    // Contact Management
+    // =====================
+    Route::apiResource('contacts', ContactController::class, [
+        // 'middleware' => [
+        //     'index' => 'permission:contacts.view|role:super-admin',
+        //     'show' => 'permission:contacts.view|role:super-admin',
+        //     'update' => 'permission:contacts.edit|role:super-admin',
+        //     'destroy' => 'permission:contacts.delete|role:super-admin',
+        // ]
+    ]);
 
     // =====================
     // Two-Factor Authentication Routes

@@ -7,6 +7,7 @@ use App\Http\Resources\Api\V1\SuperAdmin\ContactResource;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 
 class ContactController extends Controller
 {
@@ -15,6 +16,7 @@ class ContactController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
+        
         $perPage = $request->query('per_page', 15);
         $status = $request->query('status');
         $search = $request->query('search');
@@ -36,7 +38,6 @@ class ContactController extends Controller
         }
 
         $contacts = $query->orderBy('created_at', 'desc')->paginate($perPage);
-
         return response()->json([
             'data' => ContactResource::collection($contacts->items()),
             'pagination' => [

@@ -1,12 +1,14 @@
 <?php
 
-use App\Http\Controllers\Api\V1\SuperAdmin\PermissionController;
-use App\Http\Controllers\Api\V1\SuperAdmin\PermissionRoleController;
-use App\Http\Controllers\Api\V1\SuperAdmin\RoleController;
-use App\Http\Controllers\Api\V1\SuperAdmin\RolePermissionController;
-use App\Http\Controllers\Api\V1\SuperAdmin\Dashboard\DashboardController;
-use App\Http\Controllers\Api\V1\SuperAdmin\OAuth2ClientController;
-use App\Http\Controllers\Api\V1\SuperAdmin\ContactController;
+use App\Http\Controllers\Api\V1\SuperAdmin\{Dashboard\DashboardController,
+    ContactController,
+    OAuth2ClientController,
+    RolePermissionController,
+    PermissionController,
+    RoleController,
+    PermissionRoleController
+ };
+
 use Illuminate\Support\Facades\Route;
 Route::prefix('SuperAdmin')->middleware(['auth:api','role:super-admin'])->group(function () {
     // =====================

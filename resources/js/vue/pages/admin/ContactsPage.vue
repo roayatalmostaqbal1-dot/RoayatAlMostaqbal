@@ -1,37 +1,44 @@
 <template>
-  <div class="p-6">
-    <!-- Header -->
-    <div class="mb-6">
-      <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
-        <i class="fas fa-envelope mr-3"></i>Contact Messages
-      </h1>
-      <p class="text-gray-600 dark:text-gray-400 mt-2">Manage incoming contact form submissions</p>
-    </div>
+  <DashboardLayout page-title="Contact Messages" page-description="Manage incoming contact form submissions">
+    <Card>
+      <template #header>
+        <div class="flex items-center justify-between">
+          <h2 class="text-lg font-bold text-white">Contact Messages</h2>
+          <Button
+            variant="primary"
+            size="sm"
+            @click="fetchContacts"
+            :disabled="isLoading"
+          >
+            <i class="fas fa-sync-alt mr-2"></i>Refresh
+          </Button>
+        </div>
+      </template>
 
-    <!-- Filters -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-6">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <!-- Error Message -->
+      <div v-if="error" class="mb-4 p-4 rounded-lg bg-red-500 bg-opacity-10 border border-red-500 text-red-400">
+        {{ error }}
+      </div>
+
+      <!-- Filters -->
+      <div class="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
         <!-- Search -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Search
-          </label>
+          <label class="block text-sm font-medium text-gray-300 mb-2">Search</label>
           <input
             v-model="searchQuery"
             type="text"
             placeholder="Search by name or email"
-            class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+            class="w-full px-4 py-2 border border-[#3b5265] rounded-lg bg-[#162936] text-white placeholder-gray-500 focus:ring-2 focus:ring-[#27e9b5] focus:border-[#27e9b5]"
           />
         </div>
 
         <!-- Status Filter -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Status
-          </label>
+          <label class="block text-sm font-medium text-gray-300 mb-2">Status</label>
           <select
             v-model="selectedStatus"
-            class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+            class="w-full px-4 py-2 border border-[#3b5265] rounded-lg bg-[#162936] text-white focus:ring-2 focus:ring-[#27e9b5] focus:border-[#27e9b5]"
           >
             <option value="">All</option>
             <option value="new">New</option>
@@ -39,121 +46,134 @@
             <option value="replied">Replied</option>
           </select>
         </div>
-
-        <!-- Refresh Button -->
-        <div class="flex items-end">
-          <button
-            @click="fetchContacts"
-            class="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
-          >
-            <i class="fas fa-sync-alt mr-2"></i>Refresh
-          </button>
-        </div>
       </div>
-    </div>
 
-    <!-- Loading State -->
-    <div v-if="loading" class="text-center py-8">
-      <i class="fas fa-spinner fa-spin text-3xl text-blue-500"></i>
-      <p class="text-gray-600 dark:text-gray-400 mt-2">Loading...</p>
-    </div>
-
-    <!-- Contacts Table -->
-    <div v-else class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
-      <table class="w-full">
-        <thead class="bg-gray-100 dark:bg-gray-700">
-          <tr>
-            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Name</th>
-            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Email</th>
-            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Service</th>
-            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Status</th>
-            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Date</th>
-            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-          <tr v-for="contact in contacts" :key="contact.id" class="hover:bg-gray-50 dark:hover:bg-gray-700">
-            <td class="px-6 py-4 text-sm text-gray-900 dark:text-white">{{ contact.name }}</td>
-            <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{{ contact.email }}</td>
-            <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{{ contact.service || '-' }}</td>
-            <td class="px-6 py-4 text-sm">
-              <span
-                :class="getStatusBadgeClass(contact.status)"
-                class="px-3 py-1 rounded-full text-xs font-semibold"
-              >
-                {{ getStatusLabel(contact.status) }}
-              </span>
-            </td>
-            <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
-              {{ formatDate(contact.created_at) }}
-            </td>
-            <td class="px-6 py-4 text-sm">
-              <button
-                @click="viewContact(contact)"
-                class="text-blue-500 hover:text-blue-700 mr-3"
-                title="View"
-              >
-                <i class="fas fa-eye"></i>
-              </button>
-              <button
-                @click="deleteContact(contact.id)"
-                class="text-red-500 hover:text-red-700"
-                title="Delete"
-              >
-                <i class="fas fa-trash"></i>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <!-- Loading State -->
+      <div v-if="isLoading && contacts.length === 0" class="text-center py-8">
+        <svg class="animate-spin h-8 w-8 text-[#27e9b5] mx-auto">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <p class="text-gray-400 mt-2">Loading contacts...</p>
+      </div>
 
       <!-- Empty State -->
-      <div v-if="contacts.length === 0" class="text-center py-8">
-        <i class="fas fa-inbox text-4xl text-gray-400 mb-4"></i>
-        <p class="text-gray-600 dark:text-gray-400">No contacts found</p>
+      <div v-else-if="contacts.length === 0" class="text-center py-8">
+        <p class="text-gray-400 mb-4">No contacts found</p>
+        <Button variant="secondary" @click="fetchContacts">Try Again</Button>
       </div>
-    </div>
 
-    <!-- Pagination -->
-    <div v-if="pagination && contacts.length > 0" class="mt-6">
-      <Pagination
-        :current-page="pagination.current_page"
-        :last-page="pagination.last_page"
-        :total="pagination.total"
-        :per-page="pagination.per_page"
-        @page-changed="handlePageChange"
-      />
-    </div>
+      <!-- Contacts Table -->
+      <div v-else class="overflow-x-auto">
+        <table class="w-full">
+          <thead>
+            <tr class="border-b border-[#3b5265]">
+              <th class="text-left py-3 px-4 text-gray-300 font-semibold">Name</th>
+              <th class="text-left py-3 px-4 text-gray-300 font-semibold">Email</th>
+              <th class="text-left py-3 px-4 text-gray-300 font-semibold">Service</th>
+              <th class="text-left py-3 px-4 text-gray-300 font-semibold">Status</th>
+              <th class="text-left py-3 px-4 text-gray-300 font-semibold">Date</th>
+              <th class="text-left py-3 px-4 text-gray-300 font-semibold">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="contact in contacts" :key="contact.id" class="border-b border-[#3b5265] hover:bg-[#162936] transition">
+              <td class="py-3 px-4 text-white">{{ contact.name }}</td>
+              <td class="py-3 px-4 text-gray-300">{{ contact.email }}</td>
+              <td class="py-3 px-4 text-gray-300">{{ contact.service || '-' }}</td>
+              <td class="py-3 px-4">
+                <span
+                  :class="getStatusBadgeClass(contact.status)"
+                  class="px-3 py-1 rounded-full text-xs font-semibold inline-block"
+                >
+                  {{ getStatusLabel(contact.status) }}
+                </span>
+              </td>
+              <td class="py-3 px-4 text-gray-300">{{ formatDate(contact.created_at) }}</td>
+              <td class="py-3 px-4">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    @click="viewContact(contact)"
+                    :disabled="isLoading"
+                    title="View contact details"
+                  >
+                    👁️ View
+                  </Button>
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    @click="handleDelete(contact)"
+                    :disabled="isLoading"
+                    title="Delete contact"
+                  >
+                    🗑️ Delete
+                  </Button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-    <!-- View Modal -->
+      <!-- Pagination -->
+      <div v-if="!isLoading && contacts.length > 0" class="mt-6 flex justify-between items-center">
+        <p class="text-sm text-gray-400">
+          Showing {{ pagination.from }} to {{ pagination.to }} of {{ pagination.total }} contacts
+        </p>
+        <div class="flex gap-2">
+          <Button
+            variant="secondary"
+            size="sm"
+            @click="previousPage"
+            :disabled="pagination.current_page === 1 || isLoading"
+          >
+            Previous
+          </Button>
+          <Button
+            variant="secondary"
+            size="sm"
+            @click="nextPage"
+            :disabled="pagination.current_page === pagination.last_page || isLoading"
+          >
+            Next
+          </Button>
+        </div>
+      </div>
+    </Card>
+
+    <!-- Contact View Modal -->
     <ContactViewModal
       v-if="selectedContact"
       :contact="selectedContact"
-      :is-open="isViewModalOpen"
-      @close="isViewModalOpen = false"
-      @reply="handleReply"
+      @close="selectedContact = null"
+      @updated="handleContactUpdated"
     />
-  </div>
+  </DashboardLayout>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useContactsStore } from '../../stores/contactsStore';
-import Pagination from '../../components/ui/Pagination.vue';
+import DashboardLayout from '../../components/layout/DashboardLayout.vue';
+import Card from '../../components/ui/Card.vue';
+import Button from '../../components/ui/Button.vue';
 import ContactViewModal from '../../components/contact/ContactViewModal.vue';
 
 const contactsStore = useContactsStore();
-const loading = ref(false);
+const isLoading = ref(false);
+const error = ref(null);
 const searchQuery = ref('');
 const selectedStatus = ref('');
 const selectedContact = ref(null);
-const isViewModalOpen = ref(false);
 
 const contacts = computed(() => contactsStore.contacts);
 const pagination = computed(() => contactsStore.pagination);
 
 const fetchContacts = async (page = 1) => {
-  loading.value = true;
+  isLoading.value = true;
+  error.value = null;
   try {
     await contactsStore.fetchContacts({
       page,
@@ -161,31 +181,46 @@ const fetchContacts = async (page = 1) => {
       search: searchQuery.value,
       status: selectedStatus.value,
     });
+  } catch (err) {
+    error.value = err.message || 'Failed to fetch contacts';
   } finally {
-    loading.value = false;
+    isLoading.value = false;
   }
 };
 
 const viewContact = (contact) => {
   selectedContact.value = contact;
-  isViewModalOpen.value = true;
 };
 
-const deleteContact = async (id) => {
-  if (confirm('Are you sure you want to delete this contact?')) {
-    await contactsStore.deleteContact(id);
-    await fetchContacts();
+const handleDelete = async (contact) => {
+  if (confirm(`Are you sure you want to delete the contact from ${contact.name}?`)) {
+    isLoading.value = true;
+    try {
+      await contactsStore.deleteContact(contact.id);
+      await fetchContacts();
+    } catch (err) {
+      error.value = err.message || 'Failed to delete contact';
+    } finally {
+      isLoading.value = false;
+    }
   }
 };
 
-const handlePageChange = (page) => {
-  fetchContacts(page);
+const handleContactUpdated = async () => {
+  selectedContact.value = null;
+  await fetchContacts();
 };
 
-const handleReply = async (replyData) => {
-  await contactsStore.updateContact(selectedContact.value.id, replyData);
-  isViewModalOpen.value = false;
-  await fetchContacts();
+const previousPage = () => {
+  if (pagination.value.current_page > 1) {
+    fetchContacts(pagination.value.current_page - 1);
+  }
+};
+
+const nextPage = () => {
+  if (pagination.value.current_page < pagination.value.last_page) {
+    fetchContacts(pagination.value.current_page + 1);
+  }
 };
 
 const getStatusLabel = (status) => {
@@ -199,11 +234,11 @@ const getStatusLabel = (status) => {
 
 const getStatusBadgeClass = (status) => {
   const classes = {
-    new: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
-    read: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
-    replied: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+    new: 'bg-blue-500 bg-opacity-20 text-blue-300 border border-blue-500 border-opacity-30',
+    read: 'bg-yellow-500 bg-opacity-20 text-yellow-300 border border-yellow-500 border-opacity-30',
+    replied: 'bg-green-500 bg-opacity-20 text-green-300 border border-green-500 border-opacity-30',
   };
-  return classes[status] || 'bg-gray-100 text-gray-800';
+  return classes[status] || 'bg-gray-500 bg-opacity-20 text-gray-300';
 };
 
 const formatDate = (date) => {

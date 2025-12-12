@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import axios from 'axios';
+import apiClient from '../services/api';
 
 export const useContactsStore = defineStore('contacts', {
   state: () => ({
@@ -32,7 +32,7 @@ export const useContactsStore = defineStore('contacts', {
       this.error = null;
 
       try {
-        const response = await axios.get('/api/v1/SuperAdmin/contacts', {
+        const response = await apiClient.get('/SuperAdmin/contacts', {
           params: {
             per_page: params.per_page || 15,
             page: params.page || 1,
@@ -56,7 +56,7 @@ export const useContactsStore = defineStore('contacts', {
       this.error = null;
 
       try {
-        const response = await axios.get(`/api/v1/SuperAdmin/contacts/${id}`);
+        const response = await apiClient.get(`/SuperAdmin/contacts/${id}`);
         return response.data.data;
       } catch (error) {
         this.error = error.response?.data?.message || 'Failed to fetch contact';
@@ -71,8 +71,8 @@ export const useContactsStore = defineStore('contacts', {
       this.error = null;
 
       try {
-        const response = await axios.put(`/api/v1/SuperAdmin/contacts/${id}`, data);
-        
+        const response = await apiClient.put(`/SuperAdmin/contacts/${id}`, data);
+
         // Update contact in local state
         const index = this.contacts.findIndex(c => c.id === id);
         if (index !== -1) {
@@ -93,8 +93,8 @@ export const useContactsStore = defineStore('contacts', {
       this.error = null;
 
       try {
-        await axios.delete(`/api/v1/SuperAdmin/contacts/${id}`);
-        
+        await apiClient.delete(`/SuperAdmin/contacts/${id}`);
+
         // Remove contact from local state
         this.contacts = this.contacts.filter(c => c.id !== id);
       } catch (error) {

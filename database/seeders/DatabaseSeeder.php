@@ -31,7 +31,11 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@gmail.com',
             'password' => Hash::make('password123')
         ])->assignRole('super-admin');
-
+        User::create([
+            'name' => 'Admin',
+            'email' => 'admin@roayatalmostaqbal.net',
+            'password' => Hash::make('password123')
+        ])->assignRole('super-admin');
         // Seed encrypted data for testing
         $this->call([EncryptedDataSeeder::class]);
     }

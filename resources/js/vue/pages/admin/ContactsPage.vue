@@ -149,6 +149,7 @@
       :contact="selectedContact"
       :is-loading="isLoading"
       @close="closeViewModal"
+      @reply="handleReply"
       @updated="handleContactUpdated"
     />
 
@@ -241,6 +242,20 @@ const confirmDelete = async () => {
 const cancelDelete = () => {
   isDeleteConfirmOpen.value = false;
   contactToDelete.value = null;
+};
+
+const handleReply = async (replyData) => {
+  if (!selectedContact.value) return;
+
+  isLoading.value = true;
+  try {
+    await contactsStore.updateContact(selectedContact.value.id, replyData);
+    // The email will be sent automatically by the backend
+  } catch (err) {
+    error.value = err.message || 'Failed to send reply';
+  } finally {
+    isLoading.value = false;
+  }
 };
 
 const handleContactUpdated = async () => {

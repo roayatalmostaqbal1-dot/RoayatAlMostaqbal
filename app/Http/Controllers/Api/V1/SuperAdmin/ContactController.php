@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Api\V1\SuperAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\V1\SuperAdmin\ContactResource;
+use App\Mail\ContactReplyMail;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\{Mail,Log};
 
 class ContactController extends Controller
 {
@@ -16,7 +17,7 @@ class ContactController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        
+
         $perPage = $request->query('per_page', 15);
         $status = $request->query('status');
         $search = $request->query('search');
@@ -82,6 +83,11 @@ class ContactController extends Controller
         }
 
         $contact->update($validated);
+
+        // Send reply email if a reply message was provided
+        if (isset($validated['reply_message'])) {
+            Mail::to($contact->email)->send(new ContactReplyMail($contact, $validated['reply_message']));
+        }
 
         return response()->json([
             'data' => new ContactResource($contact),

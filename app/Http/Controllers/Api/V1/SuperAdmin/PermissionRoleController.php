@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Api\V1\SuperAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\{Role,Permission};
+use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\Api\V1\SuperAdmin\PermissionRole\{RoleResource,PermissionResource ,PermissionRoleResource};
 use App\Http\Requests\Api\V1\SuperAdmin\PermissionRole\PermissionRole\{AddpermissionToRoleRequest,RemovepermissionToRoleRequest};

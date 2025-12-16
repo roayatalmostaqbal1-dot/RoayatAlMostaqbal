@@ -140,6 +140,11 @@ class RolesAndPermissionsSeeder extends Seeder
             ['guard_name' => 'api']
         );
 
+        $userRole = Role::firstOrCreate(
+            ['name' => 'user'],
+            ['guard_name' => 'api']
+        );
+
         // Assign all permissions to super-admin
         $superAdminRole->syncPermissions(Permission::all());
 
@@ -157,11 +162,16 @@ class RolesAndPermissionsSeeder extends Seeder
         $viewerPermissions = Permission::where('name', 'like', '%.view')->get();
         $viewerRole->syncPermissions($viewerPermissions);
 
+        // Assign permissions to user (view only)
+        $userPermissions = Permission::where('name', 'like', '%.view')->get();
+        $userRole->syncPermissions($userPermissions);
+
         $this->command->info('✓ Roles and permissions seeded successfully!');
         $this->command->info('  - Super Admin: All permissions');
         $this->command->info('  - Admin: All except delete');
         $this->command->info('  - Editor: View and edit only');
         $this->command->info('  - Viewer: View only');
+        $this->command->info('  - User: View only');
     }
 }
 

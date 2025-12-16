@@ -17,6 +17,7 @@ import EncryptedDataPage from '../pages/admin/EncryptedDataPage.vue';
 import EncryptionDebugPage from '../pages/admin/EncryptionDebugPage.vue';
 import OAuth2ClientsPage from '../pages/admin/OAuth2ClientsPage.vue';
 import ContactsPage from '../pages/admin/ContactsPage.vue';
+import PagesManagementPage from '../pages/admin/PagesManagementPage.vue';
 const routes = [
     {
         path: '/login',
@@ -109,6 +110,12 @@ const routes = [
         meta: { requiresAuth: true },
     },
     {
+        path: '/pages-management',
+        name: 'PagesManagement',
+        component: PagesManagementPage,
+        meta: { requiresAuth: true },
+    },
+    {
         path: '',
         redirect: '/dashboard',
     },
@@ -123,6 +130,18 @@ const router = createRouter({
     routes,
 });
 
+const routePageMap = {
+    '/dashboard': 'dashboard',
+    '/users': 'users',
+    '/roles': 'roles',
+    '/permissions': 'permissions',
+    '/pages-management': 'pages',
+    '/oauth2-clients': 'oauth2-clients',
+    '/contacts': 'contacts',
+    '/settings': 'settings',
+    '/encrypted-data': 'encrypted-data',
+};
+
 // Navigation guards
 router.beforeEach((to, _from, next) => {
     const authStore = useAuthStore();
@@ -135,6 +154,45 @@ router.beforeEach((to, _from, next) => {
     } else if ((to.path === '/login' || to.path === '/register') && isAuthenticated) {
         // Redirect to dashboard if already logged in
         next('/dashboard');
+    } else if (requiresAuth && isAuthenticated) {
+        const pageKey = routePageMap[to.path];
+
+        if (!pageKey) {
+            next();
+            return;
+        }
+
+
+        if (!authStore.userPages || authStore.userPages.length === 0) {
+            next();
+            return;
+        }
+
+        if (!authStore.hasPageAccess(pageKey)) {
+            const accessiblePages = [
+                { path: '/dashboard', key: 'dashboard' },
+                { path: '/users', key: 'users' },
+                { path: '/roles', key: 'roles' },
+                { path: '/permissions', key: 'permissions' },
+                { path: '/pages-management', key: 'pages' },
+                { path: '/oauth2-clients', key: 'oauth2-clients' },
+                { path: '/contacts', key: 'contacts' },
+                { path: '/settings', key: 'settings' },
+                { path: '/encrypted-data', key: 'encrypted-data' },
+            ];
+
+            const firstAccessible = accessiblePages.find(page =>
+                authStore.hasPageAccess(page.key)
+            );
+
+            if (firstAccessible) {
+                next(firstAccessible.path);
+            } else {
+                next();
+            }
+        } else {
+            next();
+        }
     } else {
         next();
     }

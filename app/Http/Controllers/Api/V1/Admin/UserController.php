@@ -7,8 +7,8 @@ use App\Http\Requests\Api\V1\Admin\Users\StoreUserRequest;
 use App\Http\Resources\Api\V1\Admin\Users\InfoAllUsersResponse;
 use App\Http\Resources\Api\V1\User\UserInfoResource;
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {

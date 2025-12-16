@@ -19,13 +19,18 @@ class UserInfoResource extends JsonResource
         $user = User::with(['roles.permissions'])->findOrFail($this->id);
 
         $only_user_data = ['id', 'name', 'email', 'is_active'];
-        $accessToken = $this->additional['token'] ?? null;
 
         // Get all unique permissions from user's roles
         $permissions = $user->roles
             ->flatMap(fn($role) => $role->permissions)
             ->unique('id')
             ->pluck('name')
+            ->values();
+
+        // Get all unique pages from user's roles using ORM
+        $pages = $user->roles
+            ->flatMap(fn($role) => $role->getPageKeys())
+            ->unique()
             ->values();
 
         return [
@@ -36,6 +41,7 @@ class UserInfoResource extends JsonResource
                 'user_info'     => $user->only($only_user_data),
                 'roles'         => $user->roles->pluck('name')->values(),
                 'permissions'   => $permissions,
+                'pages'         => $pages,
             ],
         ];
     }

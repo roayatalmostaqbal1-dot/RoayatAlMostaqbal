@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\SocialAccount;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -96,22 +97,8 @@ class SocialAuthController extends Controller
         if ($user) {
             // Check if user has set their own password
             $needsPasswordSetup = is_null($user->password_set_at);
-
-            Log::info('User exists by email but no social account', [
-                'user_id' => $user->id,
-                'user_email' => $user->email,
-                'password_set_at' => $user->password_set_at,
-                'needs_password_setup' => $needsPasswordSetup,
-            ]);
-
             return [$user, null, $needsPasswordSetup];
         }
-
-        // Create new user with temporary unusable password
-        Log::info('Creating new user from social login', [
-            'email' => $socialUser->getEmail(),
-            'name' => $socialUser->getName() ?? $socialUser->getNickname() ?? 'No Name',
-        ]);
 
         $user = User::create([
             'name' => $socialUser->getName() ?? $socialUser->getNickname() ?? 'No Name',
@@ -121,11 +108,11 @@ class SocialAuthController extends Controller
             'password_set_at' => null, // User hasn't set password yet
         ]);
 
-        Log::info('New user created - needs password setup', [
-            'user_id' => $user->id,
-            'user_email' => $user->email,
-            'needs_password_setup' => true,
-        ]);
+        $userRole = Role::firstOrCreate(
+            ['name' => 'user'],
+            ['guard_name' => 'api']
+        );
+        $user->assignRole($userRole);
 
         return [$user, null, true]; // true = needs password setup
     }

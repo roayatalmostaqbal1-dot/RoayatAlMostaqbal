@@ -6,7 +6,8 @@ use App\Http\Controllers\Api\V1\SuperAdmin\{Dashboard\DashboardController,
     RolePermissionController,
     PermissionController,
     RoleController,
-    PermissionRoleController
+    PermissionRoleController,
+    PageController
  };
 
 use Illuminate\Support\Facades\Route;
@@ -111,6 +112,21 @@ Route::prefix('SuperAdmin')->middleware(['auth:api','role:super-admin'])->group(
         //     'destroy' => 'permission:contacts.delete|role:super-admin',
         // ]
     ]);
+
+    // =====================
+    // Pages Management
+    // =====================
+    Route::apiResource('pages', PageController::class, [
+        'only' => ['index', 'show']
+    ]);
+    Route::get('pages-with-roles/all', [PageController::class, 'getAllWithRoles'])
+        ->name('pages.all-with-roles');
+    Route::post('roles/{role}/pages', [PageController::class, 'assignPagesToRole'])
+        ->name('roles.pages.assign');
+    Route::get('roles/{role}/pages', [PageController::class, 'getPagesForRole'])
+        ->name('roles.pages.get');
+    Route::delete('roles/{role}/pages/{pageKey}', [PageController::class, 'removePageFromRole'])
+        ->name('roles.pages.remove');
 
     // =====================
     // Two-Factor Authentication Routes

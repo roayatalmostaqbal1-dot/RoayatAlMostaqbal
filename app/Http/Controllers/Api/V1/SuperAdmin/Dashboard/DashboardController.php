@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Api\V1\SuperAdmin\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\AuditLog;
 use App\Models\User;
+use App\Models\Role;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
 class DashboardController extends Controller
 {

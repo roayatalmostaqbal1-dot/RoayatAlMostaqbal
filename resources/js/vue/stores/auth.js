@@ -5,18 +5,31 @@ export const useAuthStore = defineStore("auth", {
     // =====================
     // State
     // =====================
-    state: () => ({
-        authUser: null,
-        authToken: localStorage.getItem("token") || null,
-        isLoading: false,
-        authErrors: null,
+    state: () => {
+        let authPages = [];
+        try {
+            const stored = localStorage.getItem('auth');
+            if (stored) {
+                const parsed = JSON.parse(stored);
+                authPages = Array.isArray(parsed.authPages) ? parsed.authPages : [];
+            }
+        } catch (e) {
+            console.error('Error parsing auth from localStorage:', e);
+        }
+        return {
+            authUser: null,
+            authToken: localStorage.getItem("token") || null,
+            isLoading: false,
+            authErrors: null,
 
-        authRoles: [],
-        authPermissions: [],
+            authRoles: [],
+            authPermissions: [],
+            authPages: authPages,
 
-        twoFactorRequired: false,
-        twoFactorUserId: null,
-    }),
+            twoFactorRequired: false,
+            twoFactorUserId: null,
+        };
+    },
 
     // =====================
     // Persistence
@@ -27,7 +40,7 @@ export const useAuthStore = defineStore("auth", {
             {
                 key: 'auth',
                 storage: localStorage,
-                paths: ['authUser', 'authToken', 'authRoles', 'authPermissions'],
+                paths: ['authUser', 'authToken', 'authRoles', 'authPermissions', 'authPages'],
             },
         ],
     },
@@ -46,6 +59,10 @@ export const useAuthStore = defineStore("auth", {
         userName: (state) => state.authUser?.name || "",
         userEmail: (state) => state.authUser?.email || "",
         userRoles: (state) => state.authRoles || [],
+        userPages: (state) => {
+            const pages = state.authPages || [];
+            return Array.isArray(pages) ? pages : [];
+        },
         userAvatar: (state) => state.authUser?.avatar || null,
 
         // =====================
@@ -102,6 +119,11 @@ export const useAuthStore = defineStore("auth", {
          * Check if user is admin
          */
         isAdmin: (state) => state.authRoles.includes('admin') || state.authRoles.includes('super-admin'),
+
+
+        hasPageAccess: (state) => (pageKey) => {
+            return state.authPages.includes(pageKey);
+        },
     },
 
     // =====================
@@ -134,6 +156,7 @@ export const useAuthStore = defineStore("auth", {
                 this.authUser = response.data.data.user_info;
                 this.authRoles = response.data.data.roles || [];
                 this.authPermissions = response.data.data.permissions || [];
+                this.authPages = response.data.data.pages || [];
 
                 localStorage.setItem("token", this.authToken);
 
@@ -215,6 +238,7 @@ export const useAuthStore = defineStore("auth", {
                 this.authUser = response.data.data.user_info || response.data.data;
                 this.authRoles = response.data.data.roles || [];
                 this.authPermissions = response.data.data.permissions || [];
+                this.authPages = response.data.data.pages || [];
 
                 return { success: true, data: this.authUser };
             } catch (err) {
@@ -225,6 +249,7 @@ export const useAuthStore = defineStore("auth", {
                 this.authToken = null;
                 this.authRoles = [];
                 this.authPermissions = [];
+                this.authPages = [];
                 localStorage.removeItem("token");
 
                 return { success: false, error: this.authErrors };
@@ -248,6 +273,7 @@ export const useAuthStore = defineStore("auth", {
             this.authUser = null;
             this.authRoles = [];
             this.authPermissions = [];
+            this.authPages = [];
             this.authErrors = null;
             this.twoFactorRequired = false;
             this.twoFactorUserId = null;

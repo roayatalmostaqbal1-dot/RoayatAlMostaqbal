@@ -135,6 +135,13 @@ const IconContacts = {
     ])
 };
 
+const IconPages = {
+    render: () => h('svg', { fill: 'currentColor', viewBox: '0 0 24 24' }, [
+        h('path', { d: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-8-6z' }),
+        h('path', { d: 'M16 18H8v-2h8v2zm0-4H8v-2h8v2z' })
+    ])
+};
+
 const router = useRouter();
 const route = useRoute();
 const authStore = useAuthStore();
@@ -144,17 +151,29 @@ const isMobile = ref(false);
 // Logo URL - using public asset
 const logoUrl = '/RoayatAlMostaqbal.svg';
 
-const menuItems = [
-    { path: '/dashboard', label: 'Dashboard', icon: IconDashboard },
-    { path: '/users', label: 'Users', icon: IconUsers },
-    { path: '/roles', label: 'Roles', icon: IconRoles },
-    { path: '/permissions', label: 'Permissions', icon: IconPermissions },
-    { path: '/oauth2-clients', label: 'OAuth2 Clients', icon: IconOAuth2 },
-    { path: '/contacts', label: 'Contacts', icon: IconContacts },
-    { path: '/settings', label: 'Settings', icon: IconSettings },
-    { path: '/encrypted-data', label: 'Encrypted Data', icon: IconEncryption },
-    { path: '/encryption-debug', label: 'Encryption Debug', icon: IconDebug },
+const allMenuItems = [
+    { path: '/dashboard', label: 'Dashboard', icon: IconDashboard, pageKey: 'dashboard' },
+    { path: '/users', label: 'Users', icon: IconUsers, pageKey: 'users' },
+    { path: '/roles', label: 'Roles', icon: IconRoles, pageKey: 'roles' },
+    { path: '/permissions', label: 'Permissions', icon: IconPermissions, pageKey: 'permissions' },
+    { path: '/pages-management', label: 'Pages', icon: IconPages, pageKey: 'pages' },
+    { path: '/oauth2-clients', label: 'OAuth2 Clients', icon: IconOAuth2, pageKey: 'oauth2-clients' },
+    { path: '/contacts', label: 'Contacts', icon: IconContacts, pageKey: 'contacts' },
+    { path: '/settings', label: 'Settings', icon: IconSettings, pageKey: 'settings' },
+    { path: '/encrypted-data', label: 'Encrypted Data', icon: IconEncryption, pageKey: 'encrypted-data' },
+    { path: '/encryption-debug', label: 'Encryption Debug', icon: IconDebug, pageKey: null }, // Debug page - always show
 ];
+
+const menuItems = computed(() => {
+    const userPages = authStore.userPages;
+
+    return allMenuItems.filter(item => {
+        if (item.pageKey === null) {
+            return true;
+        }
+        return userPages.includes(item.pageKey);
+    });
+});
 
 const userInitial = computed(() => {
     return authStore.userName.charAt(0).toUpperCase();

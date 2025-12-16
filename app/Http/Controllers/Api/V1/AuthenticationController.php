@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Auth\RegisterRequest;
 use App\Http\Resources\Api\V1\User\UserInfoResource;
-use App\Models\User;
+use App\Models\{User,Role};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth, Hash, Log};
 
@@ -28,7 +28,13 @@ class AuthenticationController extends Controller
             // Assign default role if needed
             // $user->assignRole('viewer');
             $user->save();
-
+            if(!Role::where('name','user')->exists()){
+                Role::create([
+                    'name' => 'user',
+                    'guard_name' => 'api',
+                ]);
+            }
+            $user->assignRole('user');
             // Create Passport token for the new user
             $token = $user->createToken('authToken')->accessToken;
 

@@ -388,29 +388,44 @@ export const useAuthStore = defineStore("auth", {
             window.addEventListener("message", this.boundHandleMessage);
         },
 
+        extractUserData(userData) {
+            if (!userData) return { userInfo: null, roles: [], permissions: [], pages: [] };
+            if (userData.user_info) {
+                return {
+                    userInfo: userData.user_info,
+                    roles: userData.roles || [],
+                    permissions: userData.permissions || [],
+                    pages: userData.pages || [],
+                };
+            }
+
+            return {
+                userInfo: userData,
+                roles: [],
+                permissions: [],
+                pages: [],
+            };
+        },
 
         handleMessage(event) {
-            console.log('=== Auth Store handleMessage ===');
-            console.log('Event origin:', event.origin);
-            console.log('Window origin:', window.location.origin);
-            console.log('Event data:', event.data);
-
             if (event.origin !== window.location.origin) return;
 
-            const { type, token, user, user_id, roles, permissions, error } = event.data || {};
+            const { type, token, user, user_id, error } = event.data || {};
+
+            const { userInfo, roles, permissions, pages } = this.extractUserData(user);
 
             if (type === "SOCIAL_AUTH_SUCCESS") {
-                console.log('Handling SOCIAL_AUTH_SUCCESS');
                 this.authToken = token;
-                this.authUser = user;
-                this.authRoles = roles || [];
-                this.authPermissions = permissions || [];
+                this.authUser = userInfo;
+                this.authRoles = roles;
+                this.authPermissions = permissions;
+                this.authPages = pages;
                 localStorage.setItem("token", token);
 
                 window.removeEventListener("message", this.boundHandleMessage);
 
                 window.dispatchEvent(
-                    new CustomEvent("social-auth-success", { detail: { token, user, roles, permissions } })
+                    new CustomEvent("social-auth-success", { detail: { token, user: userInfo, roles, permissions, pages } })
                 );
             }
 
@@ -438,16 +453,18 @@ export const useAuthStore = defineStore("auth", {
 
             else if (type === "SOCIAL_AUTH_2FA_REQUIRED") {
                 console.log('Handling SOCIAL_AUTH_2FA_REQUIRED');
+                const effectiveUserId = user_id || userInfo?.id;
                 this.twoFactorRequired = true;
-                this.twoFactorUserId = user_id;
-                this.authUser = user;
-                this.authRoles = roles || [];
-                this.authPermissions = permissions || [];
+                this.twoFactorUserId = effectiveUserId;
+                this.authUser = userInfo;
+                this.authRoles = roles;
+                this.authPermissions = permissions;
+                this.authPages = pages;
 
                 window.removeEventListener("message", this.boundHandleMessage);
 
                 window.dispatchEvent(
-                    new CustomEvent("social-auth-2fa-required", { detail: { user_id, user, roles, permissions } })
+                    new CustomEvent("social-auth-2fa-required", { detail: { user_id: effectiveUserId, user: userInfo, roles, permissions, pages } })
                 );
             }
 
@@ -458,7 +475,6 @@ export const useAuthStore = defineStore("auth", {
 
                 window.removeEventListener("message", this.boundHandleMessage);
 
-                // Dispatch event so SocialLoginButton can redirect to password setup
                 window.dispatchEvent(
                     new CustomEvent("social-auth-password-setup-required", { detail: { user, token } })
                 );

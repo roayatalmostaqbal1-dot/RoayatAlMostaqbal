@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Api\V1\User\UserInfoResource;
 use App\Models\Role;
 use App\Models\SocialAccount;
 use App\Models\User;
@@ -77,6 +78,7 @@ class SocialAuthController extends Controller
 
         if ($existingAccount) {
             $user = $existingAccount->user;
+            $user->load('roles'); // Load roles for UserInfoResource
 
             // Check if user has set their own password
             $needsPasswordSetup = is_null($user->password_set_at);
@@ -95,6 +97,7 @@ class SocialAuthController extends Controller
         $user = User::where('email', $socialUser->getEmail())->first();
 
         if ($user) {
+            $user->load('roles'); // Load roles for UserInfoResource
             // Check if user has set their own password
             $needsPasswordSetup = is_null($user->password_set_at);
             return [$user, null, $needsPasswordSetup];
@@ -108,11 +111,22 @@ class SocialAuthController extends Controller
             'password_set_at' => null, // User hasn't set password yet
         ]);
 
+        // Assign 'user' role to new social auth users
         $userRole = Role::firstOrCreate(
             ['name' => 'user'],
             ['guard_name' => 'api']
         );
         $user->assignRole($userRole);
+
+        // Reload user with roles relationship for proper data formatting
+        $user->load('roles');
+
+        Log::info('New user created via social auth', [
+            'user_id' => $user->id,
+            'user_email' => $user->email,
+            'assigned_role' => 'user',
+            'roles' => $user->roles->pluck('name')->toArray(),
+        ]);
 
         return [$user, null, true]; // true = needs password setup
     }
@@ -136,17 +150,15 @@ class SocialAuthController extends Controller
     {
         $callbackUrl = config('app.url').'/admin/social-callback';
 
-        $userData = [
-            'id' => $user->id,
-            'name' => $user->name,
-            'email' => $user->email,
-            'two_factor_enabled' => $user->two_factor_enabled,
-        ];
+        $userResource = new UserInfoResource($user);
+        $resourceData = $userResource->toArray(request());
+        $userData = $resourceData['data'] ?? [];
 
         Log::info('=== buildRedirectUrl ===', [
             'user_id' => $user->id,
             'needs_password_setup' => $needsPasswordSetup,
             'two_factor_enabled' => $user->two_factor_enabled,
+            'user_data' => $userData,
         ]);
 
         // 2FA Redirect

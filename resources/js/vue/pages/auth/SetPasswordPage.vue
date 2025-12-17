@@ -252,6 +252,22 @@ const handleSetPassword = async () => {
     }
 };
 
+
+const extractUserInfo = (data) => {
+    if (data.user_info) {
+        return {
+            id: data.user_info.id,
+            name: data.user_info.name,
+            email: data.user_info.email,
+        };
+    }
+    return {
+        id: data.id,
+        name: data.name,
+        email: data.email,
+    };
+};
+
 onMounted(() => {
     // Get user data and token from route query or localStorage
     const queryUser = route.query.user;
@@ -259,7 +275,8 @@ onMounted(() => {
 
     if (queryUser && queryToken) {
         try {
-            userData.value = JSON.parse(decodeURIComponent(queryUser));
+            const parsedData = JSON.parse(decodeURIComponent(queryUser));
+            userData.value = extractUserInfo(parsedData);
             token.value = queryToken;
 
             // Store in localStorage for page refresh
@@ -276,7 +293,8 @@ onMounted(() => {
 
         if (storedUser && storedToken) {
             try {
-                userData.value = JSON.parse(decodeURIComponent(storedUser));
+                const parsedData = JSON.parse(decodeURIComponent(storedUser));
+                userData.value = extractUserInfo(parsedData);
                 token.value = storedToken;
             } catch (e) {
                 console.error('Failed to parse stored user data:', e);

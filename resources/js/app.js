@@ -1,3 +1,17 @@
+import { library, dom } from '@fortawesome/fontawesome-svg-core';
+import {
+    faShieldAlt, faBell, faDoorOpen, faHome, faShieldVirus, faCreditCard, faServer, faCheck, faEye, faBullseye, faTrophy,
+    faBuilding, faVideo, faKey, faBrain, faDigitalTachograph, faRobot, faDesktop, faUserCheck, faSearch, faChartLine, faUsers, faMapMarkerAlt
+} from '@fortawesome/free-solid-svg-icons';
+import { faFacebook, faTwitter, faInstagram, faLinkedin } from '@fortawesome/free-brands-svg-icons';
+
+library.add(
+    faShieldAlt, faBell, faDoorOpen, faHome, faShieldVirus, faCreditCard, faServer, faCheck, faEye, faBullseye, faTrophy,
+    faBuilding, faVideo, faKey, faBrain, faDigitalTachograph, faRobot, faDesktop, faUserCheck, faSearch, faChartLine, faUsers, faMapMarkerAlt,
+    faFacebook, faTwitter, faInstagram, faLinkedin
+);
+dom.watch();
+
 // Main JavaScript file for Roayat Al Mostaqbal website
 document.addEventListener('DOMContentLoaded', function () {
     const header = document.querySelector('header');

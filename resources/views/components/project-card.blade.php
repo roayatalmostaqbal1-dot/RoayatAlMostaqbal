@@ -3,7 +3,7 @@
 
 <div class="bg-[#162936] rounded-[20px] overflow-hidden hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)] transition-all duration-300">
     <div class="overflow-hidden h-48">
-        <img src="{{ $image }}" alt="{{ $title }}" loading="lazy" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+        <img src="{{ $image }}" alt="{{ $title }}" loading="lazy" width="400" height="300" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
     </div>
     <div class="p-6">
         <h3 class="text-xl font-bold text-white mb-2">{{ $title }}</h3>

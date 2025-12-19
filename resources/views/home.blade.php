@@ -71,7 +71,7 @@
                                 <i class="fas fa-shield-virus"></i>
                             </div>
                             <div>
-                                <h4 class="text-lg font-bold text-white mb-2">{{ __('messages.tech.feature.family.title') }}</h4>
+                                <h3 class="text-lg font-bold text-white mb-2">{{ __('messages.tech.feature.family.title') }}</h3>
                                 <p class="text-gray-300">{{ __('messages.tech.feature.family.description') }}</p>
                             </div>
                         </div>
@@ -81,7 +81,7 @@
                                 <i class="fas fa-credit-card"></i>
                             </div>
                             <div>
-                                <h4 class="text-lg font-bold text-white mb-2">{{ __('messages.tech.feature.business.title') }}</h4>
+                                <h3 class="text-lg font-bold text-white mb-2">{{ __('messages.tech.feature.business.title') }}</h3>
                                 <p class="text-gray-300">{{ __('messages.tech.feature.business.description') }}</p>
                             </div>
                         </div>
@@ -91,7 +91,7 @@
                                 <i class="fas fa-server"></i>
                             </div>
                             <div>
-                                <h4 class="text-lg font-bold text-white mb-2">{{ __('messages.tech.feature.servers.title') }}</h4>
+                                <h3 class="text-lg font-bold text-white mb-2">{{ __('messages.tech.feature.servers.title') }}</h3>
                                 <p class="text-gray-300">{{ __('messages.tech.feature.servers.description') }}</p>
                             </div>
                         </div>
@@ -117,22 +117,22 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
                 <x-project-card
-                    image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop"
+                    image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=300&h=200&fit=crop&auto=format"
                     :title="__('messages.projects.project1.title')"
                 />
 
                 <x-project-card
-                    image="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop"
+                    image="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300&h=200&fit=crop&auto=format"
                     :title="__('messages.projects.project2.title')"
                 />
 
                 <x-project-card
-                    image="https://images.unsplash.com/photo-1551434678-e076c223a692?w=400&h=300&fit=crop"
+                    image="https://images.unsplash.com/photo-1551434678-e076c223a692?w=300&h=200&fit=crop&auto=format"
                     :title="__('messages.projects.project3.title')"
                 />
 
                 <x-project-card
-                    image="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=400&h=300&fit=crop"
+                    image="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=300&h=200&fit=crop&auto=format"
                     :title="__('messages.projects.project4.title')"
                 />
             </div>

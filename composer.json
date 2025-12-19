@@ -21,7 +21,8 @@
         "pragmarx/google2fa-laravel": "^2.3",
         "predis/predis": "^3.2",
         "socialiteproviders/microsoft": "^4.7",
-        "spatie/laravel-permission": "^6.21"
+        "spatie/laravel-permission": "^6.21",
+        "spatie/laravel-sitemap": "^7.3"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

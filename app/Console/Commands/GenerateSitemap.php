@@ -13,7 +13,7 @@ class GenerateSitemap extends Command
 
     public function handle()
     {
-        $baseUrl = config('app.url');
+        $baseUrl = config('app.domin'); // تأكد من APP_URL=https://roayatalmostaqbal.net
 
         $pages = [
             ''          => 'home',
@@ -26,7 +26,6 @@ class GenerateSitemap extends Command
         $sitemap = Sitemap::create();
 
         foreach ($pages as $path => $name) {
-
             $arUrl = $baseUrl . '/ar' . ($path ? "/$path" : '');
             $enUrl = $baseUrl . '/en' . ($path ? "/$path" : '');
 

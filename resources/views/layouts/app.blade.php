@@ -17,10 +17,14 @@
     <link rel="canonical" href="{{ url()->current() }}">
 
     <!-- Language Alternate Links -->
-    @if(app()->getLocale() === 'ar')
-        <link rel="alternate" hreflang="en" href="{{ route(Route::current()->getName(), [...Route::current()->parameters(), 'locale' => 'en']) }}" />
-    @else
-        <link rel="alternate" hreflang="ar" href="{{ route(Route::current()->getName(), [...Route::current()->parameters(), 'locale' => 'ar']) }}" />
+    @php
+        $routeName = Route::currentRouteName();
+        $routeParams = Route::current() ? Route::current()->parameters() : [];
+    @endphp
+    @if(app()->getLocale() === 'ar' && $routeName)
+        <link rel="alternate" hreflang="en" href="{{ route($routeName, [...$routeParams, 'locale' => 'en']) }}" />
+    @elseif($routeName)
+        <link rel="alternate" hreflang="ar" href="{{ route($routeName, [...$routeParams, 'locale' => 'ar']) }}" />
     @endif
     <link rel="alternate" hreflang="x-default" href="{{ url()->current() }}" />
 

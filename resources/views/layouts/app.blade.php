@@ -71,30 +71,7 @@
     @stack('styles')
 
     <!-- Structured Data (JSON-LD) -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "رؤية المستقبل - Roayat Al Mostaqbal",
-        "alternateName": "Roayat Al Mostaqbal",
-        "url": "{{ url('/') }}",
-        "logo": {
-            "@type": "ImageObject",
-            "url": "{{ asset('RoayatAlMostaqbal.svg') }}",
-            "width": 256,
-            "height": 256
-        },
-        "description": "@yield('description', __('messages.header.subtitle'))",
-        "contactPoint": {
-            "@type": "ContactPoint",
-            "contactType": "Customer Support",
-            "availableLanguage": ["ar", "en"]
-        },
-        "sameAs": [
-            @yield('social_media', '')
-        ]
-    }
-    </script>
+
 </head>
 <body>
     <!-- Header -->

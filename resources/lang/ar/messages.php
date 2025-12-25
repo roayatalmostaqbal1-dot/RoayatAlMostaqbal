@@ -272,7 +272,7 @@ return [
     'contact.info.email.title' => 'البريد الإلكتروني',
     'contact.info.email.description' =>  config('mail.from.address'),
     'contact.info.working_hours.title' => 'ساعات العمل',
-    'contact.info.working_hours.description' => 'الأحد - الخميس: 8:00 ص - 6:00 م<br>الجمعة - السبت: مغلق',
+    'contact.info.working_hours.description' => 'الأحد - الخميس: 8:00 ص - 6:00 م الجمعة - السبت: مغلق',
 
     // Contact Form
     'contact.form.title' => 'أرسلوا لنا رسالة',

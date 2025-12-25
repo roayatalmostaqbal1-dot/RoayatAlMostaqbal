@@ -263,7 +263,7 @@ return [
     'about.features.maintenance.title' => 'Regular Maintenance',
     'about.features.maintenance.description' => 'Regular maintenance to ensure continuous operation',
 
-    // Contact CTA
+    // Contact CTA  
     'about.contact_cta.title' => '? Want to Know More About Our Services',
     'about.contact_cta.description' => 'Contact us today for a free consultation',
     'about.contact_cta.button' => 'Contact Us',
@@ -281,7 +281,7 @@ return [
     'contact.info.email.title' => 'Email',
     'contact.info.email.description' =>  config('mail.from.address'),
     'contact.info.working_hours.title' => 'Working Hours',
-    'contact.info.working_hours.description' => 'Sunday - Thursday: 8:00 AM - 6:00 PM<br>Friday - Saturday: Closed',
+    'contact.info.working_hours.description' => 'Sunday - Thursday: 8:00 AM - 6:00 PM Friday - Saturday: Closed',
 
     // Contact Form
     'contact.form.title' => 'Send Us a Message',

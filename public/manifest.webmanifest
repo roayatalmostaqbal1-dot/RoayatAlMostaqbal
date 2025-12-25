@@ -1,0 +1,38 @@
+{
+  "name": "رؤية المستقبل - Roayat Al Mostaqbal",
+  "short_name": "رؤية المستقبل",
+  "description": "منصة استشارات وحلول برمجية متكاملة | Integrated consulting and software solutions platform",
+  "scope": "/",
+  "start_url": "/ar",
+  "display": "standalone",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/RoayatAlMostaqbal.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "32x32",
+      "type": "image/x-icon"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/RoayatAlMostaqbal.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ],
+  "categories": [
+    "business",
+    "productivity"
+  ],
+  "dir": "auto",
+  "lang": "ar-SA",
+  "prefer_related_applications": false
+}

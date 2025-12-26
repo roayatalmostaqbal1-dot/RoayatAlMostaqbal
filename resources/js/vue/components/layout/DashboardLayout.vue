@@ -57,7 +57,7 @@
 
 <script setup>
 import { computed, ref, onMounted } from 'vue';
-import { useAuthStore } from '../../stores/auth';
+import { useAuthStore } from '../../stores/Auth/auth';
 import Sidebar from './Sidebar.vue';
 
 const props = defineProps({

@@ -15,7 +15,7 @@
             class="w-full px-4 py-3 rounded-lg border-2 border-[#3b5265] bg-[#051824] text-white placeholder-gray-500 focus:outline-none focus:border-[#27e9b5] text-center text-2xl tracking-widest"
           />
         </div>
-        
+
         <div v-if="error" class="mb-4 p-3 rounded-lg bg-red-500 bg-opacity-10 border border-red-500 text-red-400 text-sm">
           {{ error }}
         </div>
@@ -87,7 +87,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useAuthStore } from '../../stores/auth';
+import { useAuthStore } from '../../stores/Auth/auth';
 import { useToastStore } from '../../stores/toastStore';
 
 const props = defineProps({

@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { useAuthStore } from '../stores/auth';
+import { useAuthStore } from '../stores/Auth/auth';
 
 // Pages
 import LoginPage from '../pages/auth/LoginPage.vue';
@@ -11,13 +11,13 @@ import ResetPasswordPage from '../pages/auth/ResetPasswordPage.vue';
 import DashboardPage from '../pages/admin/DashboardPage.vue';
 import UsersPage from '../pages/admin/UsersPage.vue';
 import SettingsPage from '../pages/AllUser/SettingsPage.vue';
-import RolesPage from '../pages/admin/RolesPage.vue';
-import PermissionsPage from '../pages/admin/PermissionsPage.vue';
-import EncryptedDataPage from '../pages/admin/EncryptedDataPage.vue';
-import EncryptionDebugPage from '../pages/admin/EncryptionDebugPage.vue';
-import OAuth2ClientsPage from '../pages/admin/OAuth2ClientsPage.vue';
+import RolesPage from '../pages/SuberAdmin/RolesPage.vue';
+import PermissionsPage from '../pages/SuberAdmin/PermissionsPage.vue';
+import EncryptedDataPage from '../pages/AllUser/EncryptedDataPage.vue';
+import EncryptionDebugPage from '../pages/AllUser/EncryptionDebugPage.vue';
+import OAuth2ClientsPage from '../pages/SuberAdmin/OAuth2ClientsPage.vue';
 import ContactsPage from '../pages/admin/ContactsPage.vue';
-import PagesManagementPage from '../pages/admin/PagesManagementPage.vue';
+import PagesManagementPage from '../pages/SuberAdmin/PagesManagementPage.vue';
 const routes = [
     {
         path: '/login',

@@ -1,12 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LanguageController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\AboutController;
-use App\Http\Controllers\ServicesController;
-use App\Http\Controllers\ProjectsController;
-use App\Http\Controllers\ContactController;
+use App\Http\Controllers\Web\{
+    LanguageController,
+    HomeController,
+    AboutController,
+    ServicesController,
+    ProjectsController,
+    ContactController,
+};
 use Telegram\Bot\Laravel\Facades\Telegram;
 
 // Language switching

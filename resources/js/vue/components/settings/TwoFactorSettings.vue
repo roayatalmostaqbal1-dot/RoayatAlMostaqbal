@@ -151,7 +151,7 @@
 import { ref, onMounted } from 'vue';
 import Button from '../ui/Button.vue';
 import Input from '../ui/Input.vue';
-import { useTwoFactorStore } from '../../stores/twoFactorStore';
+import { useTwoFactorStore } from '../../stores/AllUser/twoFactorStore';
 
 const twoFactorStore = useTwoFactorStore();
 

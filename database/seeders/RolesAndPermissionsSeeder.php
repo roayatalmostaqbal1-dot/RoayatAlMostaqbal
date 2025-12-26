@@ -103,6 +103,24 @@ class RolesAndPermissionsSeeder extends Seeder
                 ['name' => 'encrypted_data.create', 'description' => 'Create encrypted data'],
                 ['name' => 'encrypted_data.edit', 'description' => 'Edit encrypted data'],
             ],
+            'pages' => [
+                ['name' => 'pages.view', 'description' => 'View pages list and details'],
+                ['name' => 'pages.create', 'description' => 'Create new pages'],
+                ['name' => 'pages.edit', 'description' => 'Edit pages'],
+                ['name' => 'pages.delete', 'description' => 'Delete pages'],
+            ],
+            "oauth2_clients"=>[
+                ['name' => 'oauth2_clients.view', 'description' => 'View OAuth2 clients list and details'],
+                ['name' => 'oauth2_clients.create', 'description' => 'Create new OAuth2 clients'],
+                ['name' => 'oauth2_clients.edit', 'description' => 'Edit OAuth2 clients'],
+                ['name' => 'oauth2_clients.delete', 'description' => 'Delete OAuth2 clients'],
+            ],
+            "contacts"=>[
+                ['name' => 'contacts.view', 'description' => 'View contacts list and details'],
+                ['name' => 'contacts.create', 'description' => 'Create new contacts'],
+                ['name' => 'contacts.edit', 'description' => 'Edit contacts'],
+                ['name' => 'contacts.delete', 'description' => 'Delete contacts'],
+            ],
         ];
 
         // Create permissions

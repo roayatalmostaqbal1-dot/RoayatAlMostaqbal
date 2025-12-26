@@ -157,7 +157,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import Button from '../ui/Button.vue';
-import { useAuthStore } from '../../stores/auth';
+import { useAuthStore } from '../../stores/Auth/auth';
 import { useToastStore } from '../../stores/toastStore';
 
 const props = defineProps({

@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\Api\V1\AuthenticationController;
-use App\Http\Controllers\Api\V1\TwoFactorAuthController;
+use App\Http\Controllers\Api\V1\AllUser\EncryptedDataController;
+use App\Http\Controllers\Api\V1\AllUser\TwoFactorAuthController;
+use App\Http\Controllers\Api\V1\Auth\AuthenticationController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:api')->group(function () {
@@ -17,4 +18,15 @@ Route::middleware('auth:api')->group(function () {
             ->name('two-factor.recovery-codes');
     });
     Route::post('change-password', [AuthenticationController::class, 'changePassword'])->name('change-password');
+
+    Route::post('/encrypted-data', [EncryptedDataController::class, 'store'])
+        ->middleware('permission:encrypted_data.create');
+    Route::get('/encrypted-data', [EncryptedDataController::class, 'show'])
+        ->middleware('permission:encrypted_data.view');
+    Route::put('/encrypted-data/{id}', [EncryptedDataController::class, 'update'])
+        ->middleware('permission:encrypted_data.edit');
+    Route::get('/admin/encrypted-data/{userId}', [EncryptedDataController::class, 'adminShow'])
+        ->middleware('permission:encrypted_data.view');
+
+    
 });

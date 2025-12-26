@@ -68,7 +68,7 @@
 <script setup>
 import { computed, ref, onMounted, onUnmounted, h } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { useAuthStore } from '../../stores/auth';
+import { useAuthStore } from '../../stores/Auth/auth';
 import Button from '../ui/Button.vue';
 
 // Icons using render functions (no runtime compilation needed)

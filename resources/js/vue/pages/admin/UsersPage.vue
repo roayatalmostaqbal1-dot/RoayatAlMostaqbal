@@ -148,8 +148,8 @@ import Card from '../../components/ui/Card.vue';
 import Button from '../../components/ui/Button.vue';
 import Pagination from '../../components/ui/Pagination.vue';
 import CrudModal from '../../components/crud/CrudModal.vue';
-import { useUsersStore } from '../../stores/usersStore';
-import { useRolesStore } from '../../stores/rolesStore';
+import { useUsersStore } from '../../stores/Admin/usersStore';
+import { useRolesStore } from '../../stores/SuberAdmin/rolesStore';
 
 // Initialize stores
 const usersStore = useUsersStore();

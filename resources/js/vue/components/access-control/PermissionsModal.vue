@@ -68,7 +68,7 @@
 
 <script setup>
 import { ref, watch, computed } from 'vue';
-import { usePermissionsStore } from '../../stores/permissionsStore';
+import { usePermissionsStore } from '../../stores/SuberAdmin/permissionsStore';
 
 const props = defineProps({
   isOpen: Boolean,

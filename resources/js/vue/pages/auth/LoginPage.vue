@@ -88,7 +88,7 @@
 <script setup>
 import { reactive, ref, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAuthStore } from '../../stores/auth';
+import { useAuthStore } from '../../stores/Auth/auth';
 import { useToastStore } from '../../stores/toastStore';
 import Card from '../../components/ui/Card.vue';
 import Input from '../../components/ui/Input.vue';

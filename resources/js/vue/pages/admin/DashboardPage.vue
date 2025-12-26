@@ -103,7 +103,7 @@ import DashboardLayout from '../../components/layout/DashboardLayout.vue';
 import Card from '../../components/ui/Card.vue';
 import Button from '../../components/ui/Button.vue';
 import StatCard from '../../components/dashboard/StatCard.vue';
-import { useDashboardStore } from '../../stores/dashboardStore';
+import { useDashboardStore } from '../../stores/Admin/dashboardStore';
 import BaseChart from "../../components/charts/BaseChart.vue";
 
 const dashboardStore = useDashboardStore();
@@ -117,7 +117,7 @@ const activityGroupedByDate = computed(() => {
     console.log(grouped[date]);
   });
   const sorted = Object.keys(grouped)
-    .sort((a, b) => new Date(a) - new Date(b)) // الترتيب حسب التاريخ
+    .sort((a, b) => new Date(a) - new Date(b))
     .reduce((acc, key) => {
       acc[key] = grouped[key];
       return acc;

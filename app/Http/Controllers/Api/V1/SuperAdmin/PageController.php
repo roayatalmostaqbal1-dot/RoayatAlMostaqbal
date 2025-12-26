@@ -7,14 +7,13 @@ use App\Models\Role;
 use App\Models\RolePage;
 use App\Enums\Api\PageEnum;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 
 class PageController extends Controller
 {
     /**
      * Display a listing of all pages.
      */
-    public function index(): JsonResponse
+    public function index()
     {
         $pages = PageEnum::toArray();
 
@@ -27,7 +26,7 @@ class PageController extends Controller
     /**
      * Get all pages with their role assignments.
      */
-    public function getAllWithRoles(): JsonResponse
+    public function getAllWithRoles()
     {
         $pages = PageEnum::toArray();
         $roles = Role::all();
@@ -61,7 +60,7 @@ class PageController extends Controller
     /**
      * Assign pages to a role.
      */
-    public function assignPagesToRole(Request $request, Role $role): JsonResponse
+    public function assignPagesToRole(Request $request, Role $role)
     {
         $validated = $request->validate([
             'page_keys' => 'required|array',
@@ -84,7 +83,7 @@ class PageController extends Controller
     /**
      * Get pages assigned to a specific role.
      */
-    public function getPagesForRole(Role $role): JsonResponse
+    public function getPagesForRole(Role $role)
     {
         $pageKeys = $role->getPageKeys();
         $pages = \array_filter(PageEnum::toArray(), fn($page) => \in_array($page['key'], $pageKeys));
@@ -99,7 +98,7 @@ class PageController extends Controller
     /**
      * Remove a page from a role using ORM.
      */
-    public function removePageFromRole(Role $role, string $pageKey): JsonResponse
+    public function removePageFromRole(Role $role, string $pageKey)
     {
         // Validate page key
         if (!\in_array($pageKey, PageEnum::keys())) {

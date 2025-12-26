@@ -20,7 +20,7 @@
 <script setup>
 import { computed, ref, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAuthStore } from '../../stores/auth';
+import { useAuthStore } from '../../stores/Auth/auth';
 import { useToastStore } from '../../stores/toastStore';
 import SocialIcons from '../icons/SocialIcons.vue';
 

@@ -132,7 +132,7 @@
 <script setup>
 import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAuthStore } from '../../stores/auth';
+import { useAuthStore } from '../../stores/Auth/auth';
 import Card from '../../components/ui/Card.vue';
 import Input from '../../components/ui/Input.vue';
 import Button from '../../components/ui/Button.vue';
@@ -214,7 +214,7 @@ const validateForm = () => {
 
 const handleRegister = async () => {
   successMessage.value = '';
-  
+
   if (!validateForm()) return;
 
   const result = await authStore.register({

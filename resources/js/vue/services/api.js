@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useAuthStore } from '../stores/auth';
+import { useAuthStore } from '../stores/Auth/auth';
 import { useToastStore } from '../stores/toastStore';
 
 const API_BASE_URL = '/api/v1';

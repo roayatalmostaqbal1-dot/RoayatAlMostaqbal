@@ -4,19 +4,17 @@ namespace Database\Seeders;
 
 use App\Models\EncryptedUserData;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class EncryptedDataSeeder extends Seeder
 {
-    use WithoutModelEvents;
 
     /**
      * Seed the application's database with encrypted data.
-     * 
+     *
      * Note: This seeder creates encrypted data using pre-encrypted values.
      * In production, you would encrypt data using the frontend encryption utilities.
-     * 
+     *
      * For testing purposes, we're using sample encrypted data that was generated
      * using the JavaScript encryption utilities with password "test123".
      */
@@ -33,7 +31,7 @@ class EncryptedDataSeeder extends Seeder
         // Sample encrypted data records
         // These were generated using the JavaScript encryption utilities
         // Password used: "test123"
-        
+
         $encryptedDataRecords = [
             [
                 'user_id' => $user->id,

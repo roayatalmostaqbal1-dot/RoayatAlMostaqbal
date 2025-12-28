@@ -45,7 +45,9 @@
         <table class="w-full">
           <thead>
             <tr class="border-b border-[#3b5265]">
+              <th class="text-left py-3 px-4 text-gray-400 font-semibold text-sm">id</th>
               <th class="text-left py-3 px-4 text-gray-400 font-semibold text-sm">Name</th>
+
               <th class="text-left py-3 px-4 text-gray-400 font-semibold text-sm">Email</th>
               <th class="text-left py-3 px-4 text-gray-400 font-semibold text-sm">Role</th>
               <th class="text-left py-3 px-4 text-gray-400 font-semibold text-sm">Status</th>
@@ -58,6 +60,7 @@
               :key="user.id"
               class="border-b border-[#3b5265] hover:bg-[#1f3a4a] transition-colors"
             >
+              <td class="py-3 px-4 text-white">{{ user.id }}</td>
               <td class="py-3 px-4 text-white">{{ user.name }}</td>
               <td class="py-3 px-4 text-gray-400">{{ user.email }}</td>
               <td class="py-3 px-4">

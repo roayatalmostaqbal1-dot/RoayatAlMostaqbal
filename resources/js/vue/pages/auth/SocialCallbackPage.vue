@@ -134,7 +134,7 @@ onMounted(async () => {
             window.opener?.postMessage(
                 {
                     type: "SOCIAL_AUTH_2FA_REQUIRED",
-                    user_id: parseInt(userId),
+                    user_id: userId, // UUID7 string - don't parse as integer
                     user
                 },
                 window.location.origin

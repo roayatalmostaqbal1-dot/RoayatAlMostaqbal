@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('role_page', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('role_id');
-            $table->string('page_key'); 
+            $table->uuid('id')->primary();
+            $table->unsignedBigInteger('role_id'); // Spatie roles use bigIncrements
+            $table->string('page_key');
             $table->timestamps();
 
-            // Foreign key for role
+            // Foreign key for role (Spatie roles table uses bigIncrements)
             $table->foreign('role_id')
                 ->references('id')
                 ->on('roles')

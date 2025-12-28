@@ -43,12 +43,12 @@ class Role extends SpatieRole
         // Delete existing assignments
         $this->pages()->delete();
 
-        // Create new assignments
-        $pages = array_map(fn($pageKey) => new RolePage([
-            'page_key' => $pageKey,
-        ]), $pageKeys);
-
-        $this->pages()->saveMany($pages);
+        // Create new assignments one by one to trigger UUID generation
+        foreach ($pageKeys as $pageKey) {
+            $this->pages()->create([
+                'page_key' => $pageKey,
+            ]);
+        }
     }
 
     /**

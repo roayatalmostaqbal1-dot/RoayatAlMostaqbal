@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 use Laravel\Passport\Contracts\OAuthenticatable;
 use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
@@ -20,6 +21,16 @@ class User extends Authenticatable implements OAuthenticatable
      * @var list<string>
      */
     public $guard_name = 'api';
+    protected $keyType = 'string';
+    public $incrementing = false;
+    protected static function booted()
+    {
+        static::creating(function ($user) {
+            if (empty($user->id)) {
+                $user->id = (string) Str::uuid7();
+            }
+        });
+    }
     protected $fillable = [
         'name',
         'email',

@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('audit_logs', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('user_id')->nullable()->constrained()->onDelete('set null');
             $table->string('model_type'); // e.g., 'Role', 'Permission'
-            $table->bigInteger('model_id');
+            $table->string('model_id'); // String to support both numeric IDs and UUIDs
             $table->string('action'); // 'created', 'updated', 'deleted'
             $table->json('old_values')->nullable();
             $table->json('new_values')->nullable();

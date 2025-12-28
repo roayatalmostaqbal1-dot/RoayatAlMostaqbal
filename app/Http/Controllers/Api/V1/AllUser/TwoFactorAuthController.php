@@ -166,7 +166,7 @@ class TwoFactorAuthController extends Controller
     {
         $request->validate([
             'code' => 'required|string|size:6',
-            'user_id' => 'required|integer',
+            'user_id' => 'required|string|uuid',
         ]);
 
         try {

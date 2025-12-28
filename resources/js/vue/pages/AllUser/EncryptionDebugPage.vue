@@ -13,12 +13,12 @@
       <!-- User Selection -->
       <div class="mb-6 space-y-4">
         <div>
-          <label class="block text-white font-semibold mb-2">Select User ID</label>
+          <label class="block text-white font-semibold mb-2">Select User ID (UUID)</label>
           <div class="flex gap-2">
             <Input
-              v-model.number="selectedUserId"
-              type="number"
-              placeholder="Enter user ID"
+              v-model="selectedUserId"
+              type="text"
+              placeholder="Enter user UUID (e.g., 019b65d8-3f22-7009-8563-475356b5e062)"
             />
             <Button
               variant="primary"
@@ -141,7 +141,7 @@ import { useToastStore } from '../../stores/toastStore';
 
 const toastStore = useToastStore();
 
-const selectedUserId = ref(null);
+const selectedUserId = ref('');
 const isLoading = ref(false);
 const error = ref(null);
 const encryptedDataList = ref([]);

@@ -146,13 +146,13 @@
 
 <script setup>
 import { onMounted, ref, computed } from 'vue';
-import DashboardLayout from '../../components/layout/DashboardLayout.vue';
-import Card from '../../components/ui/Card.vue';
-import Button from '../../components/ui/Button.vue';
-import Pagination from '../../components/ui/Pagination.vue';
-import CrudModal from '../../components/crud/CrudModal.vue';
-import { useUsersStore } from '../../stores/Admin/usersStore';
-import { useRolesStore } from '../../stores/SuberAdmin/rolesStore';
+import DashboardLayout from '@/vue/components/layout/DashboardLayout.vue';
+import Card from '@/vue/components/ui/Card.vue';
+import Button from '@/vue/components/ui/Button.vue';
+import Pagination from '@/vue/components/ui/Pagination.vue';
+import CrudModal from '@/vue/components/crud/CrudModal.vue';
+import { useUsersStore } from '@/vue/stores/Admin/usersStore';
+import { useRolesStore } from '@/vue/stores/SuberAdmin/rolesStore';
 
 // Initialize stores
 const usersStore = useUsersStore();

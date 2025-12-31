@@ -1,12 +1,12 @@
 import { defineStore } from "pinia";
-import apiClient from "../../services/api";
-import { useToastStore } from "../toastStore";
+import apiClient from "@/vue/services/api";
+import { useToastStore } from "@/vue/stores/toastStore";
 import {
     encryptUserData,
     decryptUserData,
     initSodium,
     clearSensitiveData
-} from "../../utils/encryption";
+} from "@/vue/utils/encryption";
 
 export const useEncryptionStore = defineStore("encryption", {
     // =====================

@@ -59,10 +59,10 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { usePagesStore } from '../../stores/SuberAdmin/pagesStore';
-import apiClient from '../../services/api';
-import DashboardLayout from '../../components/layout/DashboardLayout.vue';
-import Card from '../../components/ui/Card.vue';
+import { usePagesStore } from '@/vue/stores/SuberAdmin/pagesStore';
+import apiClient from '@/vue/services/api';
+import DashboardLayout from '@/vue/components/layout/DashboardLayout.vue';
+import Card from '@/vue/components/ui/Card.vue';
 
 const pagesStore = usePagesStore();
 const roles = ref([]);

@@ -93,10 +93,10 @@
 <script setup>
 import { reactive, ref, computed, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { useAuthStore } from '../../stores/Auth/auth';
-import Card from '../../components/ui/Card.vue';
-import Input from '../../components/ui/Input.vue';
-import Button from '../../components/ui/Button.vue';
+import { useAuthStore } from '@/vue/stores/Auth/auth';
+import Card from '@/vue/components/ui/Card.vue';
+import Input from '@/vue/components/ui/Input.vue';
+import Button from '@/vue/components/ui/Button.vue';
 import axios from 'axios';
 
 const router = useRouter();

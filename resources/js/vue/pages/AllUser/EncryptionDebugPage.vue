@@ -132,12 +132,12 @@
 
 <script setup>
 import { ref } from 'vue';
-import DashboardLayout from '../../components/layout/DashboardLayout.vue';
-import Card from '../../components/ui/Card.vue';
-import Button from '../../components/ui/Button.vue';
-import Input from '../../components/ui/Input.vue';
-import apiClient from '../../services/api';
-import { useToastStore } from '../../stores/toastStore';
+import DashboardLayout from '@/vue/components/layout/DashboardLayout.vue';
+import Card from '@/vue/components/ui/Card.vue';
+import Button from '@/vue/components/ui/Button.vue';
+import Input from '@/vue/components/ui/Input.vue';
+import apiClient from '@/vue/services/api';
+import { useToastStore } from '@/vue/stores/toastStore';
 
 const toastStore = useToastStore();
 

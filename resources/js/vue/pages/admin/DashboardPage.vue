@@ -99,12 +99,12 @@
 
 <script setup>
 import { onMounted, computed } from 'vue';
-import DashboardLayout from '../../components/layout/DashboardLayout.vue';
-import Card from '../../components/ui/Card.vue';
-import Button from '../../components/ui/Button.vue';
-import StatCard from '../../components/dashboard/StatCard.vue';
-import { useDashboardStore } from '../../stores/Admin/dashboardStore';
-import BaseChart from "../../components/charts/BaseChart.vue";
+import DashboardLayout from '@/vue/components/layout/DashboardLayout.vue';
+import Card from '@/vue/components/ui/Card.vue';
+import Button from '@/vue/components/ui/Button.vue';
+import StatCard from '@/vue/components/dashboard/StatCard.vue';
+import { useDashboardStore } from '@/vue/stores/Admin/dashboardStore';
+import BaseChart from "@/vue/components/charts/BaseChart.vue";
 
 const dashboardStore = useDashboardStore();
 

@@ -35,7 +35,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import Button from '../../components/ui/Button.vue';
+import Button from '@/vue/components/ui/Button.vue';
 
 const isLoading = ref(true);
 const error = ref(null);

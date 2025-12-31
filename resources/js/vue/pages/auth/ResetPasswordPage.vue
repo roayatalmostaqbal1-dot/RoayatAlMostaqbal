@@ -92,9 +92,9 @@
 <script setup>
 import { reactive, ref, computed, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import Card from '../../components/ui/Card.vue';
-import Input from '../../components/ui/Input.vue';
-import Button from '../../components/ui/Button.vue';
+import Card from '@/vue/components/ui/Card.vue';
+import Input from '@/vue/components/ui/Input.vue';
+import Button from '@/vue/components/ui/Button.vue';
 import axios from 'axios';
 
 const router = useRouter();

@@ -88,13 +88,13 @@
 <script setup>
 import { reactive, ref, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAuthStore } from '../../stores/Auth/auth';
-import { useToastStore } from '../../stores/toastStore';
-import Card from '../../components/ui/Card.vue';
-import Input from '../../components/ui/Input.vue';
-import Button from '../../components/ui/Button.vue';
-import SocialLoginButton from '../../components/auth/SocialLoginButton.vue';
-import TwoFactorVerification from '../../components/auth/TwoFactorVerification.vue';
+import { useAuthStore } from '@/vue/stores/Auth/auth';
+import { useToastStore } from '@/vue/stores/toastStore';
+import Card from '@/vue/components/ui/Card.vue';
+import Input from '@/vue/components/ui/Input.vue';
+import Button from '@/vue/components/ui/Button.vue';
+import SocialLoginButton from '@/vue/components/auth/SocialLoginButton.vue';
+import TwoFactorVerification from '@/vue/components/auth/TwoFactorVerification.vue';
 
 const router = useRouter();
 const authStore = useAuthStore();

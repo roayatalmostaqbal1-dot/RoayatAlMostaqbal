@@ -11,7 +11,7 @@
 <script setup>
 import { computed } from "vue";
 import BaseChart from "./BaseChart.vue";
-import { useDashboardStore } from "@/stores/dashboardStore";
+import { useDashboardStore } from "@/vue/stores/Admin/dashboardStore";
 
 const dashboardStore = useDashboardStore();
 

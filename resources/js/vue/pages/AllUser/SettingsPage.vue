@@ -79,13 +79,13 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import DashboardLayout from '../../components/layout/DashboardLayout.vue';
-import Card from '../../components/ui/Card.vue';
-import Input from '../../components/ui/Input.vue';
-import Button from '../../components/ui/Button.vue';
-import TwoFactorSettings from '../../components/settings/TwoFactorSettings.vue';
-import ChangePasswordModal from '../../components/settings/ChangePasswordModal.vue';
-import { useAuthStore } from '../../stores/Auth/auth';
+import DashboardLayout from '@/vue/components/layout/DashboardLayout.vue';
+import Card from '@/vue/components/ui/Card.vue';
+import Input from '@/vue/components/ui/Input.vue';
+import Button from '@/vue/components/ui/Button.vue';
+import TwoFactorSettings from '@/vue/components/settings/TwoFactorSettings.vue';
+import ChangePasswordModal from '@/vue/components/settings/ChangePasswordModal.vue';
+import { useAuthStore } from '@/vue/stores/Auth/auth';
 
 const activeTab = ref('general');
 const isChangePasswordModalOpen = ref(false);

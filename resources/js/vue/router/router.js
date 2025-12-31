@@ -1,23 +1,23 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { useAuthStore } from '../stores/Auth/auth';
+import { useAuthStore } from '@/vue/stores/Auth/auth';
 
 // Pages
-import LoginPage from '../pages/auth/LoginPage.vue';
-import RegisterPage from '../pages/auth/RegisterPage.vue';
-import SocialCallbackPage from '../pages/auth/SocialCallbackPage.vue';
-import SetPasswordPage from '../pages/auth/SetPasswordPage.vue';
-import ForgotPasswordPage from '../pages/auth/ForgotPasswordPage.vue';
-import ResetPasswordPage from '../pages/auth/ResetPasswordPage.vue';
-import DashboardPage from '../pages/admin/DashboardPage.vue';
-import UsersPage from '../pages/admin/UsersPage.vue';
-import SettingsPage from '../pages/AllUser/SettingsPage.vue';
-import RolesPage from '../pages/SuberAdmin/RolesPage.vue';
-import PermissionsPage from '../pages/SuberAdmin/PermissionsPage.vue';
-import EncryptedDataPage from '../pages/AllUser/EncryptedDataPage.vue';
-import EncryptionDebugPage from '../pages/AllUser/EncryptionDebugPage.vue';
-import OAuth2ClientsPage from '../pages/SuberAdmin/OAuth2ClientsPage.vue';
-import ContactsPage from '../pages/admin/ContactsPage.vue';
-import PagesManagementPage from '../pages/SuberAdmin/PagesManagementPage.vue';
+import LoginPage from '@/vue/pages/auth/LoginPage.vue';
+import RegisterPage from '@/vue/pages/auth/RegisterPage.vue';
+import SocialCallbackPage from '@/vue/pages/auth/SocialCallbackPage.vue';
+import SetPasswordPage from '@/vue/pages/auth/SetPasswordPage.vue';
+import ForgotPasswordPage from '@/vue/pages/auth/ForgotPasswordPage.vue';
+import ResetPasswordPage from '@/vue/pages/auth/ResetPasswordPage.vue';
+import DashboardPage from '@/vue/pages/admin/DashboardPage.vue';
+import UsersPage from '@/vue/pages/admin/UsersPage.vue';
+import SettingsPage from '@/vue/pages/AllUser/SettingsPage.vue';
+import RolesPage from '@/vue/pages/SuberAdmin/RolesPage.vue';
+import PermissionsPage from '@/vue/pages/SuberAdmin/PermissionsPage.vue';
+import EncryptedDataPage from '@/vue/pages/AllUser/EncryptedDataPage.vue';
+import EncryptionDebugPage from '@/vue/pages/AllUser/EncryptionDebugPage.vue';
+import OAuth2ClientsPage from '@/vue/pages/SuberAdmin/OAuth2ClientsPage.vue';
+import ContactsPage from '@/vue/pages/admin/ContactsPage.vue';
+import PagesManagementPage from '@/vue/pages/SuberAdmin/PagesManagementPage.vue';
 const routes = [
     {
         path: '/login',

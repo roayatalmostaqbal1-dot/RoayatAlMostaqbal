@@ -176,14 +176,14 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import { useOAuth2ClientsStore } from '../../stores/SuberAdmin/oauth2ClientsStore';
-import DashboardLayout from '../../components/layout/DashboardLayout.vue';
-import Card from '../../components/ui/Card.vue';
-import Button from '../../components/ui/Button.vue';
-import Pagination from '../../components/ui/Pagination.vue';
-import CrudModal from '../../components/crud/CrudModal.vue';
-import OAuth2ClientViewModal from '../../components/oauth2/OAuth2ClientViewModal.vue';
-import ConfirmationModal from '../../components/ui/ConfirmationModal.vue';
+import { useOAuth2ClientsStore } from '@/vue/stores/SuberAdmin/oauth2ClientsStore';
+import DashboardLayout from '@/vue/components/layout/DashboardLayout.vue';
+import Card from '@/vue/components/ui/Card.vue';
+import Button from '@/vue/components/ui/Button.vue';
+import Pagination from '@/vue/components/ui/Pagination.vue';
+import CrudModal from '@/vue/components/crud/CrudModal.vue';
+import OAuth2ClientViewModal from '@/vue/components/oauth2/OAuth2ClientViewModal.vue';
+import ConfirmationModal from '@/vue/components/ui/ConfirmationModal.vue';
 
 const oauth2Store = useOAuth2ClientsStore();
 

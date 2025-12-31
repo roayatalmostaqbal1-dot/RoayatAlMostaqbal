@@ -136,15 +136,15 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import { useRolesStore } from '../../stores/SuberAdmin/rolesStore';
-import { usePermissionsStore } from '../../stores/SuberAdmin/permissionsStore';
-import { useToastStore } from '../../stores/toastStore';
-import DashboardLayout from '../../components/layout/DashboardLayout.vue';
-import Card from '../../components/ui/Card.vue';
-import Button from '../../components/ui/Button.vue';
-import Pagination from '../../components/ui/Pagination.vue';
-import CrudModal from '../../components/crud/CrudModal.vue';
-import PermissionsModal from '../../components/access-control/PermissionsModal.vue';
+import { useRolesStore } from '@/vue/stores/SuberAdmin/rolesStore';
+import { usePermissionsStore } from '@/vue/stores/SuberAdmin/permissionsStore';
+import { useToastStore } from '@/vue/stores/toastStore';
+import DashboardLayout from '@/vue/components/layout/DashboardLayout.vue';
+import Card from '@/vue/components/ui/Card.vue';
+import Button from '@/vue/components/ui/Button.vue';
+import Pagination from '@/vue/components/ui/Pagination.vue';
+import CrudModal from '@/vue/components/crud/CrudModal.vue';
+import PermissionsModal from '@/vue/components/access-control/PermissionsModal.vue';
 
 const rolesStore = useRolesStore();
 const permissionsStore = usePermissionsStore();

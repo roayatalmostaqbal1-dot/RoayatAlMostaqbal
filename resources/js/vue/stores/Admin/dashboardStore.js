@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import apiClient from '../../services/api';
-import { useToastStore } from '../toastStore';
+import apiClient from '@/vue/services/api';
+import { useToastStore } from '@/vue/stores/toastStore';
 
 export const useDashboardStore = defineStore('dashboard', {
 

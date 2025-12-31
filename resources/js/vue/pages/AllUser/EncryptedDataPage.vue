@@ -178,15 +178,15 @@
 
 <script setup>
 import { ref, computed, onBeforeUnmount } from 'vue';
-import { useEncryptionStore } from '../../stores/AllUser/encryptionStore';
-import { useToastStore } from '../../stores/toastStore';
-import DashboardLayout from '../../components/layout/DashboardLayout.vue';
-import Card from '../../components/ui/Card.vue';
-import Button from '../../components/ui/Button.vue';
-import Input from '../../components/ui/Input.vue';
-import PasswordReentryModal from '../../components/encryption/PasswordReentryModal.vue';
-import apiClient from '../../services/api';
-import { encryptUserData, decryptUserData } from '../../utils/encryption';
+import { useEncryptionStore } from '@/vue/stores/AllUser/encryptionStore';
+import { useToastStore } from '@/vue/stores/toastStore';
+import DashboardLayout from '@/vue/components/layout/DashboardLayout.vue';
+import Card from '@/vue/components/ui/Card.vue';
+import Button from '@/vue/components/ui/Button.vue';
+import Input from '@/vue/components/ui/Input.vue';
+import PasswordReentryModal from '@/vue/components/encryption/PasswordReentryModal.vue';
+import apiClient from '@/vue/services/api';
+import { encryptUserData, decryptUserData } from '@/vue/utils/encryption';
 
 const encryptionStore = useEncryptionStore();
 const toastStore = useToastStore();

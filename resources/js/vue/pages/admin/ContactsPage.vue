@@ -169,12 +169,12 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import { useContactsStore } from '../../stores/Admin/contactsStore';
-import DashboardLayout from '../../components/layout/DashboardLayout.vue';
-import Card from '../../components/ui/Card.vue';
-import Button from '../../components/ui/Button.vue';
-import ContactViewModal from '../../components/contact/ContactViewModal.vue';
-import ConfirmationModal from '../../components/ui/ConfirmationModal.vue';
+import { useContactsStore } from '@/vue/stores/Admin/contactsStore';
+import DashboardLayout from '@/vue/components/layout/DashboardLayout.vue';
+import Card from '@/vue/components/ui/Card.vue';
+import Button from '@/vue/components/ui/Button.vue';
+import ContactViewModal from '@/vue/components/contact/ContactViewModal.vue';
+import ConfirmationModal from '@/vue/components/ui/ConfirmationModal.vue';
 
 const contactsStore = useContactsStore();
 const isLoading = ref(false);

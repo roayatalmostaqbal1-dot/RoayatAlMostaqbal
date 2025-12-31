@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { useAuthStore } from '../stores/Auth/auth';
-import { useToastStore } from '../stores/toastStore';
+import { useAuthStore } from '@/vue/stores/Auth/auth';
+import { useToastStore } from '@/vue/stores/toastStore';
 
 const API_BASE_URL = '/api/v1';
 

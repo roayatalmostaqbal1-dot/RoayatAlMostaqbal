@@ -60,4 +60,41 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
             </url>
+    <!-- Security & Compliance Pages -->
+    <url>
+    <loc>https://www.roayatalmostaqbal.net/ar/security/encryption</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.roayatalmostaqbal.net/en/security/encryption" />
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+            </url>
+    <url>
+    <loc>https://www.roayatalmostaqbal.net/en/security/encryption</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.roayatalmostaqbal.net/ar/security/encryption" />
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+            </url>
+    <url>
+    <loc>https://www.roayatalmostaqbal.net/ar/security/privacy</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.roayatalmostaqbal.net/en/security/privacy" />
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+            </url>
+    <url>
+    <loc>https://www.roayatalmostaqbal.net/en/security/privacy</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.roayatalmostaqbal.net/ar/security/privacy" />
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+            </url>
+    <url>
+    <loc>https://www.roayatalmostaqbal.net/ar/security/data-protection</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.roayatalmostaqbal.net/en/security/data-protection" />
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+            </url>
+    <url>
+    <loc>https://www.roayatalmostaqbal.net/en/security/data-protection</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.roayatalmostaqbal.net/ar/security/data-protection" />
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+            </url>
 </urlset>

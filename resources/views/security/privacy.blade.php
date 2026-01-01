@@ -8,7 +8,7 @@
     <section class="py-20 bg-[linear-gradient(135deg,#051824_0%,#162936_100%)]">
         <div class="max-w-6xl mx-auto px-5 text-center">
             <div class="inline-flex items-center justify-center w-20 h-20 bg-[#27e9b5] bg-opacity-20 rounded-full mb-6">
-                <i class="fas fa-user-shield text-4xl text-[#f0f0f0]"></i>
+                <i class="fas fa-user-shield text-4xl text-[#051824]"></i>
             </div>
             <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">{{ __('messages.security.privacy.page_title') }}</h1>
             <p class="text-lg text-gray-300 max-w-3xl mx-auto">{{ __('messages.security.privacy.page_subtitle') }}</p>
@@ -112,7 +112,7 @@
                 <h2 class="text-2xl font-bold text-white mb-4">{{ __('messages.security.privacy.contact.title') }}</h2>
                 <p class="text-gray-300 mb-6">{{ __('messages.security.privacy.contact.description') }}</p>
                 <a href="{{ route('contact', app()->getLocale()) }}"
-                   class="inline-flex items-center px-6 py-3 bg-[#27e9b5] text-[#051824] font-bold rounded-full hover:bg-opacity-90 transition-colors">
+                    class="inline-flex items-center px-6 py-3 bg-[#27e9b5] text-[#051824] font-bold rounded-full hover:bg-opacity-90 transition-colors">
                     <i class="fas fa-envelope mr-2"></i>
                     {{ __('messages.security.privacy.contact.button') }}
                 </a>
@@ -120,4 +120,3 @@
         </div>
     </section>
 @endsection
-

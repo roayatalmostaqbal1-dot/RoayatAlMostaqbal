@@ -5,10 +5,11 @@
 
 @section('content')
     <!-- Page Header -->
-    <section class="py-20 bg-[linear-gradient(135deg,#051824_0%,#162936_100%)]">
+
+    <section class="py-12 md:py-20 bg-[#051824]">
         <div class="max-w-6xl mx-auto px-5 text-center">
             <div class="inline-flex items-center justify-center w-20 h-20 bg-[#27e9b5] bg-opacity-20 rounded-full mb-6">
-                <i class="fas fa-shield-alt text-4xl text-[#f0f0f0]"></i>
+                <i class="fas fa-shield-alt text-4xl text-[#051824]"></i>
             </div>
             <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">{{ __('messages.security.encryption.page_title') }}
             </h1>
@@ -17,34 +18,34 @@
     </section>
 
     <!-- SSL/TLS Section -->
-    <section class="py-16 bg-[#051824]">
+    <section class="py-12 md:py-16 bg-[#051824]">
         <div class="max-w-6xl mx-auto px-5">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div>
                     <div class="inline-flex items-center px-4 py-2 bg-[#27e9b5] bg-opacity-20 rounded-full mb-4">
-                        <i class="fas fa-lock text-[#f0f0f0] mr-2"></i>
-                        <span class="text-[#f0f0f0] font-semibold">{{ __('messages.security.encryption.ssl.badge') }}</span>
+                        <i class="fas fa-lock text-[#051824] me-2"></i>
+                        <span class="text-[#051824] font-semibold">{{ __('messages.security.encryption.ssl.badge') }}</span>
                     </div>
                     <h2 class="text-3xl font-bold text-white mb-4">{{ __('messages.security.encryption.ssl.title') }}</h2>
                     <p class="text-gray-300 mb-6">{{ __('messages.security.encryption.ssl.description') }}</p>
                     <ul class="space-y-3">
                         <li class="flex items-start">
-                            <i class="fas fa-check-circle text-[#f0f0f0] mt-1 mr-3"></i>
+                            <i class="fas fa-check-circle text-white mt-1 me-3"></i>
                             <span class="text-gray-300">{{ __('messages.security.encryption.ssl.feature1') }}</span>
                         </li>
                         <li class="flex items-start">
-                            <i class="fas fa-check-circle text-[#f0f0f0] mt-1 mr-3"></i>
+                            <i class="fas fa-check-circle text-white mt-1 me-3"></i>
                             <span class="text-gray-300">{{ __('messages.security.encryption.ssl.feature2') }}</span>
                         </li>
                         <li class="flex items-start">
-                            <i class="fas fa-check-circle text-[#f0f0f0] mt-1 mr-3"></i>
+                            <i class="fas fa-check-circle text-white mt-1 me-3"></i>
                             <span class="text-gray-300">{{ __('messages.security.encryption.ssl.feature3') }}</span>
                         </li>
                     </ul>
                 </div>
                 <div class="bg-[#162936] p-8 rounded-[20px] border border-[#3b5265]">
                     <div class="text-center">
-                        <i class="fas fa-certificate text-6xl text-[#f0f0f0] mb-4"></i>
+                        <i class="fas fa-certificate text-6xl text-white mb-4"></i>
                         <h3 class="text-xl font-bold text-white mb-2">
                             {{ __('messages.security.encryption.ssl.certificate') }}</h3>
                         <p class="text-gray-400">TLS 1.3 / AES-256-GCM</p>
@@ -55,12 +56,12 @@
     </section>
 
     <!-- Zero-Knowledge Proof Section -->
-    <section class="py-16 bg-[linear-gradient(135deg,#162936_0%,#3b5265_100%)]">
+    <section class="py-12 md:py-16 bg-[linear-gradient(135deg,#162936_0%,#3b5265_100%)]">
         <div class="max-w-6xl mx-auto px-5">
             <div class="text-center mb-12">
                 <div class="inline-flex items-center px-4 py-2 bg-[#27e9b5] bg-opacity-20 rounded-full mb-4">
-                    <i class="fas fa-user-secret text-[#f0f0f0] mr-2"></i>
-                    <span class="text-[#f0f0f0] font-semibold">{{ __('messages.security.encryption.zkp.badge') }}</span>
+                    <i class="fas fa-user-secret text-[#051824] me-2"></i>
+                    <span class="text-[#051824] font-semibold">{{ __('messages.security.encryption.zkp.badge') }}</span>
                 </div>
                 <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
                     {{ __('messages.security.encryption.zkp.title') }}</h2>
@@ -72,7 +73,7 @@
                 <div
                     class="bg-[#051824] p-6 rounded-[20px] border border-[#3b5265] hover:border-[#27e9b5] transition-colors">
                     <div class="w-14 h-14 bg-[#27e9b5] bg-opacity-20 rounded-full flex items-center justify-center mb-4">
-                        <i class="fas fa-eye-slash text-2xl text-[#f0f0f0]"></i>
+                        <i class="fas fa-eye-slash text-2xl text-[#051824]"></i>
                     </div>
                     <h3 class="text-xl font-bold text-white mb-3">
                         {{ __('messages.security.encryption.zkp.feature1.title') }}</h3>
@@ -82,7 +83,7 @@
                 <div
                     class="bg-[#051824] p-6 rounded-[20px] border border-[#3b5265] hover:border-[#27e9b5] transition-colors">
                     <div class="w-14 h-14 bg-[#27e9b5] bg-opacity-20 rounded-full flex items-center justify-center mb-4">
-                        <i class="fas fa-server text-2xl text-[#f0f0f0]"></i>
+                        <i class="fas fa-server text-2xl text-[#051824]"></i>
                     </div>
                     <h3 class="text-xl font-bold text-white mb-3">
                         {{ __('messages.security.encryption.zkp.feature2.title') }}</h3>
@@ -92,7 +93,7 @@
                 <div
                     class="bg-[#051824] p-6 rounded-[20px] border border-[#3b5265] hover:border-[#27e9b5] transition-colors">
                     <div class="w-14 h-14 bg-[#27e9b5] bg-opacity-20 rounded-full flex items-center justify-center mb-4">
-                        <i class="fas fa-check-double text-2xl text-[#f0f0f0]"></i>
+                        <i class="fas fa-check-double text-2xl text-[#051824]"></i>
                     </div>
                     <h3 class="text-xl font-bold text-white mb-3">
                         {{ __('messages.security.encryption.zkp.feature3.title') }}</h3>
@@ -112,7 +113,7 @@
                     <div class="bg-[#051824] p-6 rounded-lg border border-[#3b5265] mb-6">
                         <label
                             class="block text-[#27e9b5] text-sm font-bold mb-2">{{ __('messages.security.encryption.zkp_poc.secret_label') }}</label>
-                        <div class="flex gap-4">
+                        <div class="flex flex-col sm:flex-row gap-4">
                             <input type="password" id="zkp-secret"
                                 placeholder="{{ __('messages.security.encryption.zkp_poc.secret_placeholder') }}"
                                 class="flex-1 px-4 py-2 bg-[#162936] text-white border border-[#3b5265] rounded focus:outline-none focus:border-[#27e9b5]">
@@ -214,7 +215,7 @@
     @endpush
 
     <!-- Encryption Methodology Section -->
-    <section class="py-16 bg-[#051824]">
+    <section class="py-12 md:py-16 bg-[#051824]">
         <div class="max-w-6xl mx-auto px-5">
             <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
@@ -271,42 +272,42 @@
     </section>
 
     <!-- Government Compliance Section -->
-    <section class="py-16 bg-[linear-gradient(135deg,#162936_0%,#051824_100%)]">
+    <section class="py-12 md:py-16 bg-[linear-gradient(135deg,#162936_0%,#051824_100%)]">
         <div class="max-w-6xl mx-auto px-5">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div>
                     <div class="inline-flex items-center px-4 py-2 bg-[#27e9b5] bg-opacity-20 rounded-full mb-4">
-                        <i class="fas fa-landmark text-[#f0f0f0] mr-2"></i>
+                        <i class="fas fa-landmark text-[#051824] me-2"></i>
                         <span
-                            class="text-[#f0f0f0] font-semibold">{{ __('messages.security.encryption.compliance.badge') }}</span>
+                            class="text-[#051824] font-semibold">{{ __('messages.security.encryption.compliance.badge') }}</span>
                     </div>
                     <h2 class="text-3xl font-bold text-white mb-4">
                         {{ __('messages.security.encryption.compliance.title') }}</h2>
                     <p class="text-gray-300 mb-6">{{ __('messages.security.encryption.compliance.description') }}</p>
                     <div class="space-y-4">
                         <div class="flex items-center">
-                            <i class="fas fa-check text-[#f0f0f0] mr-3"></i>
+                            <i class="fas fa-check text-white me-3"></i>
                             <span class="text-gray-300">{{ __('messages.security.encryption.compliance.item1') }}</span>
                         </div>
                         <div class="flex items-center">
-                            <i class="fas fa-check text-[#f0f0f0] mr-3"></i>
+                            <i class="fas fa-check text-white me-3"></i>
                             <span class="text-gray-300">{{ __('messages.security.encryption.compliance.item2') }}</span>
                         </div>
                         <div class="flex items-center">
-                            <i class="fas fa-check text-[#f0f0f0] mr-3"></i>
+                            <i class="fas fa-check text-white me-3"></i>
                             <span class="text-gray-300">{{ __('messages.security.encryption.compliance.item3') }}</span>
                         </div>
                     </div>
                 </div>
                 <div class="bg-[#051824] p-8 rounded-[20px] border border-[#3b5265] text-center">
-                    <i class="fas fa-file-pdf text-6xl text-[#f0f0f0] mb-4"></i>
+                    <i class="fas fa-file-pdf text-6xl text-white mb-4"></i>
                     <h3 class="text-xl font-bold text-white mb-2">
                         {{ __('messages.security.encryption.compliance.report_title') }}</h3>
                     <p class="text-gray-400 mb-6">{{ __('messages.security.encryption.compliance.report_description') }}
                     </p>
                     <a href="{{ route('security.verification-report', app()->getLocale()) }}"
                         class="inline-flex items-center px-6 py-3 bg-[#27e9b5] text-[#051824] font-bold rounded-full hover:bg-opacity-90 transition-colors">
-                        <i class="fas fa-download mr-2"></i>
+                        <i class="fas fa-download me-2"></i>
                         {{ __('messages.security.encryption.compliance.download_button') }}
                     </a>
                 </div>
@@ -315,14 +316,14 @@
     </section>
 
     <!-- CTA Section -->
-    <section class="py-16 bg-[#051824]">
+    <section class="py-12 md:py-16 bg-[#051824]">
         <div class="max-w-4xl mx-auto px-5 text-center">
             <h2 class="text-3xl font-bold text-white mb-4">{{ __('messages.security.encryption.cta.title') }}</h2>
             <p class="text-gray-300 mb-8">{{ __('messages.security.encryption.cta.description') }}</p>
             <a href="{{ route('contact', app()->getLocale()) }}"
                 class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-[#27e9b5] to-[#27eb5] text-[#051824] font-bold rounded-full shadow-lg hover:shadow-xl transition-all">
                 {{ __('messages.security.encryption.cta.button') }}
-                <i class="fas fa-arrow-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }} ml-2"></i>
+                <i class="fas fa-arrow-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }} ms-2"></i>
             </a>
         </div>
     </section>

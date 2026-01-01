@@ -146,11 +146,11 @@
                                     class="w-full px-4 py-3 bg-[#051824] text-white border-2 border-[#27e9b5] rounded-lg focus:outline-none focus:border-[#27eb5]">
                                     <option value="email" {{ old('preferred_contact') == 'email' ? 'selected' : '' }}>
                                         {{ __('messages.contact.form.preferred_contact.email') }}</option>
-                                    <option value="phone" {{ old('preferred_contact') == 'phone' ? 'selected' : '' }}>
+                                    {{-- <option value="phone" {{ old('preferred_contact') == 'phone' ? 'selected' : '' }}>
                                         {{ __('messages.contact.form.preferred_contact.phone') }}</option>
                                     <option value="whatsapp"
                                         {{ old('preferred_contact') == 'whatsapp' ? 'selected' : '' }}>
-                                        {{ __('messages.contact.form.preferred_contact.whatsapp') }}</option>
+                                        {{ __('messages.contact.form.preferred_contact.whatsapp') }}</option> --}}
                                 </select>
                                 @error('preferred_contact')
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>

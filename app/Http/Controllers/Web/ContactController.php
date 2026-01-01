@@ -23,10 +23,21 @@ class ContactController extends Controller
             'phone' => 'nullable|string|max:20',
             'company' => 'nullable|string|max:255',
             'service' => 'nullable|string|max:255',
-            'message' => 'required|string|max:1000'
+            'preferred_contact' => 'nullable|string|in:email,phone,whatsapp',
+            'department' => 'nullable|string|in:commercial,residential,maintenance',
+            'message' => 'required|string|max:1000',
+            // Government compliance: Privacy consent is required
+            'privacy_consent' => 'required|accepted',
+        ], [
+            'privacy_consent.required' => __('messages.contact.form.privacy_consent_required'),
+            'privacy_consent.accepted' => __('messages.contact.form.privacy_consent_required'),
         ]);
 
-        $data = $request->only('name', 'email', 'phone', 'company', 'service', 'message');
+        $data = $request->only('name', 'email', 'phone', 'company', 'service', 'message', 'preferred_contact', 'department');
+
+        // Add privacy consent timestamp for compliance audit trail
+        $data['privacy_consent_at'] = now();
+        $data['ip_address'] = $request->ip();
 
         // Store contact in database
         Contact::create($data);
@@ -34,7 +45,7 @@ class ContactController extends Controller
         // Send email notification
         Mail::to(config('mail.from.address'))->send(new ContactMail($data));
 
-        return back()->with('success', 'Your message has been sent successfully!');
+        return back()->with('success', __('messages.contact.form.success'));
     }
 }
 

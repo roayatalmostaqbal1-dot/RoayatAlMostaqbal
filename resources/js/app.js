@@ -1,14 +1,18 @@
 import { library, dom } from '@fortawesome/fontawesome-svg-core';
 import {
     faShieldAlt, faBell, faDoorOpen, faHome, faShieldVirus, faCreditCard, faServer, faCheck, faEye, faBullseye, faTrophy,
-    faBuilding, faVideo, faKey, faBrain, faDigitalTachograph, faRobot, faDesktop, faUserCheck, faSearch, faChartLine, faUsers, faMapMarkerAlt
+    faBuilding, faVideo, faKey, faBrain, faDigitalTachograph, faRobot, faDesktop, faUserCheck, faSearch, faChartLine, faUsers, faMapMarkerAlt,
+    faLock, faCertificate, faUserSecret, faEyeSlash, faCheckDouble, faFilePdf, faDownload, faCheckCircle, faLandmark,faUserShield,
+    faPhone, faEnvelope, faClock, faChevronDown, faChevronLeft, faChevronRight, faUserLock, faClipboardCheck, faCogs, faDatabase, faArrowLeft
 } from '@fortawesome/free-solid-svg-icons';
 import { faFacebook, faTwitter, faInstagram, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 
 library.add(
     faShieldAlt, faBell, faDoorOpen, faHome, faShieldVirus, faCreditCard, faServer, faCheck, faEye, faBullseye, faTrophy,
     faBuilding, faVideo, faKey, faBrain, faDigitalTachograph, faRobot, faDesktop, faUserCheck, faSearch, faChartLine, faUsers, faMapMarkerAlt,
-    faFacebook, faTwitter, faInstagram, faLinkedin
+    faLock, faCertificate, faUserSecret, faEyeSlash, faCheckDouble, faFilePdf, faDownload, faCheckCircle, faLandmark,
+    faPhone, faEnvelope, faClock, faUserLock, faClipboardCheck, faCogs, faDatabase,faUserShield,
+    faFacebook, faTwitter, faInstagram, faLinkedin, faChevronDown, faChevronLeft, faChevronRight, faArrowLeft
 );
 dom.watch();
 
@@ -61,8 +65,8 @@ function initNavigation() {
 
         navLinks.forEach(link => {
             const href = link.getAttribute('href');
-            // فقط إذا كان الرابط داخل الصفحة
-            if (href.startsWith('#')) {
+            // فقط إذا كان الرابط داخل الصفحة وموجود
+            if (href && href.startsWith('#')) {
                 link.classList.toggle('active', href === `#${current}`);
             }
         });
@@ -73,7 +77,7 @@ function initNavigation() {
             const href = this.getAttribute('href');
 
             // روابط داخل الصفحة
-            if (href.startsWith('#')) {
+            if (href && href.startsWith('#')) {
                 e.preventDefault();
                 const targetId = href.substring(1);
                 scrollToSection(targetId);

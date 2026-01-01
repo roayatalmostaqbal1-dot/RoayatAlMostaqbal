@@ -2,8 +2,7 @@
 
 use App\Http\Controllers\Api\V1\Auth\AuthenticationController;
 use App\Http\Controllers\Api\V1\EncryptedDataController;
-use App\Http\Controllers\Api\V1\AllUser\PasswordResetController;
-use App\Http\Controllers\Api\V1\TwoFactorAuthController;
+use App\Http\Controllers\Api\V1\AllUser\{PasswordResetController,TwoFactorAuthController};
 use App\Http\Resources\Api\V1\User\UserInfoResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;

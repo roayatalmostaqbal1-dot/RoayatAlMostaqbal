@@ -44,6 +44,9 @@ class Contact extends Model
         'status',
         'replied_at',
         'reply_message',
+        // Government compliance fields
+        'privacy_consent_at',
+        'ip_address',
     ];
 
     /**
@@ -53,6 +56,7 @@ class Contact extends Model
      */
     protected $casts = [
         'replied_at' => 'datetime',
+        'privacy_consent_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

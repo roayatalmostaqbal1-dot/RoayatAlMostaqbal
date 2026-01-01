@@ -20,41 +20,45 @@
                     <h2 class="text-4xl font-bold text-white mb-8">{{ __('messages.contact.info.title') }}</h2>
                     <div class="space-y-6">
                         <div class="flex gap-4">
-                            <div class="text-4xl text-[#27e9b5] flex-shrink-0">
+                            <div class="text-4xl text-[#27e9b5] shrink-0">
                                 <i class="fas fa-map-marker-alt"></i>
                             </div>
                             <div>
-                                <h3 class="text-lg font-bold text-white mb-2">{{ __('messages.contact.info.address.title') }}</h3>
+                                <h3 class="text-lg font-bold text-white mb-2">
+                                    {{ __('messages.contact.info.address.title') }}</h3>
                                 <p class="text-gray-300">{{ __('messages.contact.info.address.description') }}</p>
                             </div>
                         </div>
 
                         <div class="flex gap-4">
-                            <div class="text-4xl text-[#27e9b5] flex-shrink-0">
+                            <div class="text-4xl text-[#27e9b5] shrink-0">
                                 <i class="fas fa-phone"></i>
                             </div>
                             <div>
-                                <h3 class="text-lg font-bold text-white mb-2">{{ __('messages.contact.info.phone.title') }}</h3>
+                                <h3 class="text-lg font-bold text-white mb-2">{{ __('messages.contact.info.phone.title') }}
+                                </h3>
                                 <p class="text-gray-300">{{ __('messages.contact.info.phone.description') }}</p>
                             </div>
                         </div>
 
                         <div class="flex gap-4">
-                            <div class="text-4xl text-[#27e9b5] flex-shrink-0">
+                            <div class="text-4xl text-[#27e9b5] shrink-0">
                                 <i class="fas fa-envelope"></i>
                             </div>
                             <div>
-                                <h3 class="text-lg font-bold text-white mb-2">{{ __('messages.contact.info.email.title') }}</h3>
+                                <h3 class="text-lg font-bold text-white mb-2">{{ __('messages.contact.info.email.title') }}
+                                </h3>
                                 <p class="text-gray-300">{{ __('messages.contact.info.email.description') }}</p>
                             </div>
                         </div>
 
                         <div class="flex gap-4">
-                            <div class="text-4xl text-[#27e9b5] flex-shrink-0">
+                            <div class="text-4xl text-[#27e9b5] shrink-0">
                                 <i class="fas fa-clock"></i>
                             </div>
                             <div>
-                                <h3 class="text-lg font-bold text-white mb-2">{{ __('messages.contact.info.working_hours.title') }}</h3>
+                                <h3 class="text-lg font-bold text-white mb-2">
+                                    {{ __('messages.contact.info.working_hours.title') }}</h3>
                                 <p class="text-gray-300">{{ __('messages.contact.info.working_hours.description') }}</p>
                             </div>
                         </div>
@@ -63,44 +67,55 @@
 
                 <div class="bg-[#162936] p-8 rounded-[20px]">
                     <h2 class="text-4xl font-bold text-white mb-8">{{ __('messages.contact.form.title') }}</h2>
-                    <form class="space-y-6" id="contact-form" action="{{ route('contact.store', app()->getLocale()) }}" method="POST">
+                    <form class="space-y-6" id="contact-form" action="{{ route('contact.store', app()->getLocale()) }}"
+                        method="POST">
                         @csrf
 
                         <div>
-                            <label for="name" class="block text-white font-bold mb-2">{{ __('messages.contact.form.name') }}</label>
-                            <input type="text" id="name" name="name" value="{{ old('name') }}" required class="w-full px-4 py-3 bg-[#051824] text-white border-2 border-[#27e9b5] rounded-lg focus:outline-none focus:border-[#27eb5]">
+                            <label for="name"
+                                class="block text-white font-bold mb-2">{{ __('messages.contact.form.name') }}</label>
+                            <input type="text" id="name" name="name" value="{{ old('name') }}" required
+                                class="w-full px-4 py-3 bg-[#051824] text-white border-2 border-[#27e9b5] rounded-lg focus:outline-none focus:border-[#27eb5]">
                             @error('name')
                                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div>
-                            <label for="email" class="block text-white font-bold mb-2">{{ __('messages.contact.form.email') }}</label>
-                            <input type="email" id="email" name="email" value="{{ old('email') }}" required class="w-full px-4 py-3 bg-[#051824] text-white border-2 border-[#27e9b5] rounded-lg focus:outline-none focus:border-[#27eb5]">
+                            <label for="email"
+                                class="block text-white font-bold mb-2">{{ __('messages.contact.form.email') }}</label>
+                            <input type="email" id="email" name="email" value="{{ old('email') }}" required
+                                class="w-full px-4 py-3 bg-[#051824] text-white border-2 border-[#27e9b5] rounded-lg focus:outline-none focus:border-[#27eb5]">
                             @error('email')
                                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div>
-                            <label for="phone" class="block text-white font-bold mb-2">{{ __('messages.contact.form.phone') }}</label>
-                            <input type="tel" id="phone" name="phone" value="{{ old('phone') }}" class="w-full px-4 py-3 bg-[#051824] text-white border-2 border-[#27e9b5] rounded-lg focus:outline-none focus:border-[#27eb5]">
+                            <label for="phone"
+                                class="block text-white font-bold mb-2">{{ __('messages.contact.form.phone') }}</label>
+                            <input type="tel" id="phone" name="phone" value="{{ old('phone') }}"
+                                class="w-full px-4 py-3 bg-[#051824] text-white border-2 border-[#27e9b5] rounded-lg focus:outline-none focus:border-[#27eb5]">
                             @error('phone')
                                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div>
-                            <label for="company" class="block text-white font-bold mb-2">{{ __('messages.contact.form.company') }}</label>
-                            <input type="text" id="company" name="company" value="{{ old('company') }}" class="w-full px-4 py-3 bg-[#051824] text-white border-2 border-[#27e9b5] rounded-lg focus:outline-none focus:border-[#27eb5]">
+                            <label for="company"
+                                class="block text-white font-bold mb-2">{{ __('messages.contact.form.company') }}</label>
+                            <input type="text" id="company" name="company" value="{{ old('company') }}"
+                                class="w-full px-4 py-3 bg-[#051824] text-white border-2 border-[#27e9b5] rounded-lg focus:outline-none focus:border-[#27eb5]">
                             @error('company')
                                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div>
-                            <label for="service" class="block text-white font-bold mb-2">{{ __('messages.contact.form.service') }}</label>
-                            <select id="service" name="service" class="w-full px-4 py-3 bg-[#051824] text-white border-2 border-[#27e9b5] rounded-lg focus:outline-none focus:border-[#27eb5]">
+                            <label for="service"
+                                class="block text-white font-bold mb-2">{{ __('messages.contact.form.service') }}</label>
+                            <select id="service" name="service"
+                                class="w-full px-4 py-3 bg-[#051824] text-white border-2 border-[#27e9b5] rounded-lg focus:outline-none focus:border-[#27eb5]">
                                 <option value="">{{ __('messages.contact.form.service.placeholder') }}</option>
                                 <option value="surveillance" {{ old('service') == 'surveillance' ? 'selected' : '' }}>
                                     {{ __('messages.contact.form.service.option.surveillance') }}
@@ -123,19 +138,84 @@
                             @enderror
                         </div>
 
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="preferred_contact"
+                                    class="block text-white font-bold mb-2">{{ __('messages.contact.form.preferred_contact') }}</label>
+                                <select id="preferred_contact" name="preferred_contact"
+                                    class="w-full px-4 py-3 bg-[#051824] text-white border-2 border-[#27e9b5] rounded-lg focus:outline-none focus:border-[#27eb5]">
+                                    <option value="email" {{ old('preferred_contact') == 'email' ? 'selected' : '' }}>
+                                        {{ __('messages.contact.form.preferred_contact.email') }}</option>
+                                    <option value="phone" {{ old('preferred_contact') == 'phone' ? 'selected' : '' }}>
+                                        {{ __('messages.contact.form.preferred_contact.phone') }}</option>
+                                    <option value="whatsapp"
+                                        {{ old('preferred_contact') == 'whatsapp' ? 'selected' : '' }}>
+                                        {{ __('messages.contact.form.preferred_contact.whatsapp') }}</option>
+                                </select>
+                                @error('preferred_contact')
+                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label for="department"
+                                    class="block text-white font-bold mb-2">{{ __('messages.contact.form.department') }}</label>
+                                <select id="department" name="department"
+                                    class="w-full px-4 py-3 bg-[#051824] text-white border-2 border-[#27e9b5] rounded-lg focus:outline-none focus:border-[#27eb5]">
+                                    <option value="commercial" {{ old('department') == 'commercial' ? 'selected' : '' }}>
+                                        {{ __('messages.contact.form.department.commercial') }}</option>
+                                    <option value="residential" {{ old('department') == 'residential' ? 'selected' : '' }}>
+                                        {{ __('messages.contact.form.department.residential') }}</option>
+                                    <option value="maintenance" {{ old('department') == 'maintenance' ? 'selected' : '' }}>
+                                        {{ __('messages.contact.form.department.maintenance') }}</option>
+                                </select>
+                                @error('department')
+                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+
                         <div>
-                            <label for="message" class="block text-white font-bold mb-2">{{ __('messages.contact.form.message') }}</label>
-                            <textarea id="message" name="message" rows="5" required class="w-full px-4 py-3 bg-[#051824] text-white border-2 border-[#27e9b5] rounded-lg focus:outline-none focus:border-[#27eb5]">{{ old('message') }}</textarea>
+                            <label for="message"
+                                class="block text-white font-bold mb-2">{{ __('messages.contact.form.message') }}</label>
+                            <textarea id="message" name="message" rows="5" required
+                                class="w-full px-4 py-3 bg-[#051824] text-white border-2 border-[#27e9b5] rounded-lg focus:outline-none focus:border-[#27eb5]">{{ old('message') }}</textarea>
                             @error('message')
                                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
                         </div>
 
-                        <button type="submit" class="w-full px-8 py-4 rounded-[30px] no-underline font-bold text-center transition-all duration-300 border-none cursor-pointer text-base bg-gradient-to-r from-[#27e9b5] to-[#27eb5] text-[#051824] shadow-[0_4px_15px_rgba(39,233,181,0.3)] hover:shadow-[0_6px_20px_rgba(39,233,181,0.4)] hover:translate-y-[-2px]">
+                        <!-- Privacy Consent (Government Compliance) -->
+                        <div class="bg-[#051824] p-4 rounded-lg border border-[#3b5265]">
+                            <div class="flex items-start gap-3">
+                                <input type="checkbox" id="privacy_consent" name="privacy_consent" required
+                                    class="mt-1 w-5 h-5 accent-[#27e9b5] cursor-pointer"
+                                    {{ old('privacy_consent') ? 'checked' : '' }}>
+                                <label for="privacy_consent" class="text-gray-300 text-sm cursor-pointer">
+                                    {{ __('messages.contact.form.privacy_consent') }}
+                                    <a href="{{ route('security.privacy', app()->getLocale()) }}"
+                                        class="text-[#27e9b5] hover:underline" target="_blank">
+                                        {{ __('messages.contact.form.privacy_policy_link') }}
+                                    </a>
+                                </label>
+                            </div>
+                            @error('privacy_consent')
+                                <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Data Protection Notice -->
+                        <div class="flex items-start gap-2 text-gray-400 text-xs">
+                            <i class="fas fa-shield-alt text-[#27e9b5] mt-0.5"></i>
+                            <p>{{ __('messages.contact.form.data_protection_notice') }}</p>
+                        </div>
+
+                        <button type="submit"
+                            class="w-full px-8 py-4 rounded-[30px] no-underline font-bold text-center transition-all duration-300 border-none cursor-pointer text-base bg-linear-to-r from-[#27e9b5] to-[#27eb5] text-[#051824] shadow-[0_4px_15px_rgba(39,233,181,0.3)] hover:shadow-[0_6px_20px_rgba(39,233,181,0.4)] hover:translate-y-[-2px]">
                             {{ __('messages.contact.form.submit') }}
                         </button>
 
-                        @if(session('success'))
+                        @if (session('success'))
                             <p class="text-green-500 mt-2">{{ session('success') }}</p>
                         @endif
                     </form>
@@ -169,7 +249,8 @@
 
             <div class="space-y-4 max-w-3xl mx-auto">
                 <div class="bg-[#051824] rounded-[20px] overflow-hidden">
-                    <div class="faq-question cursor-pointer p-6 flex justify-between items-center hover:bg-[#162936] transition-colors duration-300">
+                    <div
+                        class="faq-question cursor-pointer p-6 flex justify-between items-center hover:bg-[#162936] transition-colors duration-300">
                         <h3 class="text-lg font-bold text-white">{{ __('messages.contact.faq.item1.question') }}</h3>
                         <i class="fas fa-chevron-down text-[#27e9b5] transition-transform duration-300"></i>
                     </div>
@@ -179,7 +260,8 @@
                 </div>
 
                 <div class="bg-[#051824] rounded-[20px] overflow-hidden">
-                    <div class="faq-question cursor-pointer p-6 flex justify-between items-center hover:bg-[#162936] transition-colors duration-300">
+                    <div
+                        class="faq-question cursor-pointer p-6 flex justify-between items-center hover:bg-[#162936] transition-colors duration-300">
                         <h3 class="text-lg font-bold text-white">{{ __('messages.contact.faq.item2.question') }}</h3>
                         <i class="fas fa-chevron-down text-[#27e9b5] transition-transform duration-300"></i>
                     </div>
@@ -189,7 +271,8 @@
                 </div>
 
                 <div class="bg-[#051824] rounded-[20px] overflow-hidden">
-                    <div class="faq-question cursor-pointer p-6 flex justify-between items-center hover:bg-[#162936] transition-colors duration-300">
+                    <div
+                        class="faq-question cursor-pointer p-6 flex justify-between items-center hover:bg-[#162936] transition-colors duration-300">
                         <h3 class="text-lg font-bold text-white">{{ __('messages.contact.faq.item3.question') }}</h3>
                         <i class="fas fa-chevron-down text-[#27e9b5] transition-transform duration-300"></i>
                     </div>
@@ -199,7 +282,8 @@
                 </div>
 
                 <div class="bg-[#051824] rounded-[20px] overflow-hidden">
-                    <div class="faq-question cursor-pointer p-6 flex justify-between items-center hover:bg-[#162936] transition-colors duration-300">
+                    <div
+                        class="faq-question cursor-pointer p-6 flex justify-between items-center hover:bg-[#162936] transition-colors duration-300">
                         <h3 class="text-lg font-bold text-white">{{ __('messages.contact.faq.item4.question') }}</h3>
                         <i class="fas fa-chevron-down text-[#27e9b5] transition-transform duration-300"></i>
                     </div>
@@ -212,31 +296,31 @@
     </section>
 
     @push('scripts')
-    <script>
-        // FAQ accordion functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const faqQuestions = document.querySelectorAll('.faq-question');
+        <script>
+            // FAQ accordion functionality
+            document.addEventListener('DOMContentLoaded', function() {
+                const faqQuestions = document.querySelectorAll('.faq-question');
 
-            faqQuestions.forEach(question => {
-                question.addEventListener('click', function() {
-                    const answer = this.nextElementSibling;
-                    const icon = this.querySelector('i');
+                faqQuestions.forEach(question => {
+                    question.addEventListener('click', function() {
+                        const answer = this.nextElementSibling;
+                        const icon = this.querySelector('i');
 
-                    // Close other open FAQs
-                    faqQuestions.forEach(q => {
-                        if (q !== question) {
-                            q.nextElementSibling.classList.add('hidden');
-                            q.querySelector('i').style.transform = 'rotate(0deg)';
-                        }
+                        // Close other open FAQs
+                        faqQuestions.forEach(q => {
+                            if (q !== question) {
+                                q.nextElementSibling.classList.add('hidden');
+                                q.querySelector('i').style.transform = 'rotate(0deg)';
+                            }
+                        });
+
+                        // Toggle current FAQ
+                        answer.classList.toggle('hidden');
+                        icon.style.transform = answer.classList.contains('hidden') ? 'rotate(0deg)' :
+                            'rotate(180deg)';
                     });
-
-                    // Toggle current FAQ
-                    answer.classList.toggle('hidden');
-                    icon.style.transform = answer.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
                 });
             });
-        });
-    </script>
+        </script>
     @endpush
 @endsection
-

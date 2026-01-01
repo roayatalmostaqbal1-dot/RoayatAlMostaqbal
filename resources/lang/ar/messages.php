@@ -104,6 +104,8 @@ return [
     'footer.credits' => 'الاعتمادات',
     'footer.copyright' => 'جميع الحقوق محفوظة. سياسة الخصوصية',
     'footer.email_label' => 'البريد الإلكتروني:',
+    'footer.security_privacy' => 'الأمان والخصوصية',
+    'footer.data_protection' => 'حماية البيانات',
 
     // Common
     'common.more' => 'المزيد',
@@ -292,6 +294,18 @@ return [
     'contact.form.validation.required' => 'يرجى ملء جميع الحقول المطلوبة',
     'contact.form.validation.email' => 'يرجى إدخال بريد إلكتروني صحيح',
     'contact.form.success' => 'تم إرسال رسالتكم بنجاح! سنتواصل معكم قريباً',
+    'contact.form.preferred_contact' => 'طريقة التواصل المفضلة',
+    'contact.form.preferred_contact.email' => 'البريد الإلكتروني',
+    'contact.form.preferred_contact.phone' => 'الهاتف',
+    'contact.form.preferred_contact.whatsapp' => 'واتساب',
+    'contact.form.department' => 'القسم المطلوب',
+    'contact.form.department.commercial' => 'تجاري',
+    'contact.form.department.residential' => 'سكني',
+    'contact.form.department.maintenance' => 'صيانة',
+    'contact.form.privacy_consent' => 'أوافق على معالجة بياناتي الشخصية وفقاً لـ',
+    'contact.form.privacy_policy_link' => 'سياسة الخصوصية',
+    'contact.form.data_protection_notice' => 'بياناتكم محمية بتشفير SSL/TLS ولن يتم مشاركتها مع أي طرف ثالث. نلتزم بمعايير حماية البيانات الإماراتية.',
+    'contact.form.privacy_consent_required' => 'يجب الموافقة على سياسة الخصوصية للمتابعة',
 
     // Map Section
     'contact.map.title' => 'موقعنا على الخريطة',
@@ -330,5 +344,161 @@ return [
     'string' => 'حقل :attribute يجب أن يكون نصًا.',
     'nullable' => 'حقل :attribute يمكن تركه فارغًا.',
     'exists' => 'القيمة المحددة لحقل :attribute غير صالحة.',
+
+    // Security & Encryption Page
+    'security.encryption.title' => 'التشفير وحماية البيانات',
+    'security.encryption.meta_description' => 'تعرف على منهجية التشفير وإثبات المعرفة الصفرية المستخدمة لحماية بياناتك',
+    'security.encryption.page_title' => 'التشفير وحماية البيانات',
+    'security.encryption.page_subtitle' => 'نستخدم أحدث تقنيات التشفير وإثبات المعرفة الصفرية لضمان أقصى درجات الأمان والخصوصية لبياناتكم',
+
+    // SSL/TLS Section
+    'security.encryption.ssl.badge' => 'تشفير SSL/TLS',
+    'security.encryption.ssl.title' => 'تشفير الاتصالات',
+    'security.encryption.ssl.description' => 'جميع الاتصالات مع خوادمنا مشفرة باستخدام بروتوكول TLS 1.3 الأحدث، مما يضمن حماية بياناتكم أثناء النقل.',
+    'security.encryption.ssl.feature1' => 'تشفير 256-bit AES-GCM للبيانات',
+    'security.encryption.ssl.feature2' => 'شهادات SSL صادرة من جهات معتمدة',
+    'security.encryption.ssl.feature3' => 'دعم HSTS و Perfect Forward Secrecy',
+    'security.encryption.ssl.certificate' => 'شهادة أمان معتمدة',
+
+    // Zero-Knowledge Proof Section
+    'security.encryption.zkp.badge' => 'إثبات المعرفة الصفرية',
+    'security.encryption.zkp.title' => 'ما هو إثبات المعرفة الصفرية (ZKP)؟',
+    'security.encryption.zkp.description' => 'إثبات المعرفة الصفرية هو طريقة تشفير تتيح التحقق من صحة المعلومات دون الكشف عن البيانات الفعلية، مما يوفر أقصى درجات الخصوصية.',
+    'security.encryption.zkp.feature1.title' => 'الخصوصية الكاملة',
+    'security.encryption.zkp.feature1.description' => 'يمكن التحقق من هويتك أو معلوماتك دون الكشف عن أي بيانات حساسة.',
+    'security.encryption.zkp.feature2.title' => 'لا تخزين للبيانات',
+    'security.encryption.zkp.feature2.description' => 'الخادم لا يحتفظ بأي معلومات يمكن استخدامها لإعادة بناء بياناتك الأصلية.',
+    'security.encryption.zkp.feature3.title' => 'تحقق موثوق',
+    'security.encryption.zkp.feature3.description' => 'يمكن للنظام التأكد من صحة ادعاءاتك بثقة رياضية عالية.',
+
+    // Methodology Section
+    'security.encryption.methodology.title' => 'منهجية التشفير',
+    'security.encryption.methodology.description' => 'نتبع أفضل الممارسات العالمية في تشفير وحماية البيانات',
+    'security.encryption.methodology.step1.title' => 'التشفير على الجهاز',
+    'security.encryption.methodology.step1.description' => 'يتم تشفير بياناتك على جهازك قبل إرسالها',
+    'security.encryption.methodology.step2.title' => 'نقل آمن',
+    'security.encryption.methodology.step2.description' => 'نقل البيانات المشفرة عبر قنوات TLS آمنة',
+    'security.encryption.methodology.step3.title' => 'تخزين مشفر',
+    'security.encryption.methodology.step3.description' => 'تخزين البيانات المشفرة فقط على خوادمنا',
+    'security.encryption.methodology.step4.title' => 'فك التشفير المحلي',
+    'security.encryption.methodology.step4.description' => 'فك التشفير يتم فقط على جهازك',
+
+    // Government Compliance Section
+    'security.encryption.compliance.badge' => 'الامتثال الحكومي',
+    'security.encryption.compliance.title' => 'الامتثال للمعايير الحكومية',
+    'security.encryption.compliance.description' => 'نلتزم بجميع المعايير والمتطلبات الأمنية المحددة من قبل الجهات الحكومية في دولة الإمارات العربية المتحدة.',
+    'security.encryption.compliance.item1' => 'الامتثال لمعايير أمن المعلومات الإماراتية',
+    'security.encryption.compliance.item2' => 'التوافق مع قانون حماية البيانات الشخصية',
+    'security.encryption.compliance.item3' => 'الالتزام بمتطلبات الأمن السيبراني الوطني',
+    'security.encryption.compliance.report_title' => 'تقرير التحقق',
+    'security.encryption.compliance.report_description' => 'قم بتحميل تقرير التحقق الذي يشرح عمليات التحقق دون الكشف عن بيانات المستخدمين.',
+    'security.encryption.compliance.download_button' => 'تحميل التقرير',
+
+    // CTA Section
+    'security.encryption.cta.title' => 'هل لديك أسئلة حول أمان بياناتك؟',
+    'security.encryption.cta.description' => 'فريقنا المتخصص جاهز للإجابة على جميع استفساراتكم المتعلقة بالأمان والخصوصية.',
+    'security.encryption.cta.button' => 'تواصل معنا',
+
+    // ZKP PoC Demonstration
+    'security.encryption.zkp_poc.title' => 'عرض توضيحي لإثبات المعرفة الصفرية (PoC)',
+    'security.encryption.zkp_poc.subtitle' => 'جرب كيف يعمل التحقق دون مشاركة السر',
+    'security.encryption.zkp_poc.secret_label' => 'أدخل سرك (رقم سري)',
+    'security.encryption.zkp_poc.secret_placeholder' => 'مثال: 1234',
+    'security.encryption.zkp_poc.generate_proof' => 'إنشاء إثبات (Proof)',
+    'security.encryption.zkp_poc.verify_proof' => 'تحقق من الإثبات (Verify)',
+    'security.encryption.zkp_poc.result_title' => 'نتيجة التحقق',
+    'security.encryption.zkp_poc.success' => 'تم التحقق بنجاح! النظام تأكد أنك تعرف السر دون أن يراه.',
+    'security.encryption.zkp_poc.instruction' => 'في هذا العرض، يتم استخدام دالة هاش (Hash) لإثبات معرفتك بالرقم السري دون إرساله إلى الخادم.',
+
+    // Navigation additions
+    'nav.security' => 'الأمان',
+    'nav.encryption' => 'التشفير',
+    'nav.privacy' => 'الخصوصية',
+    'nav.data_protection' => 'حماية البيانات',
+
+    // Privacy Policy Page
+    'security.privacy.title' => 'سياسة الخصوصية',
+    'security.privacy.meta_description' => 'سياسة الخصوصية وحماية البيانات الشخصية لشركة رؤية المستقبل',
+    'security.privacy.page_title' => 'سياسة الخصوصية',
+    'security.privacy.page_subtitle' => 'نلتزم بحماية خصوصيتكم وبياناتكم الشخصية وفقاً لأعلى المعايير الدولية والمحلية',
+    'security.privacy.last_updated' => 'آخر تحديث',
+
+    'security.privacy.intro.title' => 'مقدمة',
+    'security.privacy.intro.description' => 'تلتزم شركة رؤية المستقبل بحماية خصوصية مستخدميها. توضح هذه السياسة كيفية جمع واستخدام وحماية بياناتكم الشخصية وفقاً لقوانين حماية البيانات في دولة الإمارات العربية المتحدة.',
+
+    'security.privacy.collection.title' => 'البيانات التي نجمعها',
+    'security.privacy.collection.description' => 'نجمع البيانات التالية عند استخدامكم لخدماتنا:',
+    'security.privacy.collection.item1' => 'معلومات الاتصال (الاسم، البريد الإلكتروني، رقم الهاتف)',
+    'security.privacy.collection.item2' => 'معلومات الشركة (اسم الشركة، نوع الخدمة المطلوبة)',
+    'security.privacy.collection.item3' => 'بيانات الاستخدام (عنوان IP، نوع المتصفح، وقت الزيارة)',
+
+    'security.privacy.usage.title' => 'كيف نستخدم بياناتكم',
+    'security.privacy.usage.description' => 'نستخدم بياناتكم للأغراض التالية:',
+    'security.privacy.usage.item1' => 'الرد على استفساراتكم وتقديم الخدمات المطلوبة',
+    'security.privacy.usage.item2' => 'تحسين خدماتنا وتجربة المستخدم',
+    'security.privacy.usage.item3' => 'إرسال تحديثات مهمة حول خدماتنا (بموافقتكم)',
+
+    'security.privacy.protection.title' => 'حماية بياناتكم',
+    'security.privacy.protection.description' => 'نستخدم تقنيات تشفير متقدمة (SSL/TLS) لحماية بياناتكم أثناء النقل والتخزين. لا نشارك بياناتكم مع أي طرف ثالث دون موافقتكم الصريحة، إلا في الحالات التي يتطلبها القانون.',
+
+    'security.privacy.rights.title' => 'حقوقكم',
+    'security.privacy.rights.description' => 'لديكم الحقوق التالية فيما يتعلق ببياناتكم الشخصية:',
+    'security.privacy.rights.item1' => 'الحق في الوصول إلى بياناتكم الشخصية',
+    'security.privacy.rights.item2' => 'الحق في تصحيح البيانات غير الدقيقة',
+    'security.privacy.rights.item3' => 'الحق في حذف بياناتكم (حق النسيان)',
+    'security.privacy.rights.item4' => 'الحق في الاعتراض على معالجة بياناتكم',
+
+    'security.privacy.contact.title' => 'تواصلوا معنا',
+    'security.privacy.contact.description' => 'إذا كان لديكم أي أسئلة حول سياسة الخصوصية أو ترغبون في ممارسة حقوقكم، يرجى التواصل معنا.',
+    'security.privacy.contact.button' => 'تواصل معنا',
+
+    // Data Protection Page
+    'security.data_protection.title' => 'حماية البيانات',
+    'security.data_protection.meta_description' => 'سياسة حماية البيانات والإجراءات الأمنية لشركة رؤية المستقبل',
+    'security.data_protection.page_title' => 'حماية البيانات',
+    'security.data_protection.page_subtitle' => 'نلتزم بأعلى معايير حماية البيانات وفقاً للقوانين الإماراتية والدولية',
+
+    'security.data_protection.uae.title' => 'الامتثال للقوانين الإماراتية',
+    'security.data_protection.uae.description' => 'نلتزم بجميع قوانين ولوائح حماية البيانات في دولة الإمارات العربية المتحدة، بما في ذلك قانون حماية البيانات الشخصية والمعايير الأمنية الصادرة عن الهيئة الوطنية للأمن الإلكتروني.',
+
+    'security.data_protection.measures.title' => 'الإجراءات التقنية',
+    'security.data_protection.measures.encryption.title' => 'التشفير',
+    'security.data_protection.measures.encryption.description' => 'تشفير جميع البيانات أثناء النقل والتخزين باستخدام TLS 1.3 و AES-256',
+    'security.data_protection.measures.storage.title' => 'التخزين الآمن',
+    'security.data_protection.measures.storage.description' => 'تخزين البيانات في مراكز بيانات معتمدة داخل دولة الإمارات',
+    'security.data_protection.measures.access.title' => 'التحكم في الوصول',
+    'security.data_protection.measures.access.description' => 'نظام صارم للتحكم في الوصول مع المصادقة متعددة العوامل',
+    'security.data_protection.measures.audit.title' => 'التدقيق والمراقبة',
+    'security.data_protection.measures.audit.description' => 'مراقبة مستمرة وتدقيق دوري لجميع عمليات الوصول للبيانات',
+
+    'security.data_protection.retention.title' => 'فترة الاحتفاظ بالبيانات',
+    'security.data_protection.retention.description' => 'نحتفظ ببياناتكم الشخصية فقط للمدة اللازمة لتحقيق الأغراض المحددة، أو وفقاً لما يتطلبه القانون. بعد انتهاء هذه الفترة، يتم حذف البيانات بشكل آمن.',
+
+    'security.data_protection.contact.title' => 'مسؤول حماية البيانات',
+    'security.data_protection.contact.description' => 'للاستفسارات المتعلقة بحماية البيانات أو لممارسة حقوقكم، يرجى التواصل مع مسؤول حماية البيانات لدينا.',
+    'security.data_protection.contact.button' => 'تواصل معنا',
+
+    // ZKP Verification Report
+    'security.report.title' => 'تقرير التحقق من إثبات المعرفة الصفرية',
+    'security.report.print_button' => 'طباعة التقرير',
+    'security.report.id' => 'رقم التقرير',
+    'security.report.generated_at' => 'تاريخ الإصدار',
+    'security.report.valid_until' => 'صالح حتى',
+
+    'security.report.zkp.title' => 'نظرة عامة على إثبات المعرفة الصفرية',
+    'security.report.zkp.description' => 'يستخدم نظامنا تقنية إثبات المعرفة الصفرية (ZKP) للتحقق من صحة البيانات دون الكشف عن المعلومات الحساسة. هذا يضمن أقصى درجات الخصوصية مع الحفاظ على موثوقية التحقق.',
+
+    'security.report.methodology.title' => 'منهجية التحقق',
+    'security.report.methodology.item1' => 'التشفير من طرف إلى طرف باستخدام TLS 1.3',
+    'security.report.methodology.item2' => 'تشفير البيانات المخزنة باستخدام AES-256-GCM',
+    'security.report.methodology.item3' => 'التحقق من الهوية دون الكشف عن البيانات الشخصية',
+    'security.report.methodology.item4' => 'سجلات تدقيق مشفرة لجميع عمليات التحقق',
+
+    'security.report.compliance.title' => 'الامتثال والشهادات',
+
+    'security.report.verification.title' => 'عملية التحقق',
+    'security.report.verification.description' => 'يتم التحقق من جميع العمليات باستخدام بروتوكولات تشفير معتمدة دولياً. لا يتم تخزين أي بيانات حساسة على خوادمنا، ويتم التحقق من صحة المعلومات رياضياً دون الحاجة للوصول إلى البيانات الأصلية.',
+
+    'security.report.footer' => 'هذا التقرير صادر تلقائياً ولا يحتاج إلى توقيع. للتحقق من صحة التقرير، يرجى التواصل معنا.',
 
 ];

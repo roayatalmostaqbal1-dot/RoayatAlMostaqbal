@@ -27,13 +27,11 @@
                  </ul>
             </div>
             <div>
-                <h4 class="text-lg font-bold mb-4">{{ __('messages.footer.quick_links') }}</h4>
+                <h4 class="text-lg font-bold mb-4">{{ __('messages.footer.security_privacy') }}</h4>
                 <ul class="space-y-2">
-                    <li><a href="#faq" class="text-gray-300 hover:text-[#27e9b5] transition-colors">{{ __('messages.footer.faq') }}</a></li>
-                    <li><a href="#news" class="text-gray-300 hover:text-[#27e9b5] transition-colors">{{ __('messages.footer.news') }}</a></li>
-                    <li><a href="#coming-soon" class="text-gray-300 hover:text-[#27e9b5] transition-colors">{{ __('messages.footer.coming_soon') }}</a></li>
-                    <li><a href="#404" class="text-gray-300 hover:text-[#27e9b5] transition-colors">404</a></li>
-                    <li><a href="#credits" class="text-gray-300 hover:text-[#27e9b5] transition-colors">{{ __('messages.footer.credits') }}</a></li>
+                    <li><a href="{{ route('security.encryption', app()->getLocale()) }}" class="text-gray-300 hover:text-[#27e9b5] transition-colors">{{ __('messages.nav.encryption') }}</a></li>
+                    <li><a href="{{ route('security.privacy', app()->getLocale()) }}" class="text-gray-300 hover:text-[#27e9b5] transition-colors">{{ __('messages.nav.privacy') }}</a></li>
+                    <li><a href="{{ route('security.data-protection', app()->getLocale()) }}" class="text-gray-300 hover:text-[#27e9b5] transition-colors">{{ __('messages.footer.data_protection') }}</a></li>
                 </ul>
             </div>
 

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Event;
 use Laravel\Passport\Passport;
 use SocialiteProviders\Manager\SocialiteWasCalled;
 use SocialiteProviders\Microsoft\Provider;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -33,6 +34,10 @@ class AppServiceProvider extends ServiceProvider
         Passport::personalAccessTokensExpireIn(now()->addMonths(6));
         if (file_exists(storage_path('oauth-private.key'))) {
             Passport::loadKeysFrom(storage_path());
+        }
+
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
         }
     }
 }

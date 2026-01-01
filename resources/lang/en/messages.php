@@ -263,7 +263,7 @@ return [
     'about.features.maintenance.title' => 'Regular Maintenance',
     'about.features.maintenance.description' => 'Regular maintenance to ensure continuous operation',
 
-    // Contact CTA  
+    // Contact CTA
     'about.contact_cta.title' => '? Want to Know More About Our Services',
     'about.contact_cta.description' => 'Contact us today for a free consultation',
     'about.contact_cta.button' => 'Contact Us',
@@ -298,6 +298,18 @@ return [
     'contact.form.service.option.consultation' => 'Consultation',
     'contact.form.message' => 'Message *',
     'contact.form.submit' => 'Send Message',
+    'contact.form.privacy_consent' => 'I agree to the processing of my personal data in accordance with the',
+    'contact.form.privacy_policy_link' => 'Privacy Policy',
+    'contact.form.data_protection_notice' => 'Your data is protected with SSL/TLS encryption and will not be shared with any third party. We comply with UAE data protection standards.',
+    'contact.form.privacy_consent_required' => 'You must agree to the privacy policy to continue',
+    'contact.form.preferred_contact' => 'Preferred Contact Method',
+    'contact.form.preferred_contact.email' => 'Email',
+    'contact.form.preferred_contact.phone' => 'Phone',
+    'contact.form.preferred_contact.whatsapp' => 'WhatsApp',
+    'contact.form.department' => 'Requested Department',
+    'contact.form.department.commercial' => 'Commercial',
+    'contact.form.department.residential' => 'Residential',
+    'contact.form.department.maintenance' => 'Maintenance',
 
     // Map Section
     'contact.map.title' => 'Our Location on the Map',
@@ -333,4 +345,160 @@ return [
         'service' => 'service',
         'message' => 'message',
     ],
+
+    // Security & Encryption Page
+    'security.encryption.title' => 'Encryption & Data Protection',
+    'security.encryption.meta_description' => 'Learn about our encryption methodology and Zero-Knowledge Proof technology used to protect your data',
+    'security.encryption.page_title' => 'Encryption & Data Protection',
+    'security.encryption.page_subtitle' => 'We use the latest encryption technologies and Zero-Knowledge Proof to ensure maximum security and privacy for your data',
+
+    // SSL/TLS Section
+    'security.encryption.ssl.badge' => 'SSL/TLS Encryption',
+    'security.encryption.ssl.title' => 'Communication Encryption',
+    'security.encryption.ssl.description' => 'All communications with our servers are encrypted using the latest TLS 1.3 protocol, ensuring your data is protected during transit.',
+    'security.encryption.ssl.feature1' => '256-bit AES-GCM data encryption',
+    'security.encryption.ssl.feature2' => 'SSL certificates from trusted authorities',
+    'security.encryption.ssl.feature3' => 'HSTS and Perfect Forward Secrecy support',
+    'security.encryption.ssl.certificate' => 'Certified Security Certificate',
+
+    // Zero-Knowledge Proof Section
+    'security.encryption.zkp.badge' => 'Zero-Knowledge Proof',
+    'security.encryption.zkp.title' => 'What is Zero-Knowledge Proof (ZKP)?',
+    'security.encryption.zkp.description' => 'Zero-Knowledge Proof is an encryption method that allows verification of information without revealing the actual data, providing maximum privacy.',
+    'security.encryption.zkp.feature1.title' => 'Complete Privacy',
+    'security.encryption.zkp.feature1.description' => 'Your identity or information can be verified without revealing any sensitive data.',
+    'security.encryption.zkp.feature2.title' => 'No Data Storage',
+    'security.encryption.zkp.feature2.description' => 'The server does not retain any information that could be used to reconstruct your original data.',
+    'security.encryption.zkp.feature3.title' => 'Reliable Verification',
+    'security.encryption.zkp.feature3.description' => 'The system can confirm the validity of your claims with high mathematical confidence.',
+
+    // Methodology Section
+    'security.encryption.methodology.title' => 'Encryption Methodology',
+    'security.encryption.methodology.description' => 'We follow global best practices in data encryption and protection',
+    'security.encryption.methodology.step1.title' => 'Device Encryption',
+    'security.encryption.methodology.step1.description' => 'Your data is encrypted on your device before transmission',
+    'security.encryption.methodology.step2.title' => 'Secure Transfer',
+    'security.encryption.methodology.step2.description' => 'Encrypted data transfer through secure TLS channels',
+    'security.encryption.methodology.step3.title' => 'Encrypted Storage',
+    'security.encryption.methodology.step3.description' => 'Only encrypted data is stored on our servers',
+    'security.encryption.methodology.step4.title' => 'Local Decryption',
+    'security.encryption.methodology.step4.description' => 'Decryption only occurs on your device',
+
+    // Government Compliance Section
+    'security.encryption.compliance.badge' => 'Government Compliance',
+    'security.encryption.compliance.title' => 'Government Standards Compliance',
+    'security.encryption.compliance.description' => 'We comply with all security standards and requirements set by government authorities in the United Arab Emirates.',
+    'security.encryption.compliance.item1' => 'Compliance with UAE information security standards',
+    'security.encryption.compliance.item2' => 'Compatibility with Personal Data Protection Law',
+    'security.encryption.compliance.item3' => 'Adherence to national cybersecurity requirements',
+    'security.encryption.compliance.report_title' => 'Verification Report',
+    'security.encryption.compliance.report_description' => 'Download the verification report that explains verification processes without revealing user data.',
+    'security.encryption.compliance.download_button' => 'Download Report',
+
+    // CTA Section
+    'security.encryption.cta.title' => 'Have questions about your data security?',
+    'security.encryption.cta.description' => 'Our specialized team is ready to answer all your security and privacy inquiries.',
+    'security.encryption.cta.button' => 'Contact Us',
+
+    // ZKP PoC Demonstration
+    'security.encryption.zkp_poc.title' => 'Zero-Knowledge Proof (PoC) Demonstration',
+    'security.encryption.zkp_poc.subtitle' => 'Try how verification works without sharing the secret',
+    'security.encryption.zkp_poc.secret_label' => 'Enter your secret (PIN code)',
+    'security.encryption.zkp_poc.secret_placeholder' => 'Example: 1234',
+    'security.encryption.zkp_poc.generate_proof' => 'Generate Proof',
+    'security.encryption.zkp_poc.verify_proof' => 'Verify Proof',
+    'security.encryption.zkp_poc.result_title' => 'Verification Result',
+    'security.encryption.zkp_poc.success' => 'Verified successfully! The system confirmed you know the secret without seeing it.',
+    'security.encryption.zkp_poc.instruction' => 'In this demo, a Hash function is used to prove your knowledge of the PIN without sending it to the server.',
+
+    // Navigation additions
+    'nav.security' => 'Security',
+    'nav.encryption' => 'Encryption',
+    'nav.privacy' => 'Privacy',
+    'nav.data_protection' => 'Data Protection',
+
+    // Privacy Policy Page
+    'security.privacy.title' => 'Privacy Policy',
+    'security.privacy.meta_description' => 'Privacy policy and personal data protection for Vision of the Future',
+    'security.privacy.page_title' => 'Privacy Policy',
+    'security.privacy.page_subtitle' => 'We are committed to protecting your privacy and personal data according to the highest international and local standards',
+    'security.privacy.last_updated' => 'Last Updated',
+
+    'security.privacy.intro.title' => 'Introduction',
+    'security.privacy.intro.description' => 'Vision of the Future is committed to protecting the privacy of its users. This policy explains how we collect, use, and protect your personal data in accordance with the data protection laws of the United Arab Emirates.',
+
+    'security.privacy.collection.title' => 'Data We Collect',
+    'security.privacy.collection.description' => 'We collect the following data when you use our services:',
+    'security.privacy.collection.item1' => 'Contact information (name, email, phone number)',
+    'security.privacy.collection.item2' => 'Company information (company name, requested service type)',
+    'security.privacy.collection.item3' => 'Usage data (IP address, browser type, visit time)',
+
+    'security.privacy.usage.title' => 'How We Use Your Data',
+    'security.privacy.usage.description' => 'We use your data for the following purposes:',
+    'security.privacy.usage.item1' => 'Responding to your inquiries and providing requested services',
+    'security.privacy.usage.item2' => 'Improving our services and user experience',
+    'security.privacy.usage.item3' => 'Sending important updates about our services (with your consent)',
+
+    'security.privacy.protection.title' => 'Protecting Your Data',
+    'security.privacy.protection.description' => 'We use advanced encryption technologies (SSL/TLS) to protect your data during transmission and storage. We do not share your data with any third party without your explicit consent, except where required by law.',
+
+    'security.privacy.rights.title' => 'Your Rights',
+    'security.privacy.rights.description' => 'You have the following rights regarding your personal data:',
+    'security.privacy.rights.item1' => 'Right to access your personal data',
+    'security.privacy.rights.item2' => 'Right to correct inaccurate data',
+    'security.privacy.rights.item3' => 'Right to delete your data (right to be forgotten)',
+    'security.privacy.rights.item4' => 'Right to object to the processing of your data',
+
+    'security.privacy.contact.title' => 'Contact Us',
+    'security.privacy.contact.description' => 'If you have any questions about the privacy policy or wish to exercise your rights, please contact us.',
+    'security.privacy.contact.button' => 'Contact Us',
+
+    // Data Protection Page
+    'security.data_protection.title' => 'Data Protection',
+    'security.data_protection.meta_description' => 'Data protection policy and security measures for Vision of the Future',
+    'security.data_protection.page_title' => 'Data Protection',
+    'security.data_protection.page_subtitle' => 'We are committed to the highest data protection standards in accordance with UAE and international laws',
+
+    'security.data_protection.uae.title' => 'UAE Law Compliance',
+    'security.data_protection.uae.description' => 'We comply with all data protection laws and regulations in the United Arab Emirates, including the Personal Data Protection Law and security standards issued by the National Electronic Security Authority.',
+
+    'security.data_protection.measures.title' => 'Technical Measures',
+    'security.data_protection.measures.encryption.title' => 'Encryption',
+    'security.data_protection.measures.encryption.description' => 'All data encrypted in transit and at rest using TLS 1.3 and AES-256',
+    'security.data_protection.measures.storage.title' => 'Secure Storage',
+    'security.data_protection.measures.storage.description' => 'Data stored in certified data centers within the UAE',
+    'security.data_protection.measures.access.title' => 'Access Control',
+    'security.data_protection.measures.access.description' => 'Strict access control system with multi-factor authentication',
+    'security.data_protection.measures.audit.title' => 'Audit & Monitoring',
+    'security.data_protection.measures.audit.description' => 'Continuous monitoring and periodic auditing of all data access operations',
+
+    'security.data_protection.retention.title' => 'Data Retention Period',
+    'security.data_protection.retention.description' => 'We retain your personal data only for the period necessary to achieve the specified purposes, or as required by law. After this period, data is securely deleted.',
+
+    'security.data_protection.contact.title' => 'Data Protection Officer',
+    'security.data_protection.contact.description' => 'For data protection inquiries or to exercise your rights, please contact our Data Protection Officer.',
+    'security.data_protection.contact.button' => 'Contact Us',
+
+    // ZKP Verification Report
+    'security.report.title' => 'Zero-Knowledge Proof Verification Report',
+    'security.report.print_button' => 'Print Report',
+    'security.report.id' => 'Report ID',
+    'security.report.generated_at' => 'Generated At',
+    'security.report.valid_until' => 'Valid Until',
+
+    'security.report.zkp.title' => 'Zero-Knowledge Proof Overview',
+    'security.report.zkp.description' => 'Our system uses Zero-Knowledge Proof (ZKP) technology to verify data validity without revealing sensitive information. This ensures maximum privacy while maintaining verification reliability.',
+
+    'security.report.methodology.title' => 'Verification Methodology',
+    'security.report.methodology.item1' => 'End-to-end encryption using TLS 1.3',
+    'security.report.methodology.item2' => 'Data-at-rest encryption using AES-256-GCM',
+    'security.report.methodology.item3' => 'Identity verification without exposing personal data',
+    'security.report.methodology.item4' => 'Encrypted audit logs for all verification operations',
+
+    'security.report.compliance.title' => 'Compliance & Certifications',
+
+    'security.report.verification.title' => 'Verification Process',
+    'security.report.verification.description' => 'All operations are verified using internationally certified encryption protocols. No sensitive data is stored on our servers, and information validity is mathematically verified without accessing the original data.',
+
+    'security.report.footer' => 'This report is automatically generated and does not require a signature. To verify the authenticity of this report, please contact us.',
 ];

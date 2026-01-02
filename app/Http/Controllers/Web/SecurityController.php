@@ -14,7 +14,9 @@ class SecurityController extends Controller
      */
     public function encryption(): View
     {
-        return view('security.encryption');
+        // return view('security.encryption');
+        return view('security.encryption_gov');
+
     }
 
     /**

@@ -47,9 +47,6 @@
                 <li><a href="{{ route('projects', app()->getLocale()) }}"
                         class="nav-link text-white no-underline font-semibold px-4 py-2 rounded-full transition-all duration-300 relative text-sm whitespace-nowrap {{ request()->routeIs('projects') ? 'bg-[#27e9b5] text-[#051824]' : 'hover:bg-[#27e9b5] hover:text-[#051824]' }}">{{ __('messages.nav.projects') }}</a>
                 </li>
-                <li><a href="{{ route('contact', app()->getLocale()) }}"
-                        class="nav-link text-white no-underline font-semibold px-4 py-2 rounded-full transition-all duration-300 relative text-sm whitespace-nowrap {{ request()->routeIs('contact') ? 'bg-[#27e9b5] text-[#051824]' : 'hover:bg-[#27e9b5] hover:text-[#051824]' }}">{{ __('messages.nav.contact') }}</a>
-                </li>
                 <li class="relative group">
                     <button
                         class="nav-link text-white no-underline font-semibold px-4 py-2 rounded-full transition-all duration-300 relative text-sm whitespace-nowrap flex items-center gap-1 {{ request()->routeIs('security.*') ? 'bg-[#27e9b5] text-[#051824]' : 'hover:bg-[#27e9b5] hover:text-[#051824]' }}">
@@ -72,6 +69,10 @@
                         </a>
                     </div>
                 </li>
+                <li><a href="{{ route('contact', app()->getLocale()) }}"
+                        class="nav-link text-white no-underline font-semibold px-4 py-2 rounded-full transition-all duration-300 relative text-sm whitespace-nowrap {{ request()->routeIs('contact') ? 'bg-[#27e9b5] text-[#051824]' : 'hover:bg-[#27e9b5] hover:text-[#051824]' }}">{{ __('messages.nav.contact') }}</a>
+                </li>
+
             </ul>
 
             <div class="md:hidden flex flex-col gap-1 cursor-pointer nav-toggle" id="nav-toggle">

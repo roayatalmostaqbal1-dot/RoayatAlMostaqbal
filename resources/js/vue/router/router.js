@@ -18,6 +18,7 @@ import EncryptionDebugPage from '@/vue/pages/AllUser/EncryptionDebugPage.vue';
 import OAuth2ClientsPage from '@/vue/pages/SuberAdmin/OAuth2ClientsPage.vue';
 import ContactsPage from '@/vue/pages/admin/ContactsPage.vue';
 import PagesManagementPage from '@/vue/pages/SuberAdmin/PagesManagementPage.vue';
+import EncryptedDataRecoveryPage from '@/vue/pages/admin/EncryptedDataRecoveryPage.vue';
 const routes = [
     {
         path: '/login',
@@ -116,6 +117,12 @@ const routes = [
         meta: { requiresAuth: true },
     },
     {
+        path: '/encrypted-data-recovery',
+        name: 'EncryptedDataRecovery',
+        component: EncryptedDataRecoveryPage,
+        meta: { requiresAuth: true },
+    },
+    {
         path: '',
         redirect: '/dashboard',
     },
@@ -140,6 +147,7 @@ const routePageMap = {
     '/contacts': 'contacts',
     '/settings': 'settings',
     '/encrypted-data': 'encrypted-data',
+    '/encrypted-data-recovery': 'encrypted-data-recovery',
 };
 
 // Navigation guards
@@ -179,6 +187,7 @@ router.beforeEach((to, _from, next) => {
                 { path: '/contacts', key: 'contacts' },
                 { path: '/settings', key: 'settings' },
                 { path: '/encrypted-data', key: 'encrypted-data' },
+                { path: '/encrypted-data-recovery', key: 'encrypted-data-recovery' },
             ];
 
             const firstAccessible = accessiblePages.find(page =>

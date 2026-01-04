@@ -5,7 +5,8 @@ import {
     encryptUserData,
     decryptUserData,
     initSodium,
-    clearSensitiveData
+    clearSensitiveData,
+    base64ToBytes
 } from "@/vue/utils/encryption";
 
 export const useEncryptionStore = defineStore("encryption", {
@@ -18,6 +19,7 @@ export const useEncryptionStore = defineStore("encryption", {
         decryptedData: null,
         isDecrypted: false,
         encryptedDataId: null,
+        recoveryKey: null, // Temporary storage for recovery key to show it once
     }),
 
     // =====================
@@ -52,19 +54,37 @@ export const useEncryptionStore = defineStore("encryption", {
         async encryptAndStoreData(password, sensitiveData) {
             this.isLoading = true;
             this.error = null;
+            this.recoveryKey = null;
 
             try {
-                // Encrypt data on client side
-                const encryptedData = await encryptUserData(password, sensitiveData);
+                // Ensure sodium is initialized
+                await initSodium();
+
+                // Generate recovery key
+                const recoveryKey = await import("@/vue/utils/encryption").then(m => m.generateRecoveryKey());
+
+                // Get master key info if available (for server recovery)
+                const recoveryStore = await import("@/vue/stores/Admin/encryptedDataRecoveryStore").then(m => m.useEncryptedDataRecoveryStore());
+                let masterKeyPublicKey = null;
+                if (recoveryStore.masterKeyInfo?.server_side_encryption_available) {
+                    // Note: In current implementation, actual master key encryption might happen server-side
+                    // but we pass it anyway if we have it.
+                    masterKeyPublicKey = recoveryStore.masterKeyInfo.public_key;
+                }
+
+                // Encrypt data on client side with both password and recovery key
+                const encryptedData = await encryptUserData(password, sensitiveData, masterKeyPublicKey, recoveryKey);
 
                 // Send encrypted data to server
                 const response = await apiClient.post("/encrypted-data", encryptedData);
 
                 if (response.data.success) {
                     this.encryptedDataId = response.data.data.id;
+                    this.recoveryKey = recoveryKey; // Store to show to user
+
                     const toast = useToastStore();
                     toast.success("Data Encrypted", "Your sensitive data has been securely encrypted and stored.");
-                    return { success: true, data: response.data.data };
+                    return { success: true, data: response.data.data, recoveryKey };
                 } else {
                     throw new Error(response.data.message || "Failed to store encrypted data");
                 }
@@ -72,6 +92,7 @@ export const useEncryptionStore = defineStore("encryption", {
                 this.error = err.response?.data?.message || err.message || "Encryption failed";
                 const toast = useToastStore();
                 toast.error("Encryption Error", this.error);
+                console.error("Encryption Error", this.error);
                 return { success: false, error: this.error };
             } finally {
                 this.isLoading = false;
@@ -137,8 +158,24 @@ export const useEncryptionStore = defineStore("encryption", {
             this.error = null;
 
             try {
+                // Note: Update doesn't generate a new recovery key by default
+                // to avoid confusing the user. The existing recovery key remains valid
+                // unless we implement RE-ENCRYPTION of the DEK with a new recovery key.
+
+                // For now, we fetch existing data to get the recovery fields
+                const checkResponse = await apiClient.get("/encrypted-data");
+                const existing = checkResponse.data.data;
+
+                // Ensure sodium is initialized
+                await initSodium();
+
                 // Encrypt updated data on client side
                 const encryptedData = await encryptUserData(password, sensitiveData);
+
+                // Preserve existing recovery data
+                encryptedData.encrypted_dek_recovery = existing.encrypted_dek_recovery;
+                encryptedData.dek_salt_recovery = existing.dek_salt_recovery;
+                encryptedData.dek_nonce_recovery = existing.dek_nonce_recovery;
 
                 // Send to server
                 const response = await apiClient.put(`/encrypted-data/${this.encryptedDataId}`, encryptedData);
@@ -155,6 +192,63 @@ export const useEncryptionStore = defineStore("encryption", {
                 this.error = err.response?.data?.message || err.message || "Update failed";
                 const toast = useToastStore();
                 toast.error("Update Error", this.error);
+                return { success: false, error: this.error };
+            } finally {
+                this.isLoading = false;
+            }
+        },
+
+        // ------------------------------------
+        // Recover Data with Recovery Key
+        // ------------------------------------
+        async recoverDataWithKey(recoveryKey) {
+            this.isLoading = true;
+            this.error = null;
+
+            try {
+                await initSodium();
+
+                // Fetch encrypted data from server
+                const response = await apiClient.get("/encrypted-data");
+                if (!response.data.success || !response.data.data) {
+                    throw new Error("No encrypted data found");
+                }
+
+                const encData = response.data.data;
+                if (!encData.encrypted_dek_recovery) {
+                    throw new Error("No recovery key found for this account. Recovery is not possible.");
+                }
+
+                const { decryptDEKWithRecoveryKey, decryptData: decryptDataUtil } = await import("@/vue/utils/encryption");
+
+                // 1. Decrypt DEK using recovery key
+                const dek = decryptDEKWithRecoveryKey(
+                    encData.encrypted_dek_recovery,
+                    encData.dek_salt_recovery,
+                    encData.dek_nonce_recovery,
+                    recoveryKey
+                );
+
+                // 2. Decrypt data using DEK
+                const decryptedJson = decryptDataUtil(
+                    base64ToBytes(encData.profile_ciphertext),
+                    base64ToBytes(encData.profile_nonce),
+                    dek
+                );
+
+                this.decryptedData = JSON.parse(decryptedJson);
+                this.isDecrypted = true;
+                this.encryptedDataId = encData.id;
+
+                const toast = useToastStore();
+                toast.success("Recovery Successful", "Your data has been recovered using the recovery key.");
+                return { success: true, data: this.decryptedData };
+
+            } catch (err) {
+                this.error = err.message || "Recovery failed";
+                const toast = useToastStore();
+                console.error("Recovery Error", this.error);
+                toast.error("Recovery Error", this.error);
                 return { success: false, error: this.error };
             } finally {
                 this.isLoading = false;

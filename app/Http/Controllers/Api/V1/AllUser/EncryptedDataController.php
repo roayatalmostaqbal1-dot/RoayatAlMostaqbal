@@ -3,197 +3,92 @@
 namespace App\Http\Controllers\Api\V1\AllUser;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\V1\AllUser\StoreEncryptedDataRequest;
+use App\Http\Resources\Api\V1\AllUser\EncryptedDataResource;
 use App\Models\EncryptedUserData;
+use App\Models\MasterEncryptionKey;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 
 class EncryptedDataController extends Controller
 {
     /**
      * Store encrypted user data
-     * POST /api/v1/encrypted-data
      */
-    public function store(Request $request)
+    public function store(StoreEncryptedDataRequest $request)
     {
         try {
-            $user = Auth::user();
+            $validated = $request->validated();
 
-            // Validate encrypted data structure
-            $validated = $request->validate([
-                'encrypted_dek' => 'required|string',
-                'dek_salt' => 'required|string',
-                'dek_nonce' => 'required|string',
-                'profile_ciphertext' => 'required|string',
-                'profile_nonce' => 'required|string',
-                'data_type' => 'nullable|string|max:100',
-                'metadata' => 'nullable|string',
-            ]);
-
-            // Check if user already has encrypted data of this type
-            $dataType = $validated['data_type'] ?? 'profile';
-            $existingData = EncryptedUserData::forUser($user->id)
-                ->byType($dataType)
-                ->first();
-
-            if ($existingData) {
-                // Update existing record
-                $existingData->update([
-                    'encrypted_dek' => $validated['encrypted_dek'],
-                    'dek_salt' => $validated['dek_salt'],
-                    'dek_nonce' => $validated['dek_nonce'],
-                    'profile_ciphertext' => $validated['profile_ciphertext'],
-                    'profile_nonce' => $validated['profile_nonce'],
-                    'metadata' => $validated['metadata'] ?? null,
-                ]);
-
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Encrypted data updated successfully',
-                    'data' => $existingData,
-                ], 200);
+            // Server-side encryption if needed
+            if (empty($validated['encrypted_dek_server'])) {
+                $validated['encrypted_dek_server'] = $this->encryptDEKWithMasterKey($validated['encrypted_dek']);
             }
 
-            // Create new encrypted data record
-            $encryptedData = EncryptedUserData::create([
-                'user_id' => $user->id,
-                'encrypted_dek' => $validated['encrypted_dek'],
-                'dek_salt' => $validated['dek_salt'],
-                'dek_nonce' => $validated['dek_nonce'],
-                'profile_ciphertext' => $validated['profile_ciphertext'],
-                'profile_nonce' => $validated['profile_nonce'],
-                'data_type' => $dataType,
-                'metadata' => $validated['metadata'] ?? null,
-            ]);
+            $dataType = $validated['data_type'] ?? 'profile';
 
-            Log::info("Encrypted data stored for user {$user->id}", [
-                'data_type' => $dataType,
-                'id' => $encryptedData->id,
-            ]);
+            $encryptedData = EncryptedUserData::updateOrCreate(
+                ['user_id' => Auth::id(), 'data_type' => $dataType],
+                $validated
+            );
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Encrypted data stored successfully',
-                'data' => $encryptedData,
-            ], 201);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
+            return (new \App\Http\Resources\Api\V1\AllUser\EncryptedDataResource($encryptedData))
+                ->additional(['success' => true, 'message' => 'Encrypted data saved successfully']);
+
         } catch (\Exception $e) {
-            Log::error('Error storing encrypted data: ' . $e->getMessage());
+            Log::error('Error storing encrypted data: '.$e->getMessage());
 
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to store encrypted data',
-                'error' => $e->getMessage(),
-            ], 500);
+            return response()->json(['success' => false, 'message' => 'Failed to store encrypted data'], 500);
         }
     }
 
     /**
      * Retrieve encrypted user data
-     * GET /api/v1/encrypted-data
      */
     public function show(Request $request)
     {
         try {
-            $user = Auth::user();
-            $dataType = $request->query('type', 'profile');
+            $encryptedData = EncryptedUserData::forUser(Auth::id())
+                ->byType($request->query('type', 'profile'))
+                ->firstOrFail();
 
-            $encryptedData = EncryptedUserData::forUser($user->id)
-                ->byType($dataType)
-                ->first();
+            return (new EncryptedDataResource($encryptedData))
+                ->additional(['success' => true]);
 
-            if (!$encryptedData) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'No encrypted data found',
-                ], 404);
-            }
-
-            // Return encrypted data (NOT decrypted - decryption happens client-side)
-            return response()->json([
-                'success' => true,
-                'data' => [
-                    'id' => $encryptedData->id,
-                    'encrypted_dek' => $encryptedData->encrypted_dek,
-                    'dek_salt' => $encryptedData->dek_salt,
-                    'dek_nonce' => $encryptedData->dek_nonce,
-                    'profile_ciphertext' => $encryptedData->profile_ciphertext,
-                    'profile_nonce' => $encryptedData->profile_nonce,
-                    'data_type' => $encryptedData->data_type,
-                    'created_at' => $encryptedData->created_at,
-                    'updated_at' => $encryptedData->updated_at,
-                ],
-            ], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['success' => false, 'message' => 'No encrypted data found'], 404);
         } catch (\Exception $e) {
-            Log::error('Error retrieving encrypted data: ' . $e->getMessage());
+            Log::error('Error retrieving encrypted data: '.$e->getMessage());
 
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to retrieve encrypted data',
-                'error' => $e->getMessage(),
-            ], 500);
+            return response()->json(['success' => false, 'message' => 'Failed to retrieve encrypted data'], 500);
         }
     }
 
     /**
      * Update encrypted user data
-     * PUT /api/v1/encrypted-data/{id}
      */
-    public function update(Request $request, $id)
+    public function update(StoreEncryptedDataRequest $request, $id)
     {
         try {
-            $user = Auth::user();
+            $encryptedData = EncryptedUserData::where('user_id', Auth::id())->findOrFail($id);
 
-            $encryptedData = EncryptedUserData::findOrFail($id);
-
-            // Verify ownership
-            if ($encryptedData->user_id !== $user->id) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Unauthorized',
-                ], 403);
+            $validated = $request->validated();
+            if (empty($validated['encrypted_dek_server'])) {
+                $validated['encrypted_dek_server'] = $this->encryptDEKWithMasterKey($validated['encrypted_dek']);
             }
-
-            // Validate encrypted data structure
-            $validated = $request->validate([
-                'encrypted_dek' => 'required|string',
-                'dek_salt' => 'required|string',
-                'dek_nonce' => 'required|string',
-                'profile_ciphertext' => 'required|string',
-                'profile_nonce' => 'required|string',
-                'metadata' => 'nullable|string',
-            ]);
 
             $encryptedData->update($validated);
 
-            Log::info("Encrypted data updated for user {$user->id}", [
-                'id' => $encryptedData->id,
-            ]);
+            return (new \App\Http\Resources\Api\V1\AllUser\EncryptedDataResource($encryptedData))
+                ->additional(['success' => true, 'message' => 'Encrypted data updated successfully']);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Encrypted data updated successfully',
-                'data' => $encryptedData,
-            ], 200);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
         } catch (\Exception $e) {
-            Log::error('Error updating encrypted data: ' . $e->getMessage());
+            Log::error('Error updating encrypted data: '.$e->getMessage());
 
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to update encrypted data',
-                'error' => $e->getMessage(),
-            ], 500);
+            return response()->json(['success' => false, 'message' => 'Failed to update encrypted data'], 500);
         }
     }
 
@@ -208,7 +103,7 @@ class EncryptedDataController extends Controller
             $user = Auth::user();
 
             // Check if user is admin
-            if (!$user->hasRole('super-admin') && !$user->hasRole('admin')) {
+            if (! $user->hasRole('super-admin') && ! $user->hasPermission('encrypted_data')) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Unauthorized - Admin access required',
@@ -229,7 +124,7 @@ class EncryptedDataController extends Controller
                 'data' => $encryptedData,
             ], 200);
         } catch (\Exception $e) {
-            Log::error('Error retrieving admin encrypted data: ' . $e->getMessage());
+            Log::error('Error retrieving admin encrypted data: '.$e->getMessage());
 
             return response()->json([
                 'success' => false,
@@ -238,5 +133,25 @@ class EncryptedDataController extends Controller
             ], 500);
         }
     }
-}
 
+    /**
+     * Encrypt DEK with master key (server-side)
+     */
+    private function encryptDEKWithMasterKey(string $encryptedDek): string
+    {
+        try {
+            $masterKey = MasterEncryptionKey::getActiveKey();
+
+            if (! $masterKey) {
+                // If no master key exists, create one
+                $masterKey = MasterEncryptionKey::generateNew();
+            }
+            $masterKeyValue = $masterKey->getDecryptedKey();
+
+            return Crypt::encryptString($encryptedDek);
+        } catch (\Exception $e) {
+            Log::error('Error encrypting DEK with master key: '.$e->getMessage());
+            throw new \RuntimeException('Failed to encrypt DEK with master key');
+        }
+    }
+}

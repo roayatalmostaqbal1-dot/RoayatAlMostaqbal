@@ -110,7 +110,14 @@ const IconSettings = {
 // Encryption icon - lock with key
 const IconEncryption = {
     render: () => h('svg', { fill: 'currentColor', viewBox: '0 0 24 24' }, [
-        h('path', { d: 'M12 1C6.48 1 2 5.48 2 11s4.48 10 10 10 10-4.48 10-10S17.52 1 12 1zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 7 15.5 7 14 7.67 14 8.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 7 8.5 7 7 7.67 7 8.5 7.67 10 8.5 10zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z' })
+        h('path', { d: 'M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 2c-2.67 0-8 1.34-8 4v6 c0 2.66 5.33 4 8 4s8-1.34 8-4v-6c0-2.66-5.33-4-8-4zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z' })
+    ])
+};
+
+// Data Recovery icon - key with arrow
+const IconDataRecovery = {
+    render: () => h('svg', { fill: 'currentColor', viewBox: '0 0 24 24' }, [
+        h('path', { d: 'M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z' })
     ])
 };
 
@@ -161,6 +168,7 @@ const allMenuItems = [
     { path: '/contacts', label: 'Contacts', icon: IconContacts, pageKey: 'contacts' },
     { path: '/settings', label: 'Settings', icon: IconSettings, pageKey: 'settings' },
     { path: '/encrypted-data', label: 'Encrypted Data', icon: IconEncryption, pageKey: 'encrypted-data' },
+    { path: '/encrypted-data-recovery', label: 'Data Recovery', icon: IconDataRecovery, pageKey: 'encrypted-data-recovery' },
     { path: '/encryption-debug', label: 'Encryption Debug', icon: IconDebug, pageKey: null }, // Debug page - always show
 ];
 

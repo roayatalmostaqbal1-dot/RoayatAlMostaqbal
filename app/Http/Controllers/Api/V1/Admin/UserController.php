@@ -18,12 +18,14 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+        $search = $request->query('search');
         $users = User::with('roles')
             ->select(['id', 'name', 'email', 'is_active'])
+            ->whereAny(["name", "email"], "like", "%{$search}%")
             ->paginate(perPage: $request->per_page ?? 10, page: $request->page ?? 1);
-
         return new InfoAllUsersResponse($users);
     }
+
     public function getRoles()
     {
         $roles = Role::select(['id', 'name'])->get();

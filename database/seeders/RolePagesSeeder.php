@@ -31,11 +31,11 @@ class RolePagesSeeder extends Seeder
             $this->command->info('✓ Super Admin: All pages assigned');
         }
 
-        // Admin: All pages except encrypted-data
+        // Admin: All pages except encrypted-data, but include encrypted-data-recovery
         if ($adminRole) {
             $adminPages = array_filter($allPages, fn($page) => $page !== 'encrypted-data');
             $adminRole->assignPages($adminPages);
-            $this->command->info('✓ Admin: All pages except encrypted-data assigned');
+            $this->command->info('✓ Admin: All pages except encrypted-data assigned (includes recovery)');
         }
 
         // Editor: Dashboard, Contacts, OAuth2 Clients

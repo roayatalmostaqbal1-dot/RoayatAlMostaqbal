@@ -1,17 +1,15 @@
 <?php
 
-use App\Http\Controllers\Api\V1\SuperAdmin\{
-    RolePermissionController,
-    PermissionController,
-    RoleController,
-    PermissionRoleController,
-    PageController,
-    OAuth2ClientController
- };
-
+use App\Http\Controllers\Api\V1\SuperAdmin\EncryptedDataRecoveryController;
+use App\Http\Controllers\Api\V1\SuperAdmin\OAuth2ClientController;
+use App\Http\Controllers\Api\V1\SuperAdmin\PageController;
+use App\Http\Controllers\Api\V1\SuperAdmin\PermissionController;
+use App\Http\Controllers\Api\V1\SuperAdmin\PermissionRoleController;
+use App\Http\Controllers\Api\V1\SuperAdmin\RoleController;
+use App\Http\Controllers\Api\V1\SuperAdmin\RolePermissionController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('SuperAdmin')->middleware(['auth:api','role:super-admin'])->group(function () {
+Route::prefix('SuperAdmin')->middleware(['auth:api', 'role:super-admin'])->group(function () {
     // =====================
     // Roles Management
     // =====================
@@ -22,7 +20,7 @@ Route::prefix('SuperAdmin')->middleware(['auth:api','role:super-admin'])->group(
             'store' => 'permission:roles.create',
             'update' => 'permission:roles.edit',
             'destroy' => 'permission:roles.delete',
-        ]
+        ],
     ]);
 
     // =====================
@@ -36,7 +34,7 @@ Route::prefix('SuperAdmin')->middleware(['auth:api','role:super-admin'])->group(
             'store' => 'permission:permissions.create',
             'update' => 'permission:permissions.edit',
             'destroy' => 'permission:permissions.delete',
-        ]
+        ],
     ]);
 
     // =====================
@@ -50,9 +48,8 @@ Route::prefix('SuperAdmin')->middleware(['auth:api','role:super-admin'])->group(
             'store' => 'permission:roles.edit',
             'update' => 'permission:roles.edit',
             'destroy' => 'permission:roles.edit',
-        ]
+        ],
     ]);
-
 
     // =====================
     // Role Permissions Management
@@ -71,9 +68,6 @@ Route::prefix('SuperAdmin')->middleware(['auth:api','role:super-admin'])->group(
         ->middleware('permission:roles.edit')
         ->name('role-permissions.all');
 
-
-
-
     // =====================
     // OAuth2 Clients Management
     // =====================
@@ -85,21 +79,19 @@ Route::prefix('SuperAdmin')->middleware(['auth:api','role:super-admin'])->group(
             'store' => 'permission:oauth2_clients.create',
             'update' => 'permission:oauth2_clients.edit',
             'destroy' => 'permission:oauth2_clients.delete',
-        ]
+        ],
     ]);
 
     Route::post('oauth2-clients/{id}/regenerate-secret', [OAuth2ClientController::class, 'regenerateSecret'])
         ->middleware('permission:oauth2_clients.edit')
         ->name('oauth2-clients.regenerate-secret');
 
-
-
     // =====================
     // Pages Management
     // =====================
 
     Route::apiResource('pages', PageController::class, [
-        'only' => ['index', 'show']
+        'only' => ['index', 'show'],
     ])->middleware('permission:pages.view');
     Route::get('pages-with-roles/all', [PageController::class, 'getAllWithRoles'])
         ->name('pages.all-with-roles')->middleware('permission:pages.view');
@@ -110,6 +102,14 @@ Route::prefix('SuperAdmin')->middleware(['auth:api','role:super-admin'])->group(
     Route::delete('roles/{role}/pages/{pageKey}', [PageController::class, 'removePageFromRole'])
         ->name('roles.pages.remove')->middleware('permission:roles.edit');
 
+    // =====================
+    // Encrypted Data Recovery (Admin Only)
+    // =====================
 
+    Route::get('/master-key/public-key', [EncryptedDataRecoveryController::class, 'getMasterKeyPublicKey'])
+        ->middleware('permission:encrypted_data.view');
+
+    Route::post('/recover-encrypted-data/{userId}', [EncryptedDataRecoveryController::class, 'recoverData'])
+        ->middleware('permission:encrypted_data.recover');
 
 });

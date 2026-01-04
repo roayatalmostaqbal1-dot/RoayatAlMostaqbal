@@ -102,6 +102,7 @@ class RolesAndPermissionsSeeder extends Seeder
                 ['name' => 'encrypted_data.view', 'description' => 'View encrypted data'],
                 ['name' => 'encrypted_data.create', 'description' => 'Create encrypted data'],
                 ['name' => 'encrypted_data.edit', 'description' => 'Edit encrypted data'],
+                ['name' => 'encrypted_data.recover', 'description' => 'Recover encrypted data (Admin only)'],
             ],
             'pages' => [
                 ['name' => 'pages.view', 'description' => 'View pages list and details'],
@@ -166,8 +167,11 @@ class RolesAndPermissionsSeeder extends Seeder
         // Assign all permissions to super-admin
         $superAdminRole->syncPermissions(Permission::all());
 
-        // Assign permissions to admin (all except delete)
-        $adminPermissions = Permission::where('name', 'not like', '%.delete')->get();
+        // Assign permissions to admin (all except delete, but include recover)
+        $adminPermissions = Permission::where(function($query) {
+            $query->where('name', 'not like', '%.delete')
+                  ->orWhere('name', 'encrypted_data.recover');
+        })->get();
         $adminRole->syncPermissions($adminPermissions);
 
         // Assign permissions to editor (view and edit only)

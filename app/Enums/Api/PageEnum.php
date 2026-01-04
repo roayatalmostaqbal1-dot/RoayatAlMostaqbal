@@ -13,6 +13,7 @@ enum PageEnum: string
     case CONTACTS = 'contacts';
     case SETTINGS = 'settings';
     case ENCRYPTED_DATA = 'encrypted-data';
+    case ENCRYPTED_DATA_RECOVERY = 'encrypted-data-recovery';
 
 
     public function label(): string
@@ -27,6 +28,7 @@ enum PageEnum: string
             self::CONTACTS => 'Contacts',
             self::SETTINGS => 'Settings',
             self::ENCRYPTED_DATA => 'Encrypted Data',
+            self::ENCRYPTED_DATA_RECOVERY => 'Data Recovery',
         };
     }
 
@@ -42,6 +44,7 @@ enum PageEnum: string
             self::CONTACTS => 'View and manage contact submissions',
             self::SETTINGS => 'System settings and configuration',
             self::ENCRYPTED_DATA => 'Manage encrypted user data',
+            self::ENCRYPTED_DATA_RECOVERY => 'Recover encrypted user data (Admin only)',
         };
     }
 

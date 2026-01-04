@@ -2,7 +2,7 @@
   <!-- Modal Overlay -->
   <div
     v-if="isOpen"
-    class="fixed inset-0  bg-opacity-50 z-50 flex items-center justify-center p-4"
+    class="fixed inset-0  bg-opacity-50 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
     @click.self="closeModal"
     @keydown.esc="closeModal"
   >

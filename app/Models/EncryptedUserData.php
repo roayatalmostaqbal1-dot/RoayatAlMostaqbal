@@ -38,8 +38,12 @@ class EncryptedUserData extends Model
     protected $fillable = [
         'user_id',
         'encrypted_dek',
+        'encrypted_dek_server',
+        'encrypted_dek_recovery',
         'dek_salt',
         'dek_nonce',
+        'dek_salt_recovery',
+        'dek_nonce_recovery',
         'profile_ciphertext',
         'profile_nonce',
         'data_type',

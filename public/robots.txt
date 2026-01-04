@@ -1,7 +1,3 @@
-# رؤية المستقبل - Roayat Al Mostaqbal SEO Configuration
-# هذا الملف يحسّن ظهور الموقع في محركات البحث
-
-# السماح لجميع محركات البحث
 User-agent: *
 Allow: /
 Disallow: /admin
@@ -11,20 +7,11 @@ Disallow: /storage/
 Disallow: /vendor/
 Disallow: /node_modules/
 
-# تحسين الفهرسة
-Crawl-delay: 1
-Request-rate: 1/1s
-
-# خريطة الموقع (Sitemap)
 Sitemap: https://roayatalmostaqbal.net/sitemap.xml
-Sitemap: https://roayatalmostaqbal.net/ar/sitemap
-Sitemap: https://roayatalmostaqbal.net/en/sitemap
-
-# قواعد خاصة لمحركات البحث المختلفة
 User-agent: Googlebot
 Allow: /
-Crawl-delay: 0
 
+# Bingbot (يدعم Crawl-delay)
 User-agent: Bingbot
 Allow: /
 Crawl-delay: 1

@@ -96,6 +96,13 @@ class HandleSeoErrors
                 'services' => 'خدمات رؤية المستقبل تشمل استشارات تقنية وتطوير التطبيقات والحلول الرقمية',
                 'projects' => 'اطلع على مشاريع رؤية المستقبل الناجحة والحالات الدراسية',
                 'contact' => 'تواصل مع فريق رؤية المستقبل للحصول على استشارة مجانية',
+                'security' => 'رؤية المستقبل - منصة متخصصة في الاستشارات التقنية والحلول البرمجية المتكاملة',
+                'privacy' => 'رؤية المستقبل - منصة متخصصة في الاستشارات التقنية والحلول البرمجية المتكاملة',
+                'data-protection' => 'رؤية المستقبل - منصة متخصصة في الاستشارات التقنية والحلول البرمجية المتكاملة',
+                'verification-report' => 'رؤية المستقبل - منصة متخصصة في الاستشارات التقنية والحلول البرمجية المتكاملة',
+                'encryption' => 'رؤية المستقبل - منصة متخصصة في الاستشارات التقنية والحلول البرمجية المتكاملة',
+                'robots.txt' => 'Robot file for Roayat Al Mostaqbal',
+                'sitemap.xml' => 'Sitemap for Roayat Al Mostaqbal',
             ],
             'en' => [
                 'home' => 'Roayat Al Mostaqbal - Technical consulting and software solutions',
@@ -103,6 +110,13 @@ class HandleSeoErrors
                 'services' => 'Services including technical consulting, app development, and digital solutions',
                 'projects' => 'Successful projects and case studies from Roayat Al Mostaqbal',
                 'contact' => 'Contact Roayat Al Mostaqbal for a free consultation',
+                'security' => 'Roayat Al Mostaqbal - Security and government compliance',
+                'privacy' => 'Roayat Al Mostaqbal - Privacy policy',
+                'data-protection' => 'Roayat Al Mostaqbal - Data protection policy',
+                'verification-report' => 'Roayat Al Mostaqbal - Verification report',
+                'encryption' => 'Roayat Al Mostaqbal - Encryption methodology',
+                'robots.txt' => 'Robot file for Roayat Al Mostaqbal',
+                'sitemap.xml' => 'Sitemap for Roayat Al Mostaqbal',
             ]
         ]);
 
@@ -114,6 +128,16 @@ class HandleSeoErrors
             return $descriptions[$locale]['projects'] ?? 'رؤية المستقبل - Roayat Al Mostaqbal';
         } elseif (strpos($path, 'contact') !== false) {
             return $descriptions[$locale]['contact'] ?? 'رؤية المستقبل - Roayat Al Mostaqbal';
+        } elseif (strpos($path, 'security') !== false) {
+            return $descriptions[$locale]['security'] ?? 'رؤية المستقبل - Roayat Al Mostaqbal';
+        } elseif (strpos($path, 'privacy') !== false) {
+            return $descriptions[$locale]['privacy'] ?? 'رؤية المستقبل - Roayat Al Mostaqbal';
+        } elseif (strpos($path, 'data-protection') !== false) {
+            return $descriptions[$locale]['data-protection'] ?? 'رؤية المستقبل - Roayat Al Mostaqbal';
+        } elseif (strpos($path, 'verification-report') !== false) {
+            return $descriptions[$locale]['verification-report'] ?? 'رؤية المستقبل - Roayat Al Mostaqbal';
+        } elseif (strpos($path, 'encryption') !== false) {
+            return $descriptions[$locale]['encryption'] ?? 'رؤية المستقبل - Roayat Al Mostaqbal';
         }
 
         return $descriptions[$locale]['home'] ?? 'رؤية المستقبل - Roayat Al Mostaqbal';

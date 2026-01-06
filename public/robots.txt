@@ -7,7 +7,7 @@ Disallow: /storage/
 Disallow: /vendor/
 Disallow: /node_modules/
 
-Sitemap: https://roayatalmostaqbal.net/sitemap.xml
+Sitemap: https://www.roayatalmostaqbal.net/sitemap.xml
 User-agent: Googlebot
 Allow: /
 

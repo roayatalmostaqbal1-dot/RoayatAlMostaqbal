@@ -49,5 +49,5 @@ Route::get('/admin/{vue_capture?}', function () {
 })->where('vue_capture', '[\/\w\.-]*');
 // Redirect root to Arabic
 Route::get('/', function () {
-    return redirect('https://www.roayatalmostaqbal.net/ar', 301);
+    return redirect('/ar', 301);
 });

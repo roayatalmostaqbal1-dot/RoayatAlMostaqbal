@@ -16,8 +16,7 @@
 
     <!-- Canonical URL -->
     @php
-        // $canonicalUrl = url()->current();
-                $canonicalUrl = config('app.domin');
+        $canonicalUrl = url()->current();
 
         // Ensure canonical URL always uses www and https
         $canonicalUrl = preg_replace('#^https?://(www\.)?#', 'https://www.', $canonicalUrl);

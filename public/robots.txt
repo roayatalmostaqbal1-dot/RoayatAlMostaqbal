@@ -6,12 +6,14 @@ Disallow: /.env
 Disallow: /storage/
 Disallow: /vendor/
 Disallow: /node_modules/
+Disallow: /language/
 
 Sitemap: https://www.roayatalmostaqbal.net/sitemap.xml
+
 User-agent: Googlebot
 Allow: /
 
-# Bingbot (يدعم Crawl-delay)
+# Bingbot
 User-agent: Bingbot
 Allow: /
 Crawl-delay: 1

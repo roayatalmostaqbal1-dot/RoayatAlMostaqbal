@@ -16,13 +16,21 @@
 
     <!-- Canonical URL -->
     @php
-        $canonicalUrl = url()->current();
-
+        $currentUrl = url()->current();
         // Ensure canonical URL always uses www and https
-        $canonicalUrl = preg_replace('#^https?://(www\.)?#', 'https://www.', $canonicalUrl);
-        // If domain doesn't have www, add it
-if (!str_contains($canonicalUrl, 'www.')) {
-    $canonicalUrl = str_replace('https://', 'https://www.', $canonicalUrl);
+        $canonicalUrl = preg_replace('#^https?://(www\.)?#', 'https://www.roayatalmostaqbal.net/', $currentUrl);
+
+        // Extract the path after the domain
+        $path = Request::path();
+        $path = $path === '/' ? '' : $path;
+
+        // Reconstruct canonical URL properly
+        $baseUrl = 'https://www.roayatalmostaqbal.net';
+        $canonicalUrl = $baseUrl . ($path ? '/' . ltrim($path, '/') : '');
+
+        // Remove trailing slash if exists (unless it's the root)
+if ($path !== '' && str_ends_with($canonicalUrl, '/')) {
+    $canonicalUrl = rtrim($canonicalUrl, '/');
         }
     @endphp
     <link rel="canonical" href="{{ $canonicalUrl }}">
@@ -32,23 +40,26 @@ if (!str_contains($canonicalUrl, 'www.')) {
         $routeName = Route::currentRouteName();
         $routeParams = Route::current() ? Route::current()->parameters() : [];
 
-        // Helper function to ensure URL has www
-        $ensureWww = function ($url) {
-            $url = preg_replace('#^https?://(www\.)?#', 'https://www.', $url);
-            if (!str_contains($url, 'www.')) {
-                $url = str_replace('https://', 'https://www.', $url);
+        // Function to build normalized absolute URLs
+        $buildLocalizedUrl = function ($locale) use ($routeName, $routeParams) {
+            if (!$routeName) {
+                return null;
             }
-            return $url;
+            $url = route($routeName, array_merge($routeParams, ['locale' => $locale]));
+            return preg_replace('#^https?://(www\.)?#', 'https://www.roayatalmostaqbal.net/', $url);
         };
+
+        $arUrl = $buildLocalizedUrl('ar');
+        $enUrl = $buildLocalizedUrl('en');
     @endphp
-    @if (app()->getLocale() === 'ar' && $routeName)
-        <link rel="alternate" hreflang="en"
-            href="{{ $ensureWww(route($routeName, [...$routeParams, 'locale' => 'en'])) }}" />
-    @elseif($routeName)
-        <link rel="alternate" hreflang="ar"
-            href="{{ $ensureWww(route($routeName, [...$routeParams, 'locale' => 'ar'])) }}" />
+
+    @if ($arUrl)
+        <link rel="alternate" hreflang="ar" href="{{ $arUrl }}" />
     @endif
-    <link rel="alternate" hreflang="x-default" href="{{ $canonicalUrl }}" />
+    @if ($enUrl)
+        <link rel="alternate" hreflang="en" href="{{ $enUrl }}" />
+    @endif
+    <link rel="alternate" hreflang="x-default" href="https://www.roayatalmostaqbal.net/" />
 
     <!-- Open Graph Meta Tags (محسّن للعربية والإنجليزية) -->
     <meta property="og:title" content="@yield('title', __('messages.header.title')) - رؤية المستقبل">

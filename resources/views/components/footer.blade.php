@@ -13,7 +13,7 @@
                     <a href="#" aria-label="Facebook" class="text-[#27e9b5] hover:text-white transition-colors"><i class="fab fa-facebook text-lg"></i></a>
                     <a href="#" aria-label="Twitter" class="text-[#27e9b5] hover:text-white transition-colors"><i class="fab fa-twitter text-lg"></i></a>
                     <a href="#" aria-label="Instagram" class="text-[#27e9b5] hover:text-white transition-colors"><i class="fab fa-instagram text-lg"></i></a>
-                    <a href="#" aria-label="LinkedIn" class="text-[#27e9b5] hover:text-white transition-colors"><i class="fab fa-linkedin text-lg"></i></a>
+                    <a href="https://www.linkedin.com/in/roayata-almostaqbal-211009397/" aria-label="LinkedIn" class="text-[#27e9b5] hover:text-white transition-colors"><i class="fab fa-linkedin text-lg"></i></a>
                 </div>
             </div>
 

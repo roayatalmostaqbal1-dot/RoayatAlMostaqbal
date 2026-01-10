@@ -114,7 +114,6 @@ const activityGroupedByDate = computed(() => {
   dashboardStore.recentActivity.forEach(item => {
     const date = item.timestamp.split(",")[0];
     grouped[date] = (grouped[date] || 0) + 1;
-    console.log(grouped[date]);
   });
   const sorted = Object.keys(grouped)
     .sort((a, b) => new Date(a) - new Date(b))

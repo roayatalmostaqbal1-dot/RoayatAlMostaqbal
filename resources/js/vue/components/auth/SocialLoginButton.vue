@@ -51,23 +51,18 @@ const label = computed(() => {
 });
 
 const handleSocialAuthSuccess = (event) => {
-    console.log('=== SOCIAL_AUTH_SUCCESS received ===');
-    console.log('Event detail:', event.detail);
 
     // Only reset loading state, notification and redirect handled by LoginPage
     isLoading.value = false;
 };
 
 const handleSocialAuthCancelled = () => {
-    console.log('=== SOCIAL_AUTH_CANCELLED received ===');
     // User cancelled the social login popup
     isLoading.value = false;
     toastStore.error('Cancelled', 'Social login was cancelled');
 };
 
 const handleSocialAuthError = (event) => {
-    console.log('=== SOCIAL_AUTH_ERROR received ===');
-    console.log('Event detail:', event.detail);
 
     // Social login error occurred
     isLoading.value = false;
@@ -79,14 +74,10 @@ const handleSocialAuthError = (event) => {
 };
 
 const handlePasswordSetupRequired = (event) => {
-    console.log('=== SOCIAL_AUTH_PASSWORD_SETUP_REQUIRED received ===');
-    console.log('Event detail:', event.detail);
-
     // New user needs to set password
     isLoading.value = false;
     if (event.detail && event.detail.user && event.detail.token) {
         const userParam = encodeURIComponent(JSON.stringify(event.detail.user));
-        console.log('Redirecting to set-password page');
         router.push(`/set-password?user=${userParam}&token=${event.detail.token}`);
     } else {
         console.error('Missing user or token in event detail');
@@ -95,16 +86,11 @@ const handlePasswordSetupRequired = (event) => {
 };
 
 const handleSocialLogin = () => {
-    console.log('=== Starting social login ===');
-    console.log('Provider:', props.provider);
     isLoading.value = true;
     authStore.socialAuthRedirect(props.provider);
 };
 
 onMounted(() => {
-    console.log('=== SocialLoginButton mounted ===');
-    console.log('Adding event listeners for provider:', props.provider);
-
     window.addEventListener('social-auth-success', handleSocialAuthSuccess);
     window.addEventListener('social-auth-cancelled', handleSocialAuthCancelled);
     window.addEventListener('social-auth-error', handleSocialAuthError);
@@ -112,8 +98,6 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-    console.log('=== SocialLoginButton unmounted ===');
-
     window.removeEventListener('social-auth-success', handleSocialAuthSuccess);
     window.removeEventListener('social-auth-cancelled', handleSocialAuthCancelled);
     window.removeEventListener('social-auth-error', handleSocialAuthError);

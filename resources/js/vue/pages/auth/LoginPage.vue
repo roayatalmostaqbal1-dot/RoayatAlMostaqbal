@@ -204,12 +204,8 @@ const handleSocialAuth2FARequired = (event) => {
 
 // Handle social login success
 const handleSocialAuthSuccess = (event) => {
-    console.log('=== LoginPage: SOCIAL_AUTH_SUCCESS received ===');
-    console.log('Event detail:', event.detail);
-
     if (event.detail && event.detail.token) {
         toastStore.success('Success', 'Social login successful! Redirecting...');
-        console.log('Redirecting to dashboard');
         router.push('/dashboard');
     }
 };

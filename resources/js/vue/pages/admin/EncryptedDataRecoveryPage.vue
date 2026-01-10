@@ -246,17 +246,12 @@ const searchUsers = async () => {
     // Debounce: wait 1 second after user stops typing
     searchTimeout = setTimeout(async () => {
         try {
-            console.log('Searching for:', searchQuery.value);
-
             const response = await apiClient.get('/admin/users', {
                 params: {
                     search: searchQuery.value,
                     per_page: 10,
                 },
             });
-
-
-            console.log('Search response:', response.data.success);
 
             if (response.data.status === 'success') {
                 searchResults.value = response.data.data || [];
@@ -266,11 +261,9 @@ const searchUsers = async () => {
                 }
             } else {
                 searchResults.value = [];
-                console.log('Search failed:', response.data);
                 toast.error('Search Failed', response.data.message || 'Failed to search users');
             }
         } catch (error) {
-            console.error('Error searching users:', error);
             searchResults.value = [];
 
             const errorMessage = error.response?.data?.message || 'Failed to search users';
@@ -290,7 +283,6 @@ watch(searchQuery, () => {
 // Select User
 // ------------------------------------
 const selectUser = (user) => {
-    console.log('Selected user:', user);
     recoveryStore.setSelectedUser(user);
     searchResults.value = [];
     searchQuery.value = user.name;

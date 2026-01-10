@@ -430,7 +430,6 @@ export const useAuthStore = defineStore("auth", {
             }
 
             else if (type === "SOCIAL_AUTH_CANCELLED") {
-                console.log('Handling SOCIAL_AUTH_CANCELLED');
                 this.authErrors = null;
                 window.removeEventListener("message", this.boundHandleMessage);
 
@@ -441,7 +440,6 @@ export const useAuthStore = defineStore("auth", {
             }
 
             else if (type === "SOCIAL_AUTH_ERROR") {
-                console.log('Handling SOCIAL_AUTH_ERROR');
                 this.authErrors = error || "Social login failed";
                 window.removeEventListener("message", this.boundHandleMessage);
 
@@ -452,7 +450,6 @@ export const useAuthStore = defineStore("auth", {
             }
 
             else if (type === "SOCIAL_AUTH_2FA_REQUIRED") {
-                console.log('Handling SOCIAL_AUTH_2FA_REQUIRED');
                 const effectiveUserId = user_id || userInfo?.id;
                 this.twoFactorRequired = true;
                 this.twoFactorUserId = effectiveUserId;
@@ -469,10 +466,6 @@ export const useAuthStore = defineStore("auth", {
             }
 
             else if (type === "SOCIAL_AUTH_PASSWORD_SETUP_REQUIRED") {
-                console.log('Handling SOCIAL_AUTH_PASSWORD_SETUP_REQUIRED');
-                console.log('User:', user);
-                console.log('Token:', token);
-
                 window.removeEventListener("message", this.boundHandleMessage);
 
                 window.dispatchEvent(

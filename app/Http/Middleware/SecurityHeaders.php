@@ -78,8 +78,8 @@ class SecurityHeaders
         $directives = [
             "default-src 'self'",
             "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://www.googletagmanager.com https://www.google-analytics.com https://maps.googleapis.com",
-            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://maps.googleapis.com",
-            "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:",
+            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.bunny.net https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://maps.googleapis.com",
+            "font-src 'self' https://fonts.gstatic.com https://fonts.bunny.net https://cdnjs.cloudflare.com data:",
             "img-src 'self' data: https: blob: https://maps.googleapis.com https://maps.gstatic.com",
             "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://maps.googleapis.com wss:",
             "frame-src 'self' https://www.google.com https://www.recaptcha.net",
@@ -87,7 +87,7 @@ class SecurityHeaders
             "base-uri 'self'",
             "form-action 'self'",
             "frame-ancestors 'self'",
-            "upgrade-insecure-requests",
+            'upgrade-insecure-requests',
         ];
 
         return implode('; ', $directives);
@@ -116,7 +116,7 @@ class SecurityHeaders
         ];
 
         foreach ($sensitivePaths as $path) {
-            if ($request->is($path) || $request->is($path . '/*')) {
+            if ($request->is($path) || $request->is($path.'/*')) {
                 return true;
             }
         }
@@ -124,4 +124,3 @@ class SecurityHeaders
         return false;
     }
 }
-

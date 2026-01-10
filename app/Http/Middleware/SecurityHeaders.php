@@ -77,12 +77,12 @@ class SecurityHeaders
     {
         $directives = [
             "default-src 'self'",
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://www.googletagmanager.com https://www.google-analytics.com",
-            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com",
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://www.googletagmanager.com https://www.google-analytics.com https://maps.googleapis.com",
+            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://maps.googleapis.com",
             "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:",
-            "img-src 'self' data: https: blob:",
-            "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com wss:",
-            "frame-src 'self' https://www.google.com",
+            "img-src 'self' data: https: blob: https://maps.googleapis.com https://maps.gstatic.com",
+            "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://maps.googleapis.com wss:",
+            "frame-src 'self' https://www.google.com https://www.recaptcha.net",
             "object-src 'none'",
             "base-uri 'self'",
             "form-action 'self'",

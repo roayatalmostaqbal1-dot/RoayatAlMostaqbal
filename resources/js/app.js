@@ -2,8 +2,9 @@ import { library, dom } from '@fortawesome/fontawesome-svg-core';
 import {
     faShieldAlt, faBell, faDoorOpen, faHome, faShieldVirus, faCreditCard, faServer, faCheck, faEye, faBullseye, faTrophy,
     faBuilding, faVideo, faKey, faBrain, faDigitalTachograph, faRobot, faDesktop, faUserCheck, faSearch, faChartLine, faUsers, faMapMarkerAlt,
-    faLock, faCertificate, faUserSecret, faEyeSlash, faCheckDouble, faFilePdf, faDownload, faCheckCircle, faLandmark,faUserShield,
-    faPhone, faEnvelope, faClock, faChevronDown, faChevronLeft, faChevronRight, faUserLock, faClipboardCheck, faCogs, faDatabase, faArrowLeft
+    faLock, faCertificate, faUserSecret, faEyeSlash, faCheckDouble, faFilePdf, faDownload, faCheckCircle, faLandmark, faUserShield,
+    faPhone, faEnvelope, faClock, faChevronDown, faChevronLeft, faChevronRight, faUserLock, faClipboardCheck, faCogs, faDatabase, faArrowLeft,
+    faHeadset, faTools
 } from '@fortawesome/free-solid-svg-icons';
 import { faFacebook, faTwitter, faInstagram, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 
@@ -11,8 +12,9 @@ library.add(
     faShieldAlt, faBell, faDoorOpen, faHome, faShieldVirus, faCreditCard, faServer, faCheck, faEye, faBullseye, faTrophy,
     faBuilding, faVideo, faKey, faBrain, faDigitalTachograph, faRobot, faDesktop, faUserCheck, faSearch, faChartLine, faUsers, faMapMarkerAlt,
     faLock, faCertificate, faUserSecret, faEyeSlash, faCheckDouble, faFilePdf, faDownload, faCheckCircle, faLandmark,
-    faPhone, faEnvelope, faClock, faUserLock, faClipboardCheck, faCogs, faDatabase,faUserShield,
-    faFacebook, faTwitter, faInstagram, faLinkedin, faChevronDown, faChevronLeft, faChevronRight, faArrowLeft
+    faPhone, faEnvelope, faClock, faUserLock, faClipboardCheck, faCogs, faDatabase, faUserShield,
+    faFacebook, faTwitter, faInstagram, faLinkedin, faChevronDown, faChevronLeft, faChevronRight, faArrowLeft,
+    faHeadset, faTools
 );
 dom.watch();
 

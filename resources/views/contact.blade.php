@@ -310,14 +310,20 @@
                         faqQuestions.forEach(q => {
                             if (q !== question) {
                                 q.nextElementSibling.classList.add('hidden');
-                                q.querySelector('i').style.transform = 'rotate(0deg)';
+                                const otherIcon = q.querySelector('i');
+                                if (otherIcon) {
+                                    otherIcon.style.transform = 'rotate(0deg)';
+                                }
                             }
                         });
 
                         // Toggle current FAQ
                         answer.classList.toggle('hidden');
-                        icon.style.transform = answer.classList.contains('hidden') ? 'rotate(0deg)' :
-                            'rotate(180deg)';
+                        if (icon) {
+                            icon.style.transform = answer.classList.contains('hidden') ?
+                                'rotate(0deg)' :
+                                'rotate(180deg)';
+                        }
                     });
                 });
             });

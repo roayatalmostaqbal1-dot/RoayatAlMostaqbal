@@ -101,7 +101,9 @@ if ($path !== '' && str_ends_with($canonicalUrl, '/')) {
     @stack('styles')
 
     <!-- Structured Data (JSON-LD) -->
-
+    <link rel="icon" type="image/svg+xml" href="{{ asset('RoayatAlMostaqbal.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('RoayatAlMostaqbal.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('RoayatAlMostaqbal.png') }}">
 </head>
 
 <body>

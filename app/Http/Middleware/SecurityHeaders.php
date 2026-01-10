@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Security Headers Middleware for Government Compliance
- * 
+ *
  * This middleware adds essential security headers to all responses
  * to meet UAE government security standards and best practices.
  */
@@ -58,10 +58,14 @@ class SecurityHeaders
 
         // Cache-Control for sensitive pages
         if ($this->isSensitivePage($request)) {
-            $response->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+            $response->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, private, max-age=0');
             $response->headers->set('Pragma', 'no-cache');
             $response->headers->set('Expires', '0');
         }
+
+        // Hide Server details if possible at app level (though server config is better)
+        $response->headers->remove('X-Powered-By');
+        $response->headers->remove('Server');
 
         return $response;
     }
@@ -94,6 +98,11 @@ class SecurityHeaders
      */
     protected function isSensitivePage(Request $request): bool
     {
+        // Check if user is authenticated or requesting sensitive paths
+        if ($request->user() || $request->bearerToken()) {
+            return true;
+        }
+
         $sensitivePaths = [
             'admin',
             'login',
@@ -102,6 +111,8 @@ class SecurityHeaders
             'two-factor',
             'api/auth',
             'api/admin',
+            'api/v1',
+            'oauth',
         ];
 
         foreach ($sensitivePaths as $path) {

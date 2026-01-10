@@ -6,6 +6,8 @@ import path from 'path';
 import vue from '@vitejs/plugin-vue';
 import vueDevTools from 'vite-plugin-vue-devtools'
 import { createHtmlPlugin } from 'vite-plugin-html'
+import manifestSRI from 'vite-plugin-manifest-sri';
+
 export default defineConfig({
     plugins: [
         laravel({
@@ -15,8 +17,8 @@ export default defineConfig({
         tailwindcss(),
         vue(),
         vueDevTools(),
-            createHtmlPlugin({})
-
+        createHtmlPlugin({}),
+        manifestSRI(),
     ],
     resolve: {
         alias: {

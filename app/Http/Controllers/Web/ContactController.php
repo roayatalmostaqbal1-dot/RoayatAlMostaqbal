@@ -45,7 +45,8 @@ class ContactController extends Controller
         // Send email notification
         Mail::to(config('mail.from.address'))->send(new ContactMail($data));
 
-        return back()->with('success', __('messages.contact.form.success'));
+        return redirect()->route('contact', ['locale' => app()->getLocale()])
+            ->with('success', __('messages.contact.form.success'));
     }
 }
 

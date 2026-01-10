@@ -42,9 +42,6 @@ if ($path !== '' && str_ends_with($canonicalUrl, '/')) {
 
         // Function to build normalized absolute URLs
         $buildLocalizedUrl = function ($locale) use ($routeName, $routeParams) {
-            if (!$routeName) {
-                return null;
-            }
             $url = route($routeName, array_merge($routeParams, ['locale' => $locale]));
             return preg_replace('#^https?://(www\.)?#', 'https://www.roayatalmostaqbal.net/', $url);
         };

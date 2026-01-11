@@ -18,10 +18,9 @@ class TelegramWebhookController extends Controller
      */
     public function handleWebhook(Request $request)
     {
-        Log::info('Telegram Webhook Hit', [
-            'ip' => $request->ip(),
-            'body' => $request->all(),
-        ]);
+        Log::info('--- TELEGRAM WEBHOOK RECEIVED ---');
+        Log::info('IP: '.$request->ip());
+        Log::info('Body: '.json_encode($request->all()));
 
         try {
             // Get the update from Telegram
@@ -33,7 +32,7 @@ class TelegramWebhookController extends Controller
             ]);
 
             // Check if it's a message
-            if (!$update->getMessage()) {
+            if (! $update->getMessage()) {
                 return response()->json(['ok' => true], 200);
             }
 
@@ -111,14 +110,14 @@ class TelegramWebhookController extends Controller
             Log::info('Telegram message received', [
                 'chat_id' => $chat->id,
                 'message_id' => $telegramMessage->id,
-                'from' => $firstName . ' ' . $lastName,
+                'from' => $firstName.' '.$lastName,
             ]);
 
             return response()->json(['ok' => true], 200);
 
         } catch (\Exception $e) {
-            Log::error('Telegram webhook error: ' . $e->getMessage(), [
-                'trace' => $e->getTraceAsString()
+            Log::error('Telegram webhook error: '.$e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
             ]);
 
             // Always return 200 to Telegram to avoid retries

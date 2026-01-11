@@ -75,7 +75,6 @@ onMounted(async () => {
         }
 
         const token = getQueryParam('token');
-        const userData = getQueryParam('user');
         const errorMessage = getQueryParam('error');
         const twoFactorRequired = getQueryParam('two_factor_required');
         const userId = getQueryParam('user_id');
@@ -100,20 +99,10 @@ onMounted(async () => {
 
         // 2FA Required
         if (twoFactorRequired === 'true' || twoFactorRequired === '1') {
-            let user = null;
-            if (userData) {
-                try {
-                    user = JSON.parse(decodeURIComponent(userData));
-                } catch (e) {
-                    console.error('Failed to parse user data for 2FA:', e);
-                }
-            }
-
             window.opener?.postMessage(
                 {
                     type: "SOCIAL_AUTH_2FA_REQUIRED",
-                    user_id: userId, // UUID7 string - don't parse as integer
-                    user
+                    user_id: userId,
                 },
                 window.location.origin
             );
@@ -125,50 +114,37 @@ onMounted(async () => {
 
         // Password Setup Required
         if (needsPasswordSetup === 'true' || needsPasswordSetup === '1') {
-            if (!token || !userData) {
+            if (!token) {
                 error.value = "Invalid authentication response - missing data";
                 isLoading.value = false;
                 return;
             }
 
-            try {
-                const user = JSON.parse(decodeURIComponent(userData));
+            window.opener?.postMessage(
+                {
+                    type: "SOCIAL_AUTH_PASSWORD_SETUP_REQUIRED",
+                    token
+                },
+                window.location.origin
+            );
 
-                window.opener?.postMessage(
-                    {
-                        type: "SOCIAL_AUTH_PASSWORD_SETUP_REQUIRED",
-                        user,
-                        token
-                    },
-                    window.location.origin
-                );
-
-                isLoading.value = false;
-                setTimeout(() => window.close(), 500);
-                return;
-            } catch (e) {
-                console.error('Failed to parse user data for password setup:', e);
-                error.value = "Failed to process user data";
-                isLoading.value = false;
-                return;
-            }
+            isLoading.value = false;
+            setTimeout(() => window.close(), 500);
+            return;
         }
 
         // Normal Login Flow
-        if (!token || !userData) {
+        if (!token) {
             error.value = "Invalid authentication response - missing credentials";
             isLoading.value = false;
             return;
         }
 
         try {
-            const user = JSON.parse(decodeURIComponent(userData));
-
             window.opener?.postMessage(
                 {
                     type: "SOCIAL_AUTH_SUCCESS",
                     token,
-                    user,
                 },
                 window.location.origin
             );

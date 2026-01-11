@@ -150,23 +150,17 @@ class SocialAuthController extends Controller
     {
         $callbackUrl = config('app.url').'/admin/social-callback';
 
-        $userResource = new UserInfoResource($user);
-        $resourceData = $userResource->toArray(request());
-        $userData = $resourceData['data'] ?? [];
-
-        Log::info('=== buildRedirectUrl ===', [
+        Log::info('=== buildRedirectUrl (Optimized) ===', [
             'user_id' => $user->id,
             'needs_password_setup' => $needsPasswordSetup,
             'two_factor_enabled' => $user->two_factor_enabled,
-            'user_data' => $userData,
         ]);
 
         // 2FA Redirect
         if ($user->two_factor_enabled) {
             $url = $callbackUrl
                 .'?two_factor_required=true'
-                .'&user_id='.$user->id
-                .'&user='.urlencode(json_encode($userData));
+                .'&user_id='.$user->id;
 
             Log::info('Redirecting to 2FA', ['url' => $url]);
             return $url;
@@ -176,8 +170,7 @@ class SocialAuthController extends Controller
         if ($needsPasswordSetup) {
             $url = $callbackUrl
                 .'?needs_password_setup=true'
-                .'&token='.urlencode($token)
-                .'&user='.urlencode(json_encode($userData));
+                .'&token='.urlencode($token);
 
             Log::info('Redirecting to password setup', ['url' => $url]);
             return $url;
@@ -185,8 +178,7 @@ class SocialAuthController extends Controller
 
         // Normal Login Redirect
         $url = $callbackUrl
-            .'?token='.urlencode($token)
-            .'&user='.urlencode(json_encode($userData));
+            .'?token='.urlencode($token);
 
         Log::info('Redirecting to normal login', ['url' => $url]);
         return $url;

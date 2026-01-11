@@ -15,8 +15,11 @@ class UserInfoResource extends JsonResource
      */
     public function toArray($request)
     {
-        // Load user with roles and permissions relationships
-        $user = User::with(['roles.permissions'])->findOrFail($this->id);
+        // Use the existing user model instance and ensure relationships are loaded
+        $user = $this->resource;
+        if (!$user->relationLoaded('roles')) {
+            $user->load(['roles.permissions']);
+        }
 
         $only_user_data = ['id', 'name', 'email', 'is_active'];
 

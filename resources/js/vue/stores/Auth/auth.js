@@ -412,28 +412,31 @@ export const useAuthStore = defineStore("auth", {
 
             const { type, token, user, user_id, error } = event.data || {};
 
-            const { userInfo, roles, permissions, pages } = this.extractUserData(user);
-
             if (type === "SOCIAL_AUTH_SUCCESS") {
                 this.authToken = token;
-                this.authUser = userInfo;
-                this.authRoles = roles;
-                this.authPermissions = permissions;
-                this.authPages = pages;
                 localStorage.setItem("token", token);
 
-                window.removeEventListener("message", this.boundHandleMessage);
-
-                window.dispatchEvent(
-                    new CustomEvent("social-auth-success", { detail: { token, user: userInfo, roles, permissions, pages } })
-                );
+                // Fetch full user data after setting the token
+                this.fetchUser().then(() => {
+                    window.removeEventListener("message", this.boundHandleMessage);
+                    window.dispatchEvent(
+                        new CustomEvent("social-auth-success", {
+                            detail: {
+                                token,
+                                user: this.authUser,
+                                roles: this.authRoles,
+                                permissions: this.authPermissions,
+                                pages: this.authPages
+                            }
+                        })
+                    );
+                });
             }
 
             else if (type === "SOCIAL_AUTH_CANCELLED") {
                 this.authErrors = null;
                 window.removeEventListener("message", this.boundHandleMessage);
 
-                // Dispatch event so SocialLoginButton can reset loading state
                 window.dispatchEvent(
                     new CustomEvent("social-auth-cancelled", { detail: { message: "Social login cancelled" } })
                 );
@@ -443,34 +446,36 @@ export const useAuthStore = defineStore("auth", {
                 this.authErrors = error || "Social login failed";
                 window.removeEventListener("message", this.boundHandleMessage);
 
-                // Dispatch event so SocialLoginButton can reset loading state
                 window.dispatchEvent(
                     new CustomEvent("social-auth-error", { detail: { error: error || "Social login failed" } })
                 );
             }
 
             else if (type === "SOCIAL_AUTH_2FA_REQUIRED") {
-                const effectiveUserId = user_id || userInfo?.id;
                 this.twoFactorRequired = true;
-                this.twoFactorUserId = effectiveUserId;
-                this.authUser = userInfo;
-                this.authRoles = roles;
-                this.authPermissions = permissions;
-                this.authPages = pages;
+                this.twoFactorUserId = user_id;
+
+                // For 2FA, we might still want to fetch basic user info if token is provided,
+                // but usually token is only provided after verification.
+                // Redirect user to 2FA screen.
 
                 window.removeEventListener("message", this.boundHandleMessage);
 
                 window.dispatchEvent(
-                    new CustomEvent("social-auth-2fa-required", { detail: { user_id: effectiveUserId, user: userInfo, roles, permissions, pages } })
+                    new CustomEvent("social-auth-2fa-required", { detail: { user_id } })
                 );
             }
 
             else if (type === "SOCIAL_AUTH_PASSWORD_SETUP_REQUIRED") {
-                window.removeEventListener("message", this.boundHandleMessage);
+                this.authToken = token;
+                localStorage.setItem("token", token);
 
-                window.dispatchEvent(
-                    new CustomEvent("social-auth-password-setup-required", { detail: { user, token } })
-                );
+                this.fetchUser().then(() => {
+                    window.removeEventListener("message", this.boundHandleMessage);
+                    window.dispatchEvent(
+                        new CustomEvent("social-auth-password-setup-required", { detail: { user: this.authUser, token } })
+                    );
+                });
             }
 
         },

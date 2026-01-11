@@ -88,17 +88,28 @@
                             <p>No messages in this chat</p>
                         </div>
 
-                        <div v-else class="space-y-1">
+                        <div v-else class="space-y-4">
                             <!-- Infinite Scroll Trigger/Loader -->
                             <div v-if="telegramStore.pagination.currentPage < telegramStore.pagination.lastPage"
                                 class="flex justify-center py-4">
                                 <component :is="IconSpinner" class="w-6 h-6 text-[#27e9b5]"
                                     v-if="telegramStore.loadingMore" />
-                                <span v-else class="text-[10px] text-gray-500">Scroll up to load more</span>
+                                <span v-else class="text-[10px] text-gray-400 font-medium">Scroll up to load more</span>
                             </div>
 
-                            <MessageItem v-for="message in telegramStore.messages" :key="message.id"
-                                :message="message" />
+                            <template v-for="(group, date) in groupedMessages" :key="date">
+                                <!-- Date Separator -->
+                                <div class="flex justify-center my-6 sticky top-2 z-10">
+                                    <span
+                                        class="px-3 py-1 rounded-full bg-[#051824] text-[10px] text-gray-300 font-bold border border-[#3b5265] shadow-lg backdrop-blur-sm bg-opacity-80">
+                                        {{ dateLabel(date) }}
+                                    </span>
+                                </div>
+
+                                <div class="space-y-1">
+                                    <MessageItem v-for="message in group" :key="message.id" :message="message" />
+                                </div>
+                            </template>
                         </div>
                     </div>
 
@@ -128,10 +139,12 @@
 <script setup>
 import { ref, computed, onMounted, watch, nextTick, h } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { format, isToday, isYesterday, parseISO } from 'date-fns';
 import apiClient from '@/vue/services/api';
 import DashboardLayout from '@/vue/components/layout/DashboardLayout.vue';
 import ChatListItem from '@/vue/components/telegram/ChatListItem.vue';
 import MessageItem from '@/vue/components/telegram/MessageItem.vue';
+import { useTelegramStore } from '@/vue/stores/Admin/telegramStore';
 
 // SVG Icons using render functions (Project Style)
 const IconSearch = {
@@ -177,8 +190,6 @@ const IconPaperPlane = {
     ])
 };
 
-import { useTelegramStore } from '@/vue/stores/Admin/telegramStore';
-
 const route = useRoute();
 const router = useRouter();
 const telegramStore = useTelegramStore();
@@ -186,6 +197,26 @@ const telegramStore = useTelegramStore();
 const messageText = ref('');
 const messagesContainer = ref(null);
 const messageInput = ref(null);
+
+// Group messages by date
+const groupedMessages = computed(() => {
+    const groups = {};
+    telegramStore.messages.forEach(message => {
+        const date = format(parseISO(message.sent_at), 'yyyy-MM-dd');
+        if (!groups[date]) {
+            groups[date] = [];
+        }
+        groups[date].push(message);
+    });
+    return groups;
+});
+
+const dateLabel = (dateStr) => {
+    const date = parseISO(dateStr);
+    if (isToday(date)) return 'Today';
+    if (isYesterday(date)) return 'Yesterday';
+    return format(date, 'MMMM d, yyyy');
+};
 
 const getInitials = (name) => {
     if (!name || typeof name !== 'string') return '?';
@@ -204,7 +235,7 @@ const getInitials = (name) => {
 
 const selectChat = (chatId) => {
     telegramStore.fetchMessages(chatId).then(() => {
-        nextTick(() => scrollToBottom());
+        setTimeout(() => scrollToBottom(), 100);
     });
     router.push({ query: { chat: chatId } });
 };
@@ -240,11 +271,29 @@ const markAsRead = async () => {
     await telegramStore.markAsRead(telegramStore.selectedChatId);
 };
 
-const scrollToBottom = () => {
-    if (messagesContainer.value) {
-        messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
-    }
+const scrollToBottom = (behavior = 'auto') => {
+    nextTick(() => {
+        if (messagesContainer.value) {
+            messagesContainer.value.scrollTo({
+                top: messagesContainer.value.scrollHeight,
+                behavior
+            });
+        }
+    });
 };
+
+// Auto scroll on new messages
+watch(() => telegramStore.messages.length, (newLen, oldLen) => {
+    if (newLen > oldLen) {
+        const container = messagesContainer.value;
+        if (container) {
+            const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 100;
+            if (isNearBottom || oldLen === 0) {
+                scrollToBottom('smooth');
+            }
+        }
+    }
+});
 
 const autoResize = (event) => {
     event.target.style.height = 'auto';

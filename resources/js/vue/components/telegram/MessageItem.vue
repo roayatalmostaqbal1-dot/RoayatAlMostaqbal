@@ -3,7 +3,9 @@
         :class="isFromAdmin ? 'justify-end' : 'justify-start'">
         <!-- User Avatar (Left) -->
         <div v-if="!isFromAdmin" class="mr-3 mt-1 shrink-0">
-            <div
+            <img v-if="message.chat?.photo_url" :src="message.chat.photo_url"
+                class="w-8 h-8 rounded-full border border-[#3b5265] object-cover" />
+            <div v-else
                 class="w-8 h-8 rounded-full bg-[#162936] border border-[#3b5265] flex items-center justify-center text-[#27e9b5] text-[10px] font-bold">
                 {{ getInitials(message.chat?.first_name || 'U') }}
             </div>

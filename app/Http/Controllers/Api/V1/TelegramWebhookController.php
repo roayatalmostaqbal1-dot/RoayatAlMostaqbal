@@ -73,10 +73,10 @@ class TelegramWebhookController extends Controller
                         $fileId = $photo['file_id'];
                         $file = Telegram::bot()->getFile(['file_id' => $fileId]);
                         $filePath = $file->getFilePath();
-                        $updateData['photo_url'] = "https://api.telegram.org/file/bot" . config('telegram.bots.mybot.token') . "/" . $filePath;
+                        $updateData['photo_url'] = 'https://api.telegram.org/file/bot'.config('telegram.bots.mybot.token').'/'.$filePath;
                     }
                 } catch (\Exception $e) {
-                    Log::warning('Failed to fetch Telegram profile photo: ' . $e->getMessage());
+                    Log::warning('Failed to fetch Telegram profile photo: '.$e->getMessage());
                 }
             }
 
@@ -88,11 +88,11 @@ class TelegramWebhookController extends Controller
             $fileId = null;
 
             // Check for other media types
-            if ($message->getPhoto()) {
+            if ($message->getPhoto() && count($message->getPhoto()) > 0) {
                 $messageType = 'photo';
                 $messageText = $message->getCaption() ?? '[Photo]';
-                $photo = $message->getPhoto()->last(); // Get the highest resolution photo
-                $fileId = $photo['file_id'];
+                $photo = collect($message->getPhoto())->last();
+                $fileId = $photo['file_id'] ?? null;
             } elseif ($message->getDocument()) {
                 $messageType = 'document';
                 $messageText = $message->getCaption() ?? '[Document]';
@@ -120,9 +120,9 @@ class TelegramWebhookController extends Controller
                 try {
                     $file = Telegram::bot()->getFile(['file_id' => $fileId]);
                     $tgFilePath = $file->getFilePath();
-                    $filePath = "https://api.telegram.org/file/bot" . config('telegram.bots.mybot.token') . "/" . $tgFilePath;
+                    $filePath = 'https://api.telegram.org/file/bot'.config('telegram.bots.mybot.token').'/'.$tgFilePath;
                 } catch (\Exception $e) {
-                    Log::warning('Failed to fetch Telegram file path: ' . $e->getMessage());
+                    Log::warning('Failed to fetch Telegram file path: '.$e->getMessage());
                 }
             }
 
@@ -142,6 +142,13 @@ class TelegramWebhookController extends Controller
 
             // Notify admins
             \App\Services\NotificationService::notifyAdmins(new \App\Notifications\TelegramMessageNotification($telegramMessage));
+
+            Log::info('Telegram message details', [
+                'type' => $messageType,
+                'file_id' => $fileId,
+                'file_path' => $filePath,
+                'token_exists' => (bool) config('telegram.bots.mybot.token'),
+            ]);
 
             // Broadcast event for real-time updates
             broadcast(new TelegramMessageReceived($telegramMessage))->toOthers();

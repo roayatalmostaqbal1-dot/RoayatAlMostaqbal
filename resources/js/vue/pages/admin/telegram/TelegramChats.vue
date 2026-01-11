@@ -327,7 +327,7 @@ const setupListeners = () => {
     // Listen for new messages globally for unread counts
     window.Echo.private('telegram.chats.list')
         .on('error', (error) => console.error('Echo error (chats.list):', error))
-        .listen('TelegramMessageReceived', (e) => {
+        .listen('.TelegramMessageReceived', (e) => {
             console.log('Real-time message received (global channel):', e);
             telegramStore.addReceivedMessage(e);
             if (telegramStore.selectedChatId === e.telegram_chat_id) {
@@ -342,12 +342,12 @@ const setupListeners = () => {
         }
         if (newId) {
             window.Echo.private(`telegram.chat.${newId}`)
-                .listen('TelegramMessageReceived', (e) => {
+                .listen('.TelegramMessageReceived', (e) => {
                     console.log('Real-time message received (chat):', e);
                     telegramStore.addReceivedMessage(e);
                     scrollToBottom('smooth');
                 })
-                .listen('TelegramMessageSent', (e) => {
+                .listen('.TelegramMessageSent', (e) => {
                     console.log('Real-time message sent (chat):', e);
                     const exists = telegramStore.messages.find(m => m.id === e.id);
                     if (!exists) {

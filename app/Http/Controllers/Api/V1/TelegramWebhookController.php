@@ -57,12 +57,30 @@ class TelegramWebhookController extends Controller
             );
 
             // Update chat info if changed
-            $chat->update([
+            $updateData = [
                 'telegram_username' => $username,
                 'first_name' => $firstName,
                 'last_name' => $lastName,
                 'last_message_at' => now(),
-            ]);
+            ];
+
+            // Fetch profile photo if not exists
+            if (empty($chat->photo_url)) {
+                try {
+                    $photos = Telegram::bot()->getUserProfilePhotos(['user_id' => $telegramUserId, 'limit' => 1]);
+                    if ($photos && $photos->getTotalCount() > 0) {
+                        $photo = $photos->getPhotos()[0][0];
+                        $fileId = $photo['file_id'];
+                        $file = Telegram::bot()->getFile(['file_id' => $fileId]);
+                        $filePath = $file->getFilePath();
+                        $updateData['photo_url'] = "https://api.telegram.org/file/bot" . config('telegram.bots.mybot.token') . "/" . $filePath;
+                    }
+                } catch (\Exception $e) {
+                    Log::warning('Failed to fetch Telegram profile photo: ' . $e->getMessage());
+                }
+            }
+
+            $chat->update($updateData);
 
             // Determine message type and content
             $messageType = 'text';
@@ -101,8 +119,11 @@ class TelegramWebhookController extends Controller
                 'sent_at' => now(),
             ]);
 
-            // Load relationships for broadcasting
+            // Load relationships for broadcasting and notification
             $telegramMessage->load('chat');
+
+            // Notify admins
+            \App\Services\NotificationService::notifyAdmins(new \App\Notifications\TelegramMessageNotification($telegramMessage));
 
             // Broadcast event for real-time updates
             broadcast(new TelegramMessageReceived($telegramMessage))->toOthers();

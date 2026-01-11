@@ -6,7 +6,9 @@
         ]">
         <!-- Avatar Section -->
         <div class="relative shrink-0">
-            <div
+            <img v-if="chat.photo_url" :src="chat.photo_url"
+                class="w-12 h-12 rounded-full border border-[#3b5265] object-cover" />
+            <div v-else
                 class="w-12 h-12 rounded-full bg-[#051824] border border-[#3b5265] flex items-center justify-center text-[#27e9b5] font-extrabold text-sm shadow-inner">
                 {{ getInitials(chat.full_name) }}
             </div>

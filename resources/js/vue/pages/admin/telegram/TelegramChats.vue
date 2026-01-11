@@ -47,7 +47,10 @@
                     <!-- Chat Header -->
                     <div class="px-6 py-4 border-b border-[#3b5265] bg-[#051824] flex items-center justify-between">
                         <div class="flex items-center gap-4">
-                            <div
+                            <img v-if="telegramStore.selectedChat?.photo_url"
+                                :src="telegramStore.selectedChat.photo_url"
+                                class="w-10 h-10 rounded-full border border-[#3b5265]" />
+                            <div v-else
                                 class="w-10 h-10 rounded-full bg-[#27e9b5] flex items-center justify-center text-[#051824] font-bold">
                                 {{ getInitials(telegramStore.selectedChat?.full_name || '') }}
                             </div>

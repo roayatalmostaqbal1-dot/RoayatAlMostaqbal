@@ -12,6 +12,7 @@ class TelegramChat extends Model
         'telegram_phone',
         'first_name',
         'last_name',
+        'photo_url',
         'last_message_at',
         'is_active',
     ];

@@ -1,0 +1,35 @@
+
+> build
+> vite build
+
+vite v7.2.2 building client environment for production...
+transforming...
+
+ WARN  [plugin vite:resolve] Module "crypto" has been externalized for browser compatibility, imported by "/home/dynamite/Desktop/RoayatAlMostaqbal/node_modules/libsodium-sumo/dist/modules-sumo/libsodium-sumo.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+
+✓ 576 modules transformed.
+rendering chunks...
+
+ WARN  [plugin vite:reporter] 
+(!) /home/dynamite/Desktop/RoayatAlMostaqbal/resources/js/vue/utils/encryption.js is dynamically imported by /home/dynamite/Desktop/RoayatAlMostaqbal/resources/js/vue/stores/AllUser/encryptionStore.js, /home/dynamite/Desktop/RoayatAlMostaqbal/resources/js/vue/stores/AllUser/encryptionStore.js but also statically imported by /home/dynamite/Desktop/RoayatAlMostaqbal/resources/js/vue/stores/AllUser/encryptionStore.js, dynamic import will not move module into another chunk.
+
+
+
+ WARN  [plugin vite:reporter] 
+(!) /home/dynamite/Desktop/RoayatAlMostaqbal/resources/js/vue/stores/Admin/encryptedDataRecoveryStore.js is dynamically imported by /home/dynamite/Desktop/RoayatAlMostaqbal/resources/js/vue/stores/AllUser/encryptionStore.js but also statically imported by /home/dynamite/Desktop/RoayatAlMostaqbal/resources/js/vue/pages/admin/EncryptedDataRecoveryPage.vue, dynamic import will not move module into another chunk.
+
+
+computing gzip size...
+public/build/manifest.json                0.75 kB │ gzip:   0.22 kB
+public/build/assets/vue-Bl4B72JC.css      7.09 kB │ gzip:   1.76 kB
+public/build/assets/app-CKHOzFpc.css     89.91 kB │ gzip:  14.71 kB
+public/build/assets/app-BBYP-4q3.js     105.26 kB │ gzip:  33.35 kB
+public/build/assets/vue-ChBM0Mby.js   1,879.59 kB │ gzip: 575.08 kB
+
+ WARN 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+
+✓ built in 22.12s

@@ -18,9 +18,19 @@ class TelegramWebhookController extends Controller
      */
     public function handleWebhook(Request $request)
     {
+        Log::info('Telegram Webhook Hit', [
+            'ip' => $request->ip(),
+            'body' => $request->all(),
+        ]);
+
         try {
             // Get the update from Telegram
             $update = Telegram::bot()->commandsHandler(true);
+
+            Log::debug('Telegram Update Parsed', [
+                'update_id' => $update->getUpdateId(),
+                'has_message' => (bool) $update->getMessage(),
+            ]);
 
             // Check if it's a message
             if (!$update->getMessage()) {

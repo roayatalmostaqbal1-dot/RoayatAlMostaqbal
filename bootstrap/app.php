@@ -13,6 +13,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->validateCsrfTokens(except: [
+            'broadcasting/auth',
+        ]);
         // Force canonical domain (e.g., non-www)
         $middleware->append(\App\Http\Middleware\CanonicalDomain::class);
         // Global security headers for government compliance

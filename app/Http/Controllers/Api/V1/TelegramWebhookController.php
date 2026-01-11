@@ -151,7 +151,7 @@ class TelegramWebhookController extends Controller
             ]);
 
             // Broadcast event for real-time updates
-            broadcast(new TelegramMessageReceived($telegramMessage))->toOthers();
+            broadcast(new TelegramMessageReceived($telegramMessage));
 
             Log::info('Telegram message received', [
                 'chat_id' => $chat->id,

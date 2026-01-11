@@ -137,7 +137,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch, nextTick, h } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch, nextTick, h } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { format, isToday, isYesterday, parseISO } from 'date-fns';
 import apiClient from '@/vue/services/api';
@@ -195,6 +195,7 @@ const router = useRouter();
 const telegramStore = useTelegramStore();
 
 const messageText = ref('');
+const searchQuery = ref('');
 const messagesContainer = ref(null);
 const messageInput = ref(null);
 
@@ -304,7 +305,7 @@ let searchTimeout;
 const debouncedSearch = () => {
     clearTimeout(searchTimeout);
     searchTimeout = setTimeout(() => {
-        telegramStore.fetchChats(telegramStore.searchQuery);
+        telegramStore.fetchChats(searchQuery.value);
     }, 300);
 };
 

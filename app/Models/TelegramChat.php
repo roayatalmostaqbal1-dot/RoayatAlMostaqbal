@@ -61,11 +61,15 @@ class TelegramChat extends Model
      */
     public function scopeSearch($query, $term)
     {
-        return $query->where(function ($q) use ($term) {
-            $q->where('telegram_username', 'like', "%{$term}%")
+        $term = trim($term);
+        $cleanTerm = str_replace('@', '', $term);
+
+        return $query->where(function ($q) use ($term, $cleanTerm) {
+            $q->where('telegram_username', 'like', "%{$cleanTerm}%")
                 ->orWhere('telegram_phone', 'like', "%{$term}%")
                 ->orWhere('first_name', 'like', "%{$term}%")
-                ->orWhere('last_name', 'like', "%{$term}%");
+                ->orWhere('last_name', 'like', "%{$term}%")
+                ->orWhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["%{$term}%"]);
         });
     }
 

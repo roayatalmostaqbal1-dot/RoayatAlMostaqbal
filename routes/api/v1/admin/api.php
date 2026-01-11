@@ -13,7 +13,7 @@ Route::prefix('admin')->middleware(['auth:api'])->group(function () {
     // =====================
     // Users Management (Admin)
     // =====================
-    
+
     Route::apiResource('users', UserController::class, [
         'middleware' => [
             'index' => 'permission:users.view',
@@ -38,6 +38,17 @@ Route::prefix('admin')->middleware(['auth:api'])->group(function () {
             'active_users' => [120, 150, 17022, 210, 260, 300],
             'inactive_users' => [20, 30, 25, 40, 35, 45],
         ]));
+    });
+
+    // =====================
+    // Telegram Chat Management
+    // =====================
+
+    Route::prefix('telegram')->middleware('permission:telegram-chats.manage')->group(function () {
+        Route::get('/chats', [\App\Http\Controllers\Api\V1\Admin\TelegramChatController::class, 'index'])->name('telegram.chats.index');
+        Route::get('/chats/{chat}', [\App\Http\Controllers\Api\V1\Admin\TelegramChatController::class, 'show'])->name('telegram.chats.show');
+        Route::post('/chats/{chat}/send', [\App\Http\Controllers\Api\V1\Admin\TelegramChatController::class, 'sendMessage'])->name('telegram.chats.send');
+        Route::post('/chats/{chat}/read', [\App\Http\Controllers\Api\V1\Admin\TelegramChatController::class, 'markAsRead'])->name('telegram.chats.read');
     });
 
         // =====================

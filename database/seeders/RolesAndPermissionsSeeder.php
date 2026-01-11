@@ -122,6 +122,9 @@ class RolesAndPermissionsSeeder extends Seeder
                 ['name' => 'contacts.edit', 'description' => 'Edit contacts'],
                 ['name' => 'contacts.delete', 'description' => 'Delete contacts'],
             ],
+            "telegram-chats"=>[
+                ['name' => 'telegram-chats.manage', 'description' => 'Manage Telegram chats and respond to messages'],
+            ],
         ];
 
         // Create permissions

@@ -77,18 +77,21 @@ class SecurityHeaders
     {
         $directives = [
             "default-src 'self'",
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://www.googletagmanager.com https://www.google-analytics.com https://maps.googleapis.com",
-            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.bunny.net https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://maps.googleapis.com",
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval' http://192.168.100.12:5173 https://192.168.100.12:5173 http://192.168.100.12:5174 https://192.168.100.12:5174 http://127.0.0.1:5173 https://127.0.0.1:5173 http://127.0.0.1:5174 https://127.0.0.1:5174 https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://www.googletagmanager.com https://www.google-analytics.com https://maps.googleapis.com",
+            "style-src 'self' 'unsafe-inline' http://192.168.100.12:5173 https://192.168.100.12:5173 http://192.168.100.12:5174 https://192.168.100.12:5174 http://127.0.0.1:5173 https://127.0.0.1:5173 http://127.0.0.1:5174 https://127.0.0.1:5174 https://fonts.googleapis.com https://fonts.bunny.net https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://maps.googleapis.com",
             "font-src 'self' https://fonts.gstatic.com https://fonts.bunny.net https://cdnjs.cloudflare.com data:",
-            "img-src 'self' data: https: blob: https://maps.googleapis.com https://maps.gstatic.com",
-            "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://maps.googleapis.com wss:",
+            "img-src 'self' data: https: blob: http://192.168.100.12:5173 https://192.168.100.12:5173 http://192.168.100.12:5174 https://192.168.100.12:5174 http://127.0.0.1:5173 https://127.0.0.1:5173 http://127.0.0.1:5174 https://127.0.0.1:5174 https://maps.googleapis.com https://maps.gstatic.com",
+            "connect-src 'self' http://192.168.100.12:5173 https://192.168.100.12:5173 ws://192.168.100.12:5173 wss://192.168.100.12:5173 http://192.168.100.12:5174 https://192.168.100.12:5174 ws://192.168.100.12:5174 wss://192.168.100.12:5174 ws://192.168.100.12:6001 wss://192.168.100.12:6001 http://127.0.0.1:5173 https://127.0.0.1:5173 ws://127.0.0.1:5173 wss://127.0.0.1:5173 http://127.0.0.1:5174 https://127.0.0.1:5174 ws://127.0.0.1:5174 wss://127.0.0.1:5174 ws://127.0.0.1:6001 wss://127.0.0.1:6001 http://127.0.0.1:8000 http://192.168.100.12:8000 https://www.google-analytics.com https://region1.google-analytics.com https://maps.googleapis.com wss:",
             "frame-src 'self' https://www.google.com https://www.recaptcha.net",
             "object-src 'none'",
             "base-uri 'self'",
             "form-action 'self'",
             "frame-ancestors 'self'",
-            'upgrade-insecure-requests',
         ];
+
+        if (! config('app.debug') || app()->environment('production')) {
+            $directives[] = 'upgrade-insecure-requests';
+        }
 
         return implode('; ', $directives);
     }

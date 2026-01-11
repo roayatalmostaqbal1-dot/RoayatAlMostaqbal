@@ -19,6 +19,7 @@ import OAuth2ClientsPage from '@/vue/pages/SuberAdmin/OAuth2ClientsPage.vue';
 import ContactsPage from '@/vue/pages/admin/ContactsPage.vue';
 import PagesManagementPage from '@/vue/pages/SuberAdmin/PagesManagementPage.vue';
 import EncryptedDataRecoveryPage from '@/vue/pages/admin/EncryptedDataRecoveryPage.vue';
+import TelegramChatsPage from '@/vue/pages/admin/telegram/TelegramChats.vue';
 const routes = [
     {
         path: '/login',
@@ -117,6 +118,12 @@ const routes = [
         meta: { requiresAuth: true },
     },
     {
+        path: '/telegram-chats',
+        name: 'TelegramChats',
+        component: TelegramChatsPage,
+        meta: { requiresAuth: true },
+    },
+    {
         path: '/encrypted-data-recovery',
         name: 'EncryptedDataRecovery',
         component: EncryptedDataRecoveryPage,
@@ -145,6 +152,7 @@ const routePageMap = {
     '/pages-management': 'pages',
     '/oauth2-clients': 'oauth2-clients',
     '/contacts': 'contacts',
+    '/telegram-chats': 'telegram-chats',
     '/settings': 'settings',
     '/encrypted-data': 'encrypted-data',
     '/encrypted-data-recovery': 'encrypted-data-recovery',
@@ -185,6 +193,7 @@ router.beforeEach((to, _from, next) => {
                 { path: '/pages-management', key: 'pages' },
                 { path: '/oauth2-clients', key: 'oauth2-clients' },
                 { path: '/contacts', key: 'contacts' },
+                { path: '/telegram-chats', key: 'telegram-chats' },
                 { path: '/settings', key: 'settings' },
                 { path: '/encrypted-data', key: 'encrypted-data' },
                 { path: '/encrypted-data-recovery', key: 'encrypted-data-recovery' },

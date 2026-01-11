@@ -74,7 +74,8 @@
                     </div>
 
                     <!-- Messages Area -->
-                    <div class="flex-1 overflow-y-auto p-6 bg-[#051824]/30 custom-scrollbar" ref="messagesContainer">
+                    <div class="flex-1 overflow-y-auto p-6 bg-[#051824]/30 custom-scrollbar" ref="messagesContainer"
+                        @scroll="handleScroll">
                         <div v-if="telegramStore.loadingMessages"
                             class="flex flex-col items-center justify-center h-full text-gray-400">
                             <component :is="IconSpinner" class="w-8 h-8 mb-2" />
@@ -88,6 +89,14 @@
                         </div>
 
                         <div v-else class="space-y-1">
+                            <!-- Infinite Scroll Trigger/Loader -->
+                            <div v-if="telegramStore.pagination.currentPage < telegramStore.pagination.lastPage"
+                                class="flex justify-center py-4">
+                                <component :is="IconSpinner" class="w-6 h-6 text-[#27e9b5]"
+                                    v-if="telegramStore.loadingMore" />
+                                <span v-else class="text-[10px] text-gray-500">Scroll up to load more</span>
+                            </div>
+
                             <MessageItem v-for="message in telegramStore.messages" :key="message.id"
                                 :message="message" />
                         </div>
@@ -194,8 +203,21 @@ const getInitials = (name) => {
 };
 
 const selectChat = (chatId) => {
-    telegramStore.fetchMessages(chatId);
+    telegramStore.fetchMessages(chatId).then(() => {
+        nextTick(() => scrollToBottom());
+    });
     router.push({ query: { chat: chatId } });
+};
+
+const handleScroll = async (event) => {
+    const element = event.target;
+    if (element.scrollTop === 0 && !telegramStore.loadingMore && telegramStore.pagination.currentPage < telegramStore.pagination.lastPage) {
+        const previousHeight = element.scrollHeight;
+        await telegramStore.fetchMoreMessages();
+        nextTick(() => {
+            element.scrollTop = element.scrollHeight - previousHeight;
+        });
+    }
 };
 
 const sendMessage = async () => {

@@ -51,7 +51,7 @@ class TelegramChatController extends Controller
     {
         $messages = $chat->messages()
             ->with(['admin'])
-            ->orderBy('sent_at', 'asc')
+            ->orderBy('sent_at', 'desc')
             ->paginate($request->per_page ?? 50);
 
         return response()->json([

@@ -85,27 +85,45 @@ class TelegramWebhookController extends Controller
             // Determine message type and content
             $messageType = 'text';
             $messageText = $message->getText();
-            $filePath = null;
+            $fileId = null;
 
             // Check for other media types
             if ($message->getPhoto()) {
                 $messageType = 'photo';
                 $messageText = $message->getCaption() ?? '[Photo]';
+                $photo = $message->getPhoto()->last(); // Get the highest resolution photo
+                $fileId = $photo['file_id'];
             } elseif ($message->getDocument()) {
                 $messageType = 'document';
                 $messageText = $message->getCaption() ?? '[Document]';
+                $fileId = $message->getDocument()->getFileId();
             } elseif ($message->getVoice()) {
                 $messageType = 'voice';
                 $messageText = '[Voice Message]';
+                $fileId = $message->getVoice()->getFileId();
             } elseif ($message->getVideo()) {
                 $messageType = 'video';
                 $messageText = $message->getCaption() ?? '[Video]';
+                $fileId = $message->getVideo()->getFileId();
             } elseif ($message->getSticker()) {
                 $messageType = 'sticker';
                 $messageText = '[Sticker]';
+                $fileId = $message->getSticker()->getFileId();
             } elseif ($message->getLocation()) {
                 $messageType = 'location';
                 $messageText = '[Location]';
+            }
+
+            // Fetch file path if fileId is present
+            $filePath = null;
+            if ($fileId) {
+                try {
+                    $file = Telegram::bot()->getFile(['file_id' => $fileId]);
+                    $tgFilePath = $file->getFilePath();
+                    $filePath = "https://api.telegram.org/file/bot" . config('telegram.bots.mybot.token') . "/" . $tgFilePath;
+                } catch (\Exception $e) {
+                    Log::warning('Failed to fetch Telegram file path: ' . $e->getMessage());
+                }
             }
 
             // Store the message

@@ -9,9 +9,15 @@ export const useTelegramStore = defineStore('telegram', {
         selectedChatId: null,
         loadingChats: false,
         loadingMessages: false,
+        loadingMore: false,
         sending: false,
         error: null,
         searchQuery: '',
+        pagination: {
+            currentPage: 1,
+            lastPage: 1,
+            total: 0,
+        }
     }),
 
     getters: {
@@ -49,15 +55,46 @@ export const useTelegramStore = defineStore('telegram', {
             if (!chatId) return;
             this.loadingMessages = true;
             this.selectedChatId = chatId;
+            this.pagination.currentPage = 1;
             try {
-                const response = await apiClient.get(`/admin/telegram/chats/${chatId}`);
-                this.messages = response.data.data.messages.data;
+                const response = await apiClient.get(`/admin/telegram/chats/${chatId}`, {
+                    params: { page: 1, per_page: 50 }
+                });
+                // Since we get them descending for pagination, we reverse for display
+                this.messages = response.data.data.messages.data.reverse();
+                this.pagination.currentPage = response.data.data.messages.current_page;
+                this.pagination.lastPage = response.data.data.messages.last_page;
+                this.pagination.total = response.data.data.messages.total;
                 return { success: true };
             } catch (error) {
                 console.error('Error loading messages:', error);
                 return { success: false, error };
             } finally {
                 this.loadingMessages = false;
+            }
+        },
+
+        async fetchMoreMessages() {
+            if (!this.selectedChatId || this.loadingMore || this.pagination.currentPage >= this.pagination.lastPage) return;
+
+            this.loadingMore = true;
+            const nextPage = this.pagination.currentPage + 1;
+
+            try {
+                const response = await apiClient.get(`/admin/telegram/chats/${this.selectedChatId}`, {
+                    params: { page: nextPage, per_page: 50 }
+                });
+
+                const olderMessages = response.data.data.messages.data.reverse();
+                this.messages = [...olderMessages, ...this.messages];
+
+                this.pagination.currentPage = response.data.data.messages.current_page;
+                return { success: true };
+            } catch (error) {
+                console.error('Error loading more messages:', error);
+                return { success: false, error };
+            } finally {
+                this.loadingMore = false;
             }
         },
 

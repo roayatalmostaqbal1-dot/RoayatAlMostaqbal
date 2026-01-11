@@ -17,12 +17,37 @@
             </span>
 
             <!-- Message Bubble -->
-            <div class="px-4 py-2.5 rounded-2xl shadow-sm relative transition-all" :class="[
+            <div class="px-4 py-2.5 rounded-2xl shadow-sm relative transition-all overflow-hidden" :class="[
                 isFromAdmin
                     ? 'bg-linear-to-br from-[#27e9b5] to-[#1bbd93] text-[#051824] rounded-tr-none'
                     : 'bg-[#051824] text-gray-100 border border-[#3b5265] rounded-tl-none'
             ]">
-                <p class="text-sm leading-relaxed wrap-break-word whitespace-pre-wrap">{{ message.message_text }}</p>
+                <!-- Media Content -->
+                <div v-if="message.file_path" class="mb-2 -mx-4 -mt-2.5 overflow-hidden rounded-t-2xl">
+                    <img v-if="message.message_type === 'photo' || message.message_type === 'sticker'"
+                        :src="message.file_path"
+                        class="max-w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
+                        @click="openMedia(message.file_path)" />
+
+                    <video v-else-if="message.message_type === 'video'" :src="message.file_path" controls
+                        class="max-w-full h-auto" />
+
+                    <audio v-else-if="message.message_type === 'voice' || message.message_type === 'audio'"
+                        :src="message.file_path" controls class="max-w-full h-auto" />
+
+                    <div v-else-if="message.message_type === 'document'"
+                        class="p-4 bg-[#162936] flex items-center gap-3 border-b border-[#3b5265]">
+                        <component :is="IconFile" class="w-6 h-6 text-[#27e9b5]" />
+                        <div class="flex-1 min-w-0">
+                            <p class="text-xs font-semibold text-white truncate">Document</p>
+                            <a :href="message.file_path" target="_blank"
+                                class="text-[10px] text-[#27e9b5] hover:underline">Download</a>
+                        </div>
+                    </div>
+                </div>
+
+                <p v-if="message.message_text && message.message_text !== '[Photo]' && message.message_text !== '[Video]' && message.message_text !== '[Sticker]'"
+                    class="text-sm leading-relaxed wrap-break-word whitespace-pre-wrap">{{ message.message_text }}</p>
 
                 <div class="flex items-center justify-end mt-1 gap-1.5 opacity-60">
                     <span class="text-[9px] font-medium">{{ formatTime(message.sent_at) }}</span>
@@ -60,6 +85,16 @@ const IconCheckDouble = {
         h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', d: 'M5 13l4 4L19 7' }),
         h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', d: 'M5 13l4 4L19 7' }) // FA double check style placeholder
     ])
+};
+
+const IconFile = {
+    render: () => h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24', 'stroke-width': '2' }, [
+        h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', d: 'M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z' })
+    ])
+};
+
+const openMedia = (url) => {
+    window.open(url, '_blank');
 };
 
 const getInitials = (name) => {

@@ -1,221 +1,218 @@
 <template>
-    <div class="telegram-chats-page">
-        <div class="chats-container">
+    <DashboardLayout pageTitle="Telegram Chats" pageDescription="Manage and respond to Telegram messages in real-time">
+        <div class="flex flex-col md:flex-row h-[calc(100vh-200px)] gap-6 overflow-hidden">
             <!-- Chat List Sidebar -->
-            <div class="chat-list-panel">
-                <div class="chat-list-header">
-                    <h2>Telegram Chats</h2>
-                    <div class="search-box">
-                        <i class="fas fa-search"></i>
+            <div
+                class="w-full md:w-80 lg:w-96 flex flex-col bg-[#162936] rounded-xl border border-[#3b5265] overflow-hidden">
+                <div class="p-4 border-b border-[#3b5265]">
+                    <div class="relative">
+                        <component :is="IconSearch"
+                            class="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                         <input type="text" v-model="searchQuery" placeholder="Search chats..."
+                            class="w-full bg-[#051824] border border-[#3b5265] text-white rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-[#27e9b5] focus:border-transparent transition-all"
                             @input="debouncedSearch" />
                     </div>
                 </div>
 
-                <div class="chat-list-body" v-if="!loadingChats">
-                    <div v-if="chats.length === 0" class="empty-state">
-                        <i class="fas fa-comments"></i>
-                        <p>No chats yet</p>
+                <div class="flex-1 overflow-y-auto custom-scrollbar" v-if="!telegramStore.loadingChats">
+                    <div v-if="telegramStore.chats.length === 0"
+                        class="flex flex-col items-center justify-center h-48 text-gray-500">
+                        <component :is="IconComments" class="w-10 h-10 mb-2" />
+                        <p>No chats found</p>
                     </div>
 
-                    <ChatListItem v-for="chat in chats" :key="chat.id" :chat="chat"
-                        :isActive="selectedChatId === chat.id" @select="selectChat" />
+                    <ChatListItem v-for="chat in telegramStore.chats" :key="chat.id" :chat="chat"
+                        :isActive="telegramStore.selectedChatId === chat.id" @select="selectChat" />
                 </div>
 
-                <div v-else class="loading-state">
-                    <i class="fas fa-spinner fa-spin"></i>
+                <div v-else class="flex flex-col items-center justify-center h-48 text-gray-400">
+                    <component :is="IconSpinner" class="w-8 h-8 mb-2" />
                     <p>Loading chats...</p>
                 </div>
             </div>
 
             <!-- Chat Window -->
-            <div class="chat-window-panel">
-                <div v-if="!selectedChatId" class="no-chat-selected">
-                    <i class="fab fa-telegram-plane"></i>
-                    <h3>Select a chat to start messaging</h3>
-                    <p>Choose a conversation from the list to view messages</p>
+            <div class="flex-1 flex flex-col bg-[#162936] rounded-xl border border-[#3b5265] overflow-hidden relative">
+                <div v-if="!telegramStore.selectedChatId"
+                    class="flex-1 flex flex-col items-center justify-center text-center p-8">
+                    <div class="w-20 h-20 bg-[#051824] rounded-full flex items-center justify-center mb-6">
+                        <component :is="IconTelegram" class="w-12 h-12 text-[#27e9b5]" />
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Select a conversation</h3>
+                    <p class="text-gray-400 max-w-xs">Choose a chat from the sidebar to view current messages and
+                        respond.</p>
                 </div>
 
-                <div v-else class="chat-window">
+                <template v-else>
                     <!-- Chat Header -->
-                    <div class="chat-window-header">
-                        <div class="chat-header-info">
-                            <div class="avatar-circle">
-                                {{ getInitials(selectedChat?.full_name || '') }}
+                    <div class="px-6 py-4 border-b border-[#3b5265] bg-[#051824] flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-10 h-10 rounded-full bg-[#27e9b5] flex items-center justify-center text-[#051824] font-bold">
+                                {{ getInitials(telegramStore.selectedChat?.full_name || '') }}
                             </div>
                             <div>
-                                <h3>{{ selectedChat?.full_name }}</h3>
-                                <p class="chat-meta">
-                                    {{ selectedChat?.telegram_username ? '@' + selectedChat.telegram_username :
-                                        selectedChat?.telegram_phone }}
+                                <h3 class="text-white font-semibold leading-tight">{{
+                                    telegramStore.selectedChat?.full_name }}</h3>
+                                <p class="text-xs text-gray-400">
+                                    {{ telegramStore.selectedChat?.telegram_username ? '@' +
+                                        telegramStore.selectedChat.telegram_username :
+                                        telegramStore.selectedChat?.telegram_phone }}
                                 </p>
                             </div>
                         </div>
 
-                        <button @click="markAsRead" class="btn-mark-read" v-if="hasUnread">
-                            <i class="fas fa-check-double"></i>
+                        <button @click="markAsRead"
+                            class="text-xs bg-[#162936] text-gray-300 px-3 py-1.5 rounded-lg border border-[#3b5265] hover:bg-[#27e9b5] hover:text-[#051824] transition-all flex items-center gap-2"
+                            v-if="telegramStore.hasUnread">
+                            <component :is="IconCheckDouble" class="w-4 h-4" />
                             Mark as Read
                         </button>
                     </div>
 
                     <!-- Messages Area -->
-                    <div class="messages-area" ref="messagesContainer">
-                        <div v-if="loadingMessages" class="loading-state">
-                            <i class="fas fa-spinner fa-spin"></i>
-                            <p>Loading messages...</p>
+                    <div class="flex-1 overflow-y-auto p-6 bg-[#051824]/30 custom-scrollbar" ref="messagesContainer">
+                        <div v-if="telegramStore.loadingMessages"
+                            class="flex flex-col items-center justify-center h-full text-gray-400">
+                            <component :is="IconSpinner" class="w-8 h-8 mb-2" />
+                            <p>Loading history...</p>
                         </div>
 
-                        <div v-else-if="messages.length === 0" class="empty-messages">
-                            <i class="fas fa-comment-slash"></i>
-                            <p>No messages yet</p>
+                        <div v-else-if="telegramStore.messages.length === 0"
+                            class="flex flex-col items-center justify-center h-full text-gray-500">
+                            <component :is="IconCommentSlash" class="w-10 h-10 mb-2" />
+                            <p>No messages in this chat</p>
                         </div>
 
-                        <div v-else class="messages-list">
-                            <MessageItem v-for="message in messages" :key="message.id" :message="message" />
+                        <div v-else class="space-y-1">
+                            <MessageItem v-for="message in telegramStore.messages" :key="message.id"
+                                :message="message" />
                         </div>
                     </div>
 
                     <!-- Message Input -->
-                    <div class="message-input-area">
-                        <form @submit.prevent="sendMessage" class="message-form">
-                            <textarea v-model="messageText" placeholder="Type your message..." rows="1"
-                                @keydown.enter.exact.prevent="sendMessage" @input="autoResize"
-                                ref="messageInput"></textarea>
-                            <button type="submit" class="btn-send" :disabled="!messageText.trim() || sending">
-                                <i class="fas" :class="sending ? 'fa-spinner fa-spin' : 'fa-paper-plane'"></i>
+                    <div class="p-4 border-t border-[#3b5265] bg-[#051824]">
+                        <form @submit.prevent="sendMessage" class="flex items-end gap-3">
+                            <div class="flex-1 relative">
+                                <textarea v-model="messageText" placeholder="Type a message..." rows="1"
+                                    class="w-full bg-[#162936] border border-[#3b5265] text-white rounded-xl px-4 py-3 focus:ring-2 focus:ring-[#27e9b5] focus:border-transparent transition-all resize-none min-h-[50px] max-h-[150px] custom-scrollbar"
+                                    @keydown.enter.exact.prevent="sendMessage" @input="autoResize"
+                                    ref="messageInput"></textarea>
+                            </div>
+                            <button type="submit"
+                                class="w-12 h-12 rounded-xl bg-[#27e9b5] text-[#051824] flex items-center justify-center hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100"
+                                :disabled="!messageText.trim() || telegramStore.sending">
+                                <component :is="telegramStore.sending ? IconSpinner : IconPaperPlane"
+                                    :class="telegramStore.sending ? 'w-6 h-6 animate-spin' : 'w-6 h-6'" />
                             </button>
                         </form>
                     </div>
-                </div>
+                </template>
             </div>
         </div>
-    </div>
+    </DashboardLayout>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch, nextTick } from 'vue';
+import { ref, computed, onMounted, watch, nextTick, h } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import apiClient from '@/vue/services/api';
+import DashboardLayout from '@/vue/components/layout/DashboardLayout.vue';
 import ChatListItem from '@/vue/components/telegram/ChatListItem.vue';
 import MessageItem from '@/vue/components/telegram/MessageItem.vue';
 
+// SVG Icons using render functions (Project Style)
+const IconSearch = {
+    render: () => h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24', 'stroke-width': '2' }, [
+        h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', d: 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' })
+    ])
+};
+
+const IconComments = {
+    render: () => h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24', 'stroke-width': '2' }, [
+        h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', d: 'M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z' })
+    ])
+};
+
+const IconSpinner = {
+    render: () => h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24', 'stroke-width': '2', class: 'animate-spin' }, [
+        h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', d: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15' })
+    ])
+};
+
+const IconTelegram = {
+    render: () => h('svg', { fill: 'currentColor', viewBox: '0 0 24 24' }, [
+        h('path', { d: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.11.02-1.93 1.23-5.46 3.62-.51.35-.98.52-1.4.51-.46-.01-1.35-.26-2.01-.48-.81-.27-1.45-.42-1.39-.88.03-.24.36-.49.98-.75 3.84-1.67 6.4-2.77 7.68-3.3 3.66-1.5 4.42-1.76 4.91-1.77.11 0 .35.03.5.15.13.11.17.26.19.38.01.07.01.22.01.26z' })
+    ])
+};
+
+const IconCheckDouble = {
+    render: () => h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24', 'stroke-width': '2' }, [
+        h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', d: 'M5 13l4 4L19 7' }),
+        h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', d: 'M5 13l4 4L19 7' }) // Placeholder for double check if needed, FA style
+    ])
+};
+
+const IconCommentSlash = {
+    render: () => h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24', 'stroke-width': '2' }, [
+        h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', d: 'M3 3l18 18M10 4.5V4a1 1 0 011-1h2a1 1 0 011 1v.5M8.5 7h7M7.5 10h9M6.5 13h11M5.5 16h13M4.5 19H20' }) // Custom slash comment style
+    ])
+};
+
+const IconPaperPlane = {
+    render: () => h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24', 'stroke-width': '2' }, [
+        h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', d: 'M12 19l9 2-9-18-9 18 9-2zm0 0v-8' })
+    ])
+};
+
+import { useTelegramStore } from '@/vue/stores/Admin/telegramStore';
+
 const route = useRoute();
 const router = useRouter();
+const telegramStore = useTelegramStore();
 
-const chats = ref([]);
-const messages = ref([]);
-const selectedChatId = ref(null);
-const searchQuery = ref('');
 const messageText = ref('');
-const loadingChats = ref(false);
-const loadingMessages = ref(false);
-const sending = ref(false);
 const messagesContainer = ref(null);
 const messageInput = ref(null);
 
-const selectedChat = computed(() => {
-    return chats.value.find(chat => chat.id === selectedChatId.value);
-});
-
-const hasUnread = computed(() => {
-    return selectedChat.value?.unread_count > 0;
-});
-
 const getInitials = (name) => {
-    if (!name) return '';
-    return name
-        .split(' ')
-        .map(n => n[0])
-        .join('')
-        .toUpperCase()
-        .substring(0, 2);
-};
-
-const loadChats = async () => {
-    loadingChats.value = true;
+    if (!name || typeof name !== 'string') return '?';
     try {
-        const response = await apiClient.get('/admin/telegram/chats', {
-            params: {
-                search: searchQuery.value,
-                per_page: 50
-            }
-        });
-        chats.value = response.data.data.data;
-    } catch (error) {
-        console.error('Error loading chats:', error);
-    } finally {
-        loadingChats.value = false;
-    }
-};
-
-const loadMessages = async (chatId) => {
-    if (!chatId) return;
-
-    loadingMessages.value = true;
-    try {
-        const response = await apiClient.get(`/admin/telegram/chats/${chatId}`);
-        messages.value = response.data.data.messages.data;
-        await nextTick();
-        scrollToBottom();
-    } catch (error) {
-        console.error('Error loading messages:', error);
-    } finally {
-        loadingMessages.value = false;
+        return name
+            .split(' ')
+            .filter(n => n.length > 0)
+            .map(n => n[0])
+            .join('')
+            .toUpperCase()
+            .substring(0, 2);
+    } catch (e) {
+        return name.charAt(0).toUpperCase() || '?';
     }
 };
 
 const selectChat = (chatId) => {
-    selectedChatId.value = chatId;
-    loadMessages(chatId);
+    telegramStore.fetchMessages(chatId);
     router.push({ query: { chat: chatId } });
 };
 
 const sendMessage = async () => {
-    if (!messageText.value.trim() || !selectedChatId.value || sending.value) return;
+    if (!messageText.value.trim() || !telegramStore.selectedChatId || telegramStore.sending) return;
 
-    sending.value = true;
     const text = messageText.value;
     messageText.value = '';
 
-    try {
-        const response = await apiClient.post(
-            `/admin/telegram/chats/${selectedChatId.value}/send`,
-            { message: text }
-        );
+    const result = await telegramStore.sendMessage(telegramStore.selectedChatId, text);
 
-        messages.value.push(response.data.data);
+    if (result.success) {
         await nextTick();
         scrollToBottom();
-    } catch (error) {
-        console.error('Error sending message:', error);
-        messageText.value = text; // Restore message on error
-        alert('Failed to send message. Please try again.');
-    } finally {
-        sending.value = false;
+    } else {
+        messageText.value = text;
     }
 };
 
 const markAsRead = async () => {
-    if (!selectedChatId.value) return;
-
-    try {
-        await apiClient.post(`/admin/telegram/chats/${selectedChatId.value}/read`);
-
-        // Update local chat unread count
-        const chat = chats.value.find(c => c.id === selectedChatId.value);
-        if (chat) {
-            chat.unread_count = 0;
-        }
-
-        // Mark messages as read
-        messages.value.forEach(msg => {
-            if (msg.sender_type === 'user') {
-                msg.is_read = true;
-            }
-        });
-    } catch (error) {
-        console.error('Error marking as read:', error);
-    }
+    await telegramStore.markAsRead(telegramStore.selectedChatId);
 };
 
 const scrollToBottom = () => {
@@ -233,58 +230,45 @@ let searchTimeout;
 const debouncedSearch = () => {
     clearTimeout(searchTimeout);
     searchTimeout = setTimeout(() => {
-        loadChats();
+        telegramStore.fetchChats(telegramStore.searchQuery);
     }, 300);
 };
 
 // Watch for route query changes
 watch(() => route.query.chat, (chatId) => {
     if (chatId) {
-        selectedChatId.value = parseInt(chatId);
-        loadMessages(selectedChatId.value);
+        telegramStore.fetchMessages(parseInt(chatId));
     }
 });
 
 const setupListeners = () => {
     if (!window.Echo) return;
 
-    // Listen for new messages in the general list (to update unread counts and sorting)
+    // Listen for new messages
     window.Echo.private('telegram.chats.list')
         .listen('TelegramMessageReceived', (e) => {
-            const chatIndex = chats.value.findIndex(c => c.id === e.telegram_chat_id);
-            if (chatIndex !== -1) {
-                // Update existing chat
-                const chat = chats.value[chatIndex];
-                chat.last_message_at = e.sent_at;
-                if (selectedChatId.value !== e.telegram_chat_id) {
-                    chat.unread_count = (chat.unread_count || 0) + 1;
-                }
-
-                // Move to top
-                chats.value.splice(chatIndex, 1);
-                chats.value.unshift(chat);
-            } else {
-                // New chat session
-                chats.value.unshift(e.chat);
+            telegramStore.addReceivedMessage(e);
+            if (telegramStore.selectedChatId === e.telegram_chat_id) {
+                nextTick(() => scrollToBottom());
             }
         });
 
     // We'll also listen on the specific chat channel if one is selected
-    watch(selectedChatId, (newId, oldId) => {
+    watch(() => telegramStore.selectedChatId, (newId, oldId) => {
         if (oldId) {
             window.Echo.leave(`telegram.chat.${oldId}`);
         }
         if (newId) {
             window.Echo.private(`telegram.chat.${newId}`)
                 .listen('TelegramMessageReceived', (e) => {
-                    messages.value.push(e);
+                    telegramStore.addReceivedMessage(e);
                     nextTick(() => scrollToBottom());
                 })
                 .listen('TelegramMessageSent', (e) => {
                     // This handles messages sent from other admin sessions
-                    const exists = messages.value.find(m => m.id === e.id);
+                    const exists = telegramStore.messages.find(m => m.id === e.id);
                     if (!exists) {
-                        messages.value.push(e);
+                        telegramStore.messages.push(e);
                         nextTick(() => scrollToBottom());
                     }
                 });
@@ -293,254 +277,31 @@ const setupListeners = () => {
 };
 
 onMounted(() => {
-    loadChats();
+    telegramStore.fetchChats();
     setupListeners();
 
     // Load chat from query if exists
     if (route.query.chat) {
-        selectedChatId.value = parseInt(route.query.chat);
-        loadMessages(selectedChatId.value);
+        telegramStore.fetchMessages(parseInt(route.query.chat));
     }
 });
 </script>
 
 <style scoped>
-.telegram-chats-page {
-    padding: 24px;
-    height: calc(100vh - 100px);
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
 }
 
-.chats-container {
-    display: grid;
-    grid-template-columns: 350px 1fr;
-    gap: 24px;
-    height: 100%;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
 }
 
-.chat-list-panel {
-    border-right: 1px solid #e5e7eb;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #3b5265;
+    border-radius: 10px;
 }
 
-.chat-list-header {
-    padding: 20px;
-    border-bottom: 1px solid #e5e7eb;
-}
-
-.chat-list-header h2 {
-    margin: 0 0 16px 0;
-    font-size: 20px;
-    color: #111827;
-}
-
-.search-box {
-    position: relative;
-}
-
-.search-box i {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #9ca3af;
-}
-
-.search-box input {
-    width: 100%;
-    padding: 10px 10px 10px 36px;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    font-size: 14px;
-    transition: border-color 0.2s;
-}
-
-.search-box input:focus {
-    outline: none;
-    border-color: #3b82f6;
-}
-
-.chat-list-body {
-    flex: 1;
-    overflow-y: auto;
-}
-
-.chat-window-panel {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-.no-chat-selected {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: #9ca3af;
-}
-
-.no-chat-selected i {
-    font-size: 64px;
-    margin-bottom: 16px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.no-chat-selected h3 {
-    margin: 0 0 8px 0;
-    color: #4b5563;
-}
-
-.no-chat-selected p {
-    margin: 0;
-    font-size: 14px;
-}
-
-.chat-window {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-.chat-window-header {
-    padding: 20px;
-    border-bottom: 1px solid #e5e7eb;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.chat-header-info {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.chat-header-info .avatar-circle {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    font-size: 16px;
-}
-
-.chat-header-info h3 {
-    margin: 0;
-    font-size: 16px;
-    color: #111827;
-}
-
-.chat-meta {
-    margin: 4px 0 0 0;
-    font-size: 13px;
-    color: #6b7280;
-}
-
-.btn-mark-read {
-    padding: 8px 16px;
-    background-color: #3b82f6;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.btn-mark-read:hover {
-    background-color: #2563eb;
-}
-
-.messages-area {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px;
-    background-color: #f9fafb;
-}
-
-.empty-state,
-.empty-messages,
-.loading-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    color: #9ca3af;
-}
-
-.empty-state i,
-.empty-messages i,
-.loading-state i {
-    font-size: 48px;
-    margin-bottom: 12px;
-}
-
-.messages-list {
-    display: flex;
-    flex-direction: column;
-}
-
-.message-input-area {
-    padding: 16px 20px;
-    border-top: 1px solid #e5e7eb;
-    background-color: white;
-}
-
-.message-form {
-    display: flex;
-    gap: 12px;
-    align-items: flex-end;
-}
-
-.message-form textarea {
-    flex: 1;
-    padding: 10px 14px;
-    border: 1px solid #d1d5db;
-    border-radius: 20px;
-    font-size: 14px;
-    resize: none;
-    font-family: inherit;
-    transition: border-color 0.2s;
-    max-height: 120px;
-}
-
-.message-form textarea:focus {
-    outline: none;
-    border-color: #3b82f6;
-}
-
-.btn-send {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: transform 0.2s;
-    flex-shrink: 0;
-}
-
-.btn-send:not(:disabled):hover {
-    transform: scale(1.05);
-}
-
-.btn-send:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #4a6a8a;
 }
 </style>

@@ -50,7 +50,7 @@ class TelegramChatController extends Controller
     public function show(Request $request, TelegramChat $chat)
     {
         $messages = $chat->messages()
-            ->with(['admin'])
+            ->with(['admin', 'chat'])
             ->orderBy('sent_at', 'desc')
             ->paginate($request->per_page ?? 50);
 

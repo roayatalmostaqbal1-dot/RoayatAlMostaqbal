@@ -316,18 +316,25 @@ watch(() => route.query.chat, (chatId) => {
 });
 
 const setupListeners = () => {
-    if (!window.Echo) return;
+    if (!window.Echo) {
+        console.warn('Echo not found, real-time updates disabled');
+        return;
+    }
 
-    // Listen for new messages
+    console.log('Setting up Telegram real-time listeners...');
+
+    // Listen for new messages globally for unread counts
     window.Echo.private('telegram.chats.list')
+        .on('error', (error) => console.error('Echo error (chats.list):', error))
         .listen('TelegramMessageReceived', (e) => {
+            console.log('Real-time message received (global channel):', e);
             telegramStore.addReceivedMessage(e);
             if (telegramStore.selectedChatId === e.telegram_chat_id) {
-                nextTick(() => scrollToBottom());
+                scrollToBottom('smooth');
             }
         });
 
-    // We'll also listen on the specific chat channel if one is selected
+    // Listen on specific chat channel
     watch(() => telegramStore.selectedChatId, (newId, oldId) => {
         if (oldId) {
             window.Echo.leave(`telegram.chat.${oldId}`);
@@ -335,15 +342,16 @@ const setupListeners = () => {
         if (newId) {
             window.Echo.private(`telegram.chat.${newId}`)
                 .listen('TelegramMessageReceived', (e) => {
+                    console.log('Real-time message received (chat):', e);
                     telegramStore.addReceivedMessage(e);
-                    nextTick(() => scrollToBottom());
+                    scrollToBottom('smooth');
                 })
                 .listen('TelegramMessageSent', (e) => {
-                    // This handles messages sent from other admin sessions
+                    console.log('Real-time message sent (chat):', e);
                     const exists = telegramStore.messages.find(m => m.id === e.id);
                     if (!exists) {
                         telegramStore.messages.push(e);
-                        nextTick(() => scrollToBottom());
+                        scrollToBottom('smooth');
                     }
                 });
         }
@@ -358,6 +366,17 @@ onMounted(() => {
     if (route.query.chat) {
         telegramStore.fetchMessages(parseInt(route.query.chat));
     }
+});
+
+onUnmounted(() => {
+    // Clean up Echo listeners
+    if (window.Echo) {
+        window.Echo.leave('telegram.chats.list');
+        if (telegramStore.selectedChatId) {
+            window.Echo.leave(`telegram.chat.${telegramStore.selectedChatId}`);
+        }
+    }
+    telegramStore.resetSelection();
 });
 </script>
 

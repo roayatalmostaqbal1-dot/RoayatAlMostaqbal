@@ -176,6 +176,16 @@ export const useTelegramStore = defineStore('telegram', {
                     this.messages.push(message);
                 }
             }
+        },
+
+        resetSelection() {
+            this.selectedChatId = null;
+            this.messages = [];
+            this.pagination = {
+                currentPage: 1,
+                lastPage: 1,
+                total: 0,
+            };
         }
     }
 });

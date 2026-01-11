@@ -17,6 +17,8 @@ class TelegramChat extends Model
         'is_active',
     ];
 
+    protected $appends = ['full_name'];
+
     protected $casts = [
         'last_message_at' => 'datetime',
         'is_active' => 'boolean',

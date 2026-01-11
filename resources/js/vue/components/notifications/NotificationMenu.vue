@@ -153,6 +153,7 @@ const IconChevronRight = {
 };
 
 const notificationStore = useNotificationStore();
+const authStore = useAuthStore();
 const router = useRouter();
 const isOpen = ref(false);
 

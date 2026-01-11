@@ -18,6 +18,7 @@ const echo = new Echo({
     enabledTransports: ['ws', 'wss'],
 });
 
+window.Echo = echo;
 
 export default {
   install(app) {

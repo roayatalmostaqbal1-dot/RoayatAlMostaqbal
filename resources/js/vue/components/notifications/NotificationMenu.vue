@@ -100,9 +100,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, h } from 'vue';
+import { ref, onMounted, watch, h } from 'vue';
 import { useNotificationStore } from '@/vue/stores/notificationStore';
 import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/vue/stores/Auth/auth';
 
 
 // Directives
@@ -201,14 +202,16 @@ const formatTime = (dateString) => {
     return date.toLocaleDateString();
 };
 
+let isListening = false;
 const setupRealtime = () => {
-    if (!window.Echo) return;
+    if (!window.Echo || isListening || !authStore.isAuthenticated || !authStore.authUser) return;
 
-    const userId = JSON.parse(localStorage.getItem('user'))?.id;
-    if (!userId) return;
+    const userId = authStore.authUser.id;
+    console.log('Subscribing to user channel:', userId);
 
     window.Echo.private(`App.Models.User.${userId}`)
         .notification((notification) => {
+            console.log('Real-time notification received:', notification);
             notificationStore.addNotification({
                 id: notification.id,
                 data: notification,
@@ -216,11 +219,19 @@ const setupRealtime = () => {
                 read_at: null
             });
         });
+
+    isListening = true;
 };
 
 onMounted(() => {
     notificationStore.fetchNotifications();
     setupRealtime();
+});
+
+watch(() => authStore.authUser, (newUser) => {
+    if (newUser && !isListening) {
+        setupRealtime();
+    }
 });
 </script>
 

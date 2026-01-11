@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Broadcast;
 Broadcast::routes(['middleware' => ['api', 'auth:api']]);
 
 Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
-    return (int) $user->id === (int) $id;
+    return (string) $user->id === (string) $id;
 });
 
 Broadcast::channel('telegram.chat.{chatId}', function ($user, $chatId) {

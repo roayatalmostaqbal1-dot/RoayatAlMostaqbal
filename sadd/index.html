@@ -1,0 +1,396 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SADD - Sovereign AI Decision Dashboard</title>
+    <link rel="stylesheet" href="sadd.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <style>
+        /* أنماط الطوارئ للشعار إذا لم يوجد */
+        .logo-fallback {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #0088cc, #ff0000);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <!-- شاشة تسجيل الدخول -->
+    <div id="loginScreen" class="screen active">
+        <div class="login-container">
+            <div class="login-header">
+                <div class="logo-fallback">SADD</div>
+                <h1 class="brand-name">SADD</h1>
+                <p class="brand-subtitle">Sovereign AI Decision Dashboard</p>
+                <p class="brand-arabic">لوحة قرارات الذكاء الاصطناعي السيادي</p>
+            </div>
+
+            <div class="login-card">
+                <div class="uae-pass-simulator">
+                    <div class="uae-pass-logo">
+                        <i class="fas fa-user-shield"></i>
+                        <span>UAE PASS</span>
+                    </div>
+                    <h3>تسجيل الدخول عبر الهوية الرقمية</h3>
+                    <p class="login-description">
+                        محاكاة تكامل مع منصة الهوية الرقمية الوطنية UAE PASS
+                    </p>
+
+                    <div class="mock-credentials">
+                        <div class="credential-item">
+                            <i class="fas fa-id-card"></i>
+                            <span>الهوية: <strong>784-1980-1234567-1</strong></span>
+                        </div>
+                        <div class="credential-item">
+                            <i class="fas fa-user"></i>
+                            <span>الاسم: <strong>رباح السويدي</strong></span>
+                        </div>
+                    </div>
+
+                    <button id="loginBtn" class="btn-login">
+                        <i class="fas fa-sign-in-alt"></i>
+                        تسجيل الدخول التجريبي
+                    </button>
+
+                    <div class="login-note">
+                        <i class="fas fa-info-circle"></i>
+                        هذه محاكاة توضيحية للتكامل مع UAE PASS
+                    </div>
+                </div>
+            </div>
+
+            <div class="login-footer">
+                <p>© 2026 رؤية المستقبل لأنظمة الأمن والمراقبة | عضو ريادة بتميز AJM61631</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- لوحة التحكم الرئيسية -->
+    <div id="dashboardScreen" class="screen">
+        <header class="dashboard-header">
+            <div class="header-left">
+                <div class="logo-fallback small">S</div>
+                <div class="header-title">
+                    <h1>SADD</h1>
+                    <p>Sovereign AI Decision Dashboard</p>
+                </div>
+            </div>
+
+            <div class="header-center">
+                <div class="digital-identity-badge">
+                    <i class="fas fa-user-check"></i>
+                    <span>الهوية الرقمية: <strong>مفعلة</strong></span>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <span>رباح السويدي</span>
+                </div>
+                <button id="logoutBtn" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </header>
+
+        <main class="dashboard-main">
+            <!-- البانر العلوي -->
+            <div class="dashboard-banner">
+                <div class="banner-content">
+                    <h2><i class="fas fa-robot"></i> لوحة قرارات الذكاء الاصطناعي السيادي</h2>
+                    <p>نظام أمني سيادي 100% - حماية البيانات داخل حدود الدولة</p>
+                </div>
+                <div class="banner-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <div>
+                            <h3>%100</h3>
+                            <p>سيادية البيانات</p>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-bolt"></i>
+                        <div>
+                            <h3>40%</h3>
+                            <p>توفير في التكاليف</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- الأقسام الرئيسية -->
+            <div class="dashboard-grid">
+                <!-- القسم 1: الهوية الرقمية -->
+                <section class="dashboard-card identity-card">
+                    <div class="card-header">
+                        <i class="fas fa-passport"></i>
+                        <h3>الهوية الرقمية الوطنية</h3>
+                        <span class="card-badge active">مفعلة</span>
+                    </div>
+
+                    <div class="card-content">
+                        <div class="identity-info">
+                            <div class="identity-field">
+                                <label><i class="fas fa-user"></i> الاسم الكامل:</label>
+                                <span class="identity-value">رباح محمد السويدي</span>
+                            </div>
+                            <div class="identity-field">
+                                <label><i class="fas fa-id-card"></i> رقم الهوية:</label>
+                                <span class="identity-value">784-1980-1234567-1</span>
+                            </div>
+                            <div class="identity-field">
+                                <label><i class="fas fa-flag"></i> الجنسية:</label>
+                                <span class="identity-value">إماراتي</span>
+                            </div>
+                            <div class="identity-field">
+                                <label><i class="fas fa-calendar-check"></i> تاريخ الانتهاء:</label>
+                                <span class="identity-value valid">2030-12-31</span>
+                            </div>
+                            <div class="identity-field">
+                                <label><i class="fas fa-shield-alt"></i> مستوى الأمان:</label>
+                                <span class="identity-value high">عالي</span>
+                            </div>
+                        </div>
+
+                        <div class="uae-pass-integration">
+                            <div class="integration-header">
+                                <i class="fas fa-link"></i>
+                                <h4>التكامل مع UAE PASS</h4>
+                            </div>
+                            <div class="integration-status">
+                                <div class="status-item connected">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>متصل بالنظام الأساسي</span>
+                                </div>
+                                <div class="status-item encrypted">
+                                    <i class="fas fa-lock"></i>
+                                    <span>التشفير: AES-256</span>
+                                </div>
+                                <div class="status-item last-sync">
+                                    <i class="fas fa-sync"></i>
+                                    <span>آخر مزامنة: اليوم 14:30</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- القسم 2: البيانات الأمنية -->
+                <section class="dashboard-card security-card">
+                    <div class="card-header">
+                        <i class="fas fa-database"></i>
+                        <h3>بيانات الأمن السيبراني</h3>
+                        <span class="card-badge" id="logCount">12 سجل</span>
+                    </div>
+
+                    <div class="card-content">
+                        <div class="filters">
+                            <button class="filter-btn active">اليوم</button>
+                            <button class="filter-btn">أسبوع</button>
+                            <button class="filter-btn">شهر</button>
+                            <button class="filter-btn" id="refreshLogsBtn">
+                                <i class="fas fa-redo"></i> تحديث
+                            </button>
+                        </div>
+
+                        <div class="security-logs">
+                            <table id="securityLogsTable">
+                                <thead>
+                                    <tr>
+                                        <th>الوقت</th>
+                                        <th>نوع الحدث</th>
+                                        <th>المصدر</th>
+                                        <th>مستوى الخطورة</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="logsTableBody">
+                                    <!-- سيتم ملؤها بالبيانات الوهمية -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="data-actions">
+                            <button class="action-btn" id="exportLogsBtn">
+                                <i class="fas fa-download"></i> تصدير CSV
+                            </button>
+                            <button class="action-btn" id="generateLogsBtn">
+                                <i class="fas fa-plus"></i> توليد سجلات جديدة
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- القسم 3: تحليل الذكاء الاصطناعي -->
+                <section class="dashboard-card ai-card">
+                    <div class="card-header">
+                        <i class="fas fa-brain"></i>
+                        <h3>تحليل الذكاء الاصطناعي</h3>
+                        <span class="card-badge ai">نشط</span>
+                    </div>
+
+                    <div class="card-content">
+                        <div class="ai-analysis">
+                            <div class="risk-level-container">
+                                <h4>مستوى الخطر الحالي:</h4>
+                                <div class="risk-meter">
+                                    <div class="risk-level" id="currentRiskLevel">متوسط</div>
+                                    <div class="risk-indicator">
+                                        <div class="risk-bar">
+                                            <div class="risk-fill" id="riskFill" style="width: 50%"></div>
+                                        </div>
+                                        <div class="risk-labels">
+                                            <span>منخفض</span>
+                                            <span>متوسط</span>
+                                            <span>عالي</span>
+                                            <span>حرج</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="insight-container">
+                                <h4>التوصية الأمنية:</h4>
+                                <div class="insight-box" id="currentRecommendation">
+                                    <i class="fas fa-lightbulb"></i>
+                                    <p>يوصى بمراجعة سياسات الوصول والتحقق من أذونات المستخدمين.</p>
+                                </div>
+                            </div>
+
+                            <div class="threat-indicators">
+                                <h4>مؤشرات التهديد:</h4>
+                                <div class="indicators-grid">
+                                    <div class="indicator low">
+                                        <i class="fas fa-user-check"></i>
+                                        <span>تسجيلات دخول</span>
+                                        <strong>42</strong>
+                                    </div>
+                                    <div class="indicator medium">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        <span>إنذارات</span>
+                                        <strong>8</strong>
+                                    </div>
+                                    <div class="indicator high">
+                                        <i class="fas fa-skull-crossbones"></i>
+                                        <span>محاولات وصول</span>
+                                        <strong>3</strong>
+                                    </div>
+                                    <div class="indicator critical">
+                                        <i class="fas fa-fire"></i>
+                                        <span>تهديدات حرجة</span>
+                                        <strong>1</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ai-actions">
+                            <button id="generateInsightBtn" class="btn-primary">
+                                <i class="fas fa-bolt"></i>
+                                توليد تحليل أمني جديد
+                            </button>
+                            <p class="action-note">
+                                <i class="fas fa-info-circle"></i>
+                                يستخدم الذكاء الاصطناعي السيادي تحليل البيانات المحلية فقط
+                            </p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- لوحة التحليل الفوري -->
+            <div class="live-analysis-panel">
+                <div class="panel-header">
+                    <h3><i class="fas fa-chart-line"></i> التحليل الآني للنظام</h3>
+                </div>
+                <div class="panel-content">
+                    <div class="live-metrics">
+                        <div class="metric">
+                            <i class="fas fa-server"></i>
+                            <div>
+                                <h4>حالة النظام</h4>
+                                <p class="metric-value stable">مستقر 100%</p>
+                            </div>
+                        </div>
+                        <div class="metric">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <h4>زمن الاستجابة</h4>
+                                <p class="metric-value">128 مللي ثانية</p>
+                            </div>
+                        </div>
+                        <div class="metric">
+                            <i class="fas fa-shield-virus"></i>
+                            <div>
+                                <h4>الحماية النشطة</h4>
+                                <p class="metric-value active">مفعلة</p>
+                            </div>
+                        </div>
+                        <div class="metric">
+                            <i class="fas fa-database"></i>
+                            <div>
+                                <h4>البيانات المعالجة</h4>
+                                <p class="metric-value">1.2 GB</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="dashboard-footer">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo-fallback small">SADD</div>
+                    <div>
+                        <h4>SADD - Sovereign AI Decision Dashboard</h4>
+                        <p>نظام سيادي 100% - تطوير وتشغيل محلي بالكامل</p>
+                    </div>
+                </div>
+                <div class="footer-info">
+                    <p><i class="fas fa-building"></i> رؤية المستقبل لأنظمة الأمن والمراقبة</p>
+                    <p><i class="fas fa-id-badge"></i> عضوية ريادة بتميز: AJM61631</p>
+                    <p><i class="fas fa-phone"></i> +971 50 316 1818</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- نافذة التصدير -->
+    <div id="exportModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-download"></i> تصدير البيانات</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>تم إنشاء ملف CSV يحتوي على سجلات الأمان.</p>
+                <div class="export-preview">
+                    <pre><code>timestamp,event_type,source,severity
+2026-01-08 14:30:22,login_success,192.168.1.10,low
+2026-01-08 14:25:17,access_attempt,10.0.0.45,high
+2026-01-08 14:20:05,system_scan,localhost,medium
+2026-01-08 14:15:33,data_access,192.168.1.15,low
+2026-01-08 14:10:28,malware_alert,external_ip,critical</code></pre>
+                </div>
+                <button id="downloadCsvBtn" class="btn-primary">
+                    <i class="fas fa-file-csv"></i> تنزيل ملف CSV
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="sadd.js"></script>
+</body>
+</html>

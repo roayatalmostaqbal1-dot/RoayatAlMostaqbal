@@ -20,6 +20,7 @@ import ContactsPage from '@/vue/pages/admin/ContactsPage.vue';
 import PagesManagementPage from '@/vue/pages/SuberAdmin/PagesManagementPage.vue';
 import EncryptedDataRecoveryPage from '@/vue/pages/admin/EncryptedDataRecoveryPage.vue';
 import TelegramChatsPage from '@/vue/pages/admin/telegram/TelegramChats.vue';
+import SecurityDashboardPage from '@/vue/pages/AllUser/SecurityDashboardPage.vue';
 const routes = [
     {
         path: '/login',
@@ -130,6 +131,12 @@ const routes = [
         meta: { requiresAuth: true },
     },
     {
+        path: '/security-dashboard',
+        name: 'SecurityDashboard',
+        component: SecurityDashboardPage,
+        meta: { requiresAuth: true },
+    },
+    {
         path: '',
         redirect: '/dashboard',
     },
@@ -156,6 +163,7 @@ const routePageMap = {
     '/settings': 'settings',
     '/encrypted-data': 'encrypted-data',
     '/encrypted-data-recovery': 'encrypted-data-recovery',
+    '/security-dashboard': 'security-dashboard',
 };
 
 // Navigation guards

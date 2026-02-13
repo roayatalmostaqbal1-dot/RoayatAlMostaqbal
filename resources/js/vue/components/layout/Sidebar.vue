@@ -29,7 +29,7 @@
                 'text-gray-400 hover:text-white hover:bg-[#162936]',
                 isActive(item.path) && 'bg-[#27e9b5] text-[#051824] font-semibold',
             ]">
-                <component :is="item.icon" class="w-5 h-5 flex-shrink-0" />
+                <component :is="item.icon" class="w-5 h-5 shrink-0" />
                 <span v-if="isExpanded" class="text-sm">{{ item.label }}</span>
             </router-link>
         </nav>
@@ -38,11 +38,11 @@
         <div v-if="isExpanded" class="absolute bottom-0 left-0 right-0 p-4 border-t border-[#3b5265] bg-[#051824]">
             <div class="flex items-center gap-3 mb-4">
                 <!-- User Avatar or Initial -->
-                <div v-if="authStore.userAvatar" class="w-10 h-10 rounded-full flex-shrink-0 overflow-hidden">
+                <div v-if="authStore.userAvatar" class="w-10 h-10 rounded-full shrink-0 overflow-hidden">
                     <img :src="authStore.userAvatar" :alt="authStore.userName" class="w-full h-full object-cover">
                 </div>
                 <div v-else
-                    class="w-10 h-10 rounded-full bg-[#27e9b5] flex items-center justify-center text-[#051824] font-bold flex-shrink-0">
+                    class="w-10 h-10 rounded-full bg-[#27e9b5] flex items-center justify-center text-[#051824] font-bold shrink-0">
                     {{ userInitial }}
                 </div>
 
@@ -155,6 +155,11 @@ const IconPages = {
         h('path', { d: 'M16 18H8v-2h8v2zm0-4H8v-2h8v2z' })
     ])
 };
+const IconSecurityDashboard = {
+    render: () => h('svg', { fill: 'currentColor', viewBox: '0 0 24 24' }, [
+        h('path', { d: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.11.02-1.93 1.23-5.46 3.62-.51.35-.98.52-1.4.51-.46-.01-1.35-.26-2.01-.48-.81-.27-1.45-.42-1.39-.88.03-.24.36-.49.98-.75 3.84-1.67 6.4-2.77 7.68-3.3 3.66-1.5 4.42-1.76 4.91-1.77.11 0 .35.03.5.15.13.11.17.26.19.38.01.07.01.22.01.26z' })
+    ])
+};
 
 const router = useRouter();
 const route = useRoute();
@@ -178,6 +183,8 @@ const allMenuItems = [
     { path: '/encrypted-data', label: 'Encrypted Data', icon: IconEncryption, pageKey: 'encrypted-data' },
     { path: '/encrypted-data-recovery', label: 'Data Recovery', icon: IconDataRecovery, pageKey: 'encrypted-data-recovery' },
     { path: '/encryption-debug', label: 'Encryption Debug', icon: IconDebug, pageKey: null }, // Debug page - always show
+    { path: '/security-dashboard', label: 'Security Dashboard', icon: IconSecurityDashboard, pageKey: 'security-dashboard' },
+
 ];
 
 const menuItems = computed(() => {

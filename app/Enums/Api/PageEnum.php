@@ -17,6 +17,9 @@ enum PageEnum: string
     case TELEGRAM_CHATS = 'telegram-chats';
     case TELEGRAM_MESSAGES = 'telegram-messages';
     case TELEGRAM_BOT = 'telegram-bot';
+    case SECURITY_DASHBOARD = 'security-dashboard';
+
+
 
     public function label(): string
     {
@@ -34,6 +37,7 @@ enum PageEnum: string
             self::TELEGRAM_CHATS => 'Telegram Chats',
             self::TELEGRAM_MESSAGES => 'Telegram Messages',
             self::TELEGRAM_BOT => 'Telegram Bot',
+            self::SECURITY_DASHBOARD => 'SecurityDashboard',
         };
     }
 
@@ -53,6 +57,7 @@ enum PageEnum: string
             self::TELEGRAM_CHATS => 'View and manage Telegram chats',
             self::TELEGRAM_MESSAGES => 'View and manage Telegram messages',
             self::TELEGRAM_BOT => 'View and manage Telegram bot',
+            self::SECURITY_DASHBOARD => 'View security dashboard',
         };
     }
 

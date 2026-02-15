@@ -78,7 +78,7 @@ class PermissionController extends Controller
     public function destroy( Permission $permission)
     {
     //     //
-    //     if(!Auth::user()->hasRole('super-admin')||!Auth::user()->hasPermissionTo('delete-permission')){
+    //     if(!Auth::user()->hasRole('super admin')||!Auth::user()->hasPermissionTo('delete-permission')){
     //         return response()->json([
     //             'response_code' => 403,
     //             'status' => 'error',

@@ -143,7 +143,7 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // Create roles
         $superAdminRole = Role::firstOrCreate(
-            ['name' => 'super-admin'],
+            ['name' => 'super admin'],
             ['guard_name' => 'api']
         );
 
@@ -167,7 +167,7 @@ class RolesAndPermissionsSeeder extends Seeder
             ['guard_name' => 'api']
         );
 
-        // Assign all permissions to super-admin
+        // Assign all permissions to super admin
         $superAdminRole->syncPermissions(Permission::all());
 
         // Assign permissions to admin (all except delete, but include recover)

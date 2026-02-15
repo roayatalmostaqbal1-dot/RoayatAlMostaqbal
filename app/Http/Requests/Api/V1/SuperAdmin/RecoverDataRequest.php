@@ -14,7 +14,7 @@ class RecoverDataRequest extends FormRequest
     {
         $user = Auth::user();
 
-        return $user && ($user->hasRole('super-admin') || $user->hasPermission('encrypted_data.recover'));
+        return $user && ($user->hasRole('super admin') || $user->hasPermission('encrypted_data.recover'));
     }
 
     /**

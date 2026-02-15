@@ -10,13 +10,13 @@ class RolePagesSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     * 
+     *
      * Assign pages to roles based on their access level.
      */
     public function run(): void
     {
         // Get all roles
-        $superAdminRole = Role::where('name', 'super-admin')->first();
+        $superAdminRole = Role::where('name', 'super admin')->first();
         $adminRole = Role::where('name', 'admin')->first();
         $editorRole = Role::where('name', 'editor')->first();
         $viewerRole = Role::where('name', 'viewer')->first();

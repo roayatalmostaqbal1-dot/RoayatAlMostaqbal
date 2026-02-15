@@ -9,7 +9,7 @@ use App\Http\Controllers\Api\V1\SuperAdmin\RoleController;
 use App\Http\Controllers\Api\V1\SuperAdmin\RolePermissionController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('SuperAdmin')->middleware(['auth:api', 'role:super-admin'])->group(function () {
+Route::prefix('SuperAdmin')->middleware(['auth:api', 'role:super admin'])->group(function () {
     // =====================
     // Roles Management
     // =====================

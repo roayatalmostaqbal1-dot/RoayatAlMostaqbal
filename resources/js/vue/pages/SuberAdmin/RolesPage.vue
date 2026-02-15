@@ -76,7 +76,7 @@
                     ✏️ Edit
                   </Button>
                   <Button
-                    v-if="role.name !== 'super-admin'"
+                    v-if="role.name !== 'super admin'"
                     variant="danger"
                     size="sm"
                     @click="handleDelete(role)"
@@ -169,10 +169,10 @@ onMounted(async () => {
 });
 
 const handleDelete = async (item) => {
-  if (item.name === 'super-admin') {
+  if (item.name === 'super admin') {
     // Use toast instead of alert
     const toastStore = useToastStore();
-    toastStore.error('Cannot Delete', 'Cannot delete the super-admin role');
+    toastStore.error('Cannot Delete', 'Cannot delete the super admin role');
     return;
   }
 

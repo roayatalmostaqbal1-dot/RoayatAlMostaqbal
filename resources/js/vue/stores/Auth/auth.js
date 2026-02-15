@@ -113,12 +113,12 @@ export const useAuthStore = defineStore("auth", {
         /**
          * Check if user is super admin
          */
-        isSuperAdmin: (state) => state.authRoles.includes('super-admin'),
+        isSuperAdmin: (state) => state.authRoles.includes('super admin'),
 
         /**
          * Check if user is admin
          */
-        isAdmin: (state) => state.authRoles.includes('admin') || state.authRoles.includes('super-admin'),
+        isAdmin: (state) => state.authRoles.includes('admin') || state.authRoles.includes('super admin'),
 
 
         hasPageAccess: (state) => (pageKey) => {

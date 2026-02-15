@@ -12,7 +12,7 @@ class AddpermissionToRoleRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return  Auth::user()->hasRole('super-admin');
+        return  Auth::user()->hasRole('super admin');
     }
 
     /**
@@ -36,7 +36,7 @@ class AddpermissionToRoleRequest extends FormRequest
             'role_id.exists' => 'Selected role does not exist',
             'permission_id.required' => 'Permission is required',
             'permission_id.exists' => 'Selected permission does not exist',
-            
+
         ];
     }
 

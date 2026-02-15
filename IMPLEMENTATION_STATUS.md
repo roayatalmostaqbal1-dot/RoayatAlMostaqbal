@@ -51,7 +51,7 @@ A comprehensive, production-ready Roles and Permissions system has been successf
 ### Middleware
 - [x] CheckApiPermission middleware
 - [x] Route-permission lookup with caching
-- [x] Super-admin role bypass
+- [x] super admin role bypass
 - [x] 403 Forbidden response on denied access
 - [x] IP address and user agent logging
 
@@ -106,7 +106,7 @@ A comprehensive, production-ready Roles and Permissions system has been successf
 
 ## 🔐 Security Features Implemented
 
-- [x] Super-admin role bypass
+- [x] super admin role bypass
 - [x] Role deletion protection
 - [x] Permission deletion protection
 - [x] Comprehensive audit logging
@@ -189,7 +189,7 @@ A comprehensive, production-ready Roles and Permissions system has been successf
 ## 🎯 Default Configuration
 
 ### Roles (4)
-- super-admin - All permissions
+- super admin - All permissions
 - admin - All except delete
 - editor - View and edit only
 - viewer - View only

@@ -3,10 +3,10 @@ import { useAuthStore } from '../stores/auth';
 
 /**
  * Composable for permission and role checking in Vue components
- * 
+ *
  * Usage:
  * const { can, canAny, canAll, hasRole, hasAnyRole, hasAllRoles, isSuperAdmin, isAdmin } = usePermissions();
- * 
+ *
  * if (can('users.view')) {
  *   // Show users management
  * }
@@ -62,7 +62,7 @@ export function usePermissions() {
     const isSuperAdmin = computed(() => authStore.isSuperAdmin);
 
     /**
-     * Check if user is admin (admin or super-admin)
+     * Check if user is admin (admin or super admin)
      */
     const isAdmin = computed(() => authStore.isAdmin);
 

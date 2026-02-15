@@ -103,7 +103,7 @@ class EncryptedDataController extends Controller
             $user = Auth::user();
 
             // Check if user is admin
-            if (! $user->hasRole('super-admin') && ! $user->hasPermission('encrypted_data')) {
+            if (! $user->hasRole('super admin') && ! $user->hasPermission('encrypted_data')) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Unauthorized - Admin access required',

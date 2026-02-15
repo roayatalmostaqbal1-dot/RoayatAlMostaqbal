@@ -24,18 +24,18 @@ class DatabaseSeeder extends Seeder
             'name' => 'dynamite',
             'email' => 'dynamite@gmail.com',
             'password' => Hash::make('password123')
-        ])->assignRole('super-admin');
+        ])->assignRole('super admin');
 
         User::create([
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
             'password' => Hash::make('password123')
-        ])->assignRole('super-admin');
+        ])->assignRole('super admin');
         User::create([
             'name' => 'Admin',
             'email' => 'admin@roayatalmostaqbal.net',
             'password' => Hash::make('password123')
-        ])->assignRole('super-admin');
+        ])->assignRole('super admin');
         // Seed encrypted data for testing
         $this->call([EncryptedDataSeeder::class]);
     }

@@ -312,69 +312,541 @@ protected function isAccessible(User $user, ?string $path = null): bool
 
 === Project Structure & Architecture ===
 
-## System Overview
+# RoayatAlMostaqbal - نظرة عامة شاملة
 
-RoayatAlMostaqbal is a comprehensive platform built on Laravel 12 (Backend) and Vue.js 3 (Frontend) with Tailwind CSS 4. The system follows a Service-Repository pattern for business logic and uses Pinia for frontend state management.
+## 📋 نبذة عن المشروع
 
-## Key Modules
+**اسم المشروع:** RoayatAlMostaqbal (رؤية المستقبل)
+**النوع:** منصة أمان وخدمات تكنولوجية ثنائية اللغة
+**الإطار العمل:** Laravel 12 (Backend) + Vue.js 3 (Frontend) + Tailwind CSS 4
+**الحالة:** جاهز للإنتاج وفحص براءة الاختراع
+**اللغات المدعومة:** العربية والإنجليزية
 
-- **Authentication**: Built-in Laravel Auth with potential UAE PASS integration.
-- **Security Dashboard**: Real-time security monitoring system including:
-    - **UserDashboardData**: Manages user identity status and security levels.
-    - **SecurityLogs**: Tracks all security-related events with severity levels.
-    - **AIInsight**: AI-driven threat analysis and recommendations.
+---
 
-## Directory Structure & Organization
+## 🎯 الفكرة الرئيسية للمشروع
 
-### Backend (Laravel)
+RoayatAlMostaqbal هي منصة أمان متقدمة تجمع بين عدة تقنيات حديثة:
 
-- **Models** (`app/Models/`):
-    - `User`, `UserDashboardData`, `SecurityLog`, `AIInsight`
-    - Eloquent models handling database interactions and relationships.
-- **Services** (`app/Services/`):
-    - Encapsulates business logic (e.g., `SecurityDashboardService`).
-    - Keeps controllers thin and testable.
-- **Controllers** (`app/Http/Controllers/Api/V1/`):
-    - `SecurityDashboardController`: Handles API requests, validation, and responses.
-    - Follows RESTful principles and resource-oriented design.
-- **Database**:
-    - `migrations/`: Database schema definitions.
-    - `seeders/`: Data population for development/testing.
+1. **التشفير الهجين (Hybrid Encryption)**
+   - تشفير من جانب العميل (Client-Side Encryption - CSE)
+   - تشفير من جانب الخادم (Server-Side Encryption)
+   - إدارة مفاتيح هجينة متقدمة
 
-### Frontend (Vue.js)
+2. **المصادقة المتعددة (Multi-Factor Authentication)**
+   - OAuth2 عبر Laravel Passport
+   - المصادقة الثنائية (2FA) باستخدام TOTP
+   - نظام رموز الاسترجاع (Recovery Codes)
 
-- **Pages** (`resources/js/vue/pages/`):
-    - `AllUser/SecurityDashboardPage.vue`: Main dashboard view.
-    - Organized by user role/access level.
-- **Components** (`resources/js/vue/components/`):
-    - `security/`: Domain-specific components (`IdentityCard`, `SecurityLogsCard`, `AIAnalysisCard`, `SystemMetricsCard`).
-    - `ui/`: Reusable UI elements (`Toast`, `Button`, `Card`).
-- **State Management** (`resources/js/vue/stores/`):
-    - `securityDashboardStore.js`: Manages dashboard data fetching and state.
-    - Uses Pinia for reactive state management.
+3. **التحكم بالوصول (Role-Based Access Control - RBAC)**
+   - نظام الأدوار والصلاحيات (Spatie Permission)
+   - إدارة صلاحيات متقدمة
+   - تحكم على مستوى الصفحات والموارد
 
-## Building Methods & Standards
+4. **لوحة التحكم الأمنية (Security Dashboard)**
+   - مراقبة أمان المستخدم في الوقت الفعلي
+   - تحليل التهديدات بالذكاء الاصطناعي
+   - سجلات الأمان المفصلة
 
-### Backend Development
+---
 
-- **Service Layer**: Always use Services for logic complex than basic CRUD.
-- **Type Hinting**: strictly use PHP type hints (e.g., `string $userId`, `?array $filters`).
-- **Naming Config**:
-    - Tables: Snake case (e.g., `user_dashboard_data`, `ai_insights`).
-    - API Routes: Kebab case (e.g., `/api/v1/security-dashboard`).
-- **UUID Support**: The system uses UUIDs for users. Ensure string type hints for IDs.
+## 🏗️ البنية التحتية والمعمارية
 
-### Frontend Development
+### المكونات الأساسية
 
-- **Composition API**: Use `<script setup>` syntax for all Vue components.
-- **Tailwind CSS 4**: Use utility-first styling. Avoid custom CSS files unless necessary.
-- **Icons**: Use inline SVGs or a standardized icon component.
-- **Reusability**: Extract common patterns into components in `components/ui/`.
+```
+RoayatAlMostaqbal/
+├── Backend (Laravel 12)
+│   ├── Models (قاعدة البيانات)
+│   ├── Services (منطق الأعمال)
+│   ├── Controllers (معالجات الطلبات)
+│   ├── Migrations (تعريفات قاعدة البيانات)
+│   └── Routes (المسارات والنقاط النهائية)
+│
+├── Frontend (Vue.js 3)
+│   ├── Pages (الصفحات الرئيسية)
+│   ├── Components (المكونات القابلة لإعادة الاستخدام)
+│   ├── Stores (إدارة الحالة - Pinia)
+│   └── Styles (Tailwind CSS 4)
+│
+└── Database
+    ├── Migrations (تعريفات الجداول)
+    └── Seeders (بيانات التطوير)
+```
 
-## Critical implementation Details
+---
 
-- **AIInsight Table**: Explicitly mapped to `ai_insights` to avoid default naming conflicts.
-- **Security Logs**: Stored with metadata JSON column for flexibility.
-- **Linting**:
-    - Backend: Laravel Pint (`vendor/bin/pint`).
-    - Frontend: ESLint/Prettier defaults.
+## 📦 الوحدات الرئيسية والميزات
+
+### 1. وحدة المصادقة والأمان (Authentication & Security)
+
+**الملفات الرئيسية:**
+- `app/Models/User.php` - نموذج المستخدم
+- `app/Models/UserTwoFactorAuth.php` - بيانات المصادقة الثنائية
+- `app/Models/MasterEncryptionKey.php` - مفاتيح التشفير الرئيسية
+- `app/Models/EncryptedUserData.php` - البيانات المشفرة للمستخدم
+
+**الميزات:**
+- تسجيل دخول آمن عبر OAuth2
+- المصادقة الثنائية (TOTP)
+- تشفير البيانات الحساسة
+- إدارة جلسات المستخدم
+
+### 2. وحدة لوحة التحكم الأمنية (Security Dashboard)
+
+**الملفات الرئيسية:**
+- `app/Models/UserDashboardData.php` - بيانات لوحة التحكم
+- `app/Models/SecurityLog.php` - سجلات الأمان
+- `app/Models/AIInsight.php` - تحليلات الذكاء الاصطناعي
+- `app/Services/SecurityDashboardService.php` - منطق الخدمة
+
+**الميزات:**
+- عرض حالة الأمان الحالية
+- سجل الأنشطة الأمنية
+- تنبيهات التهديدات
+- توصيات الأمان المدعومة بالذكاء الاصطناعي
+
+### 3. وحدة إدارة الأدوار والصلاحيات (RBAC)
+
+**الملفات الرئيسية:**
+- `app/Models/Role.php` - الأدوار
+- `app/Models/RolePage.php` - ربط الأدوار بالصفحات
+- `routes/api/v1/SuperAdmin/api.php` - إدارة الأدوار
+
+**الميزات:**
+- إنشاء وتعديل الأدوار
+- تعيين الصلاحيات للأدوار
+- التحكم في الوصول إلى الصفحات
+- ثلاث مستويات: Super Admin, Admin, User
+
+### 4. وحدة التكامل الاجتماعي (Social Integration)
+
+**الملفات الرئيسية:**
+- `app/Models/SocialAccount.php` - حسابات التواصل الاجتماعي
+- `app/Models/TelegramChat.php` - تكامل Telegram
+- `app/Models/TelegramMessage.php` - رسائل Telegram
+
+**الميزات:**
+- تسجيل دخول عبر Microsoft
+- تكامل Telegram للإشعارات
+- إدارة الحسابات الاجتماعية
+
+### 5. وحدة السجلات والتدقيق (Audit & Logging)
+
+**الملفات الرئيسية:**
+- `app/Models/AuditLog.php` - سجلات التدقيق
+- `app/Models/Contact.php` - رسائل التواصل
+
+**الميزات:**
+- تسجيل جميع الأنشطة
+- تتبع التغييرات
+- سجل الاتصالات
+
+---
+
+## 📁 هيكل المشروع التفصيلي
+
+### Backend (Laravel 12)
+
+#### Models (`app/Models/`)
+```
+User.php                      - نموذج المستخدم الأساسي
+UserDashboardData.php         - بيانات لوحة التحكم
+UserTwoFactorAuth.php         - بيانات المصادقة الثنائية
+SecurityLog.php               - سجلات الأمان
+AIInsight.php                 - تحليلات الذكاء الاصطناعي
+EncryptedUserData.php         - البيانات المشفرة
+MasterEncryptionKey.php       - مفاتيح التشفير الرئيسية
+Role.php                      - الأدوار
+RolePage.php                  - ربط الأدوار بالصفحات
+SocialAccount.php             - الحسابات الاجتماعية
+TelegramChat.php              - محادثات Telegram
+TelegramMessage.php           - رسائل Telegram
+AuditLog.php                  - سجلات التدقيق
+Contact.php                   - رسائل التواصل
+OAuth2Client.php              - عملاء OAuth2
+PasswordResetToken.php        - رموز إعادة تعيين كلمة المرور
+```
+
+#### Services (`app/Services/`)
+```
+SecurityDashboardService.php  - خدمة لوحة التحكم الأمنية
+NotificationService.php       - خدمة الإشعارات
+```
+
+#### Controllers (`app/Http/Controllers/Api/V1/`)
+```
+Admin/
+  - UserController.php        - إدارة المستخدمين
+  - ContactController.php      - إدارة الرسائل
+  - Dashboard/DashboardController.php
+
+SuperAdmin/
+  - RoleController.php        - إدارة الأدوار
+  - PermissionController.php   - إدارة الصلاحيات
+  - EncryptedDataRecoveryController.php
+  - OAuth2ClientController.php
+  - PageController.php
+  - PermissionRoleController.php
+  - RolePermissionController.php
+```
+
+#### Routes (`routes/api/v1/`)
+```
+admin/api.php                 - مسارات الإدارة
+SuperAdmin/api.php            - مسارات المسؤول الأعلى
+```
+
+#### Database (`database/`)
+```
+migrations/                   - تعريفات الجداول
+seeders/                      - بيانات التطوير والاختبار
+factories/                    - مصانع البيانات الوهمية
+```
+
+### Frontend (Vue.js 3)
+
+#### Pages (`resources/js/vue/pages/`)
+```
+AllUser/
+  - SecurityDashboardPage.vue - لوحة التحكم الأمنية
+  - (صفحات أخرى حسب الأدوار)
+```
+
+#### Components (`resources/js/vue/components/`)
+```
+security/
+  - IdentityCard.vue          - بطاقة الهوية
+  - SecurityLogsCard.vue      - بطاقة سجلات الأمان
+  - AIAnalysisCard.vue        - بطاقة تحليل الذكاء الاصطناعي
+  - SystemMetricsCard.vue     - بطاقة مقاييس النظام
+
+ui/
+  - Toast.vue                 - إشعارات
+  - Button.vue                - أزرار
+  - Card.vue                  - بطاقات
+  - (مكونات أخرى)
+```
+
+#### State Management (`resources/js/vue/stores/`)
+```
+securityDashboardStore.js     - إدارة حالة لوحة التحكم
+(متاجر أخرى حسب الحاجة)
+```
+
+#### Styles (`resources/css/`)
+```
+app.css                       - الأنماط الرئيسية (Tailwind CSS 4)
+```
+
+---
+
+## 🔧 معايير البناء والتطوير
+
+### معايير Backend (Laravel 12)
+
+#### 1. نمط الخدمة (Service Pattern)
+```php
+// استخدم Services لأي منطق معقد
+class SecurityDashboardService
+{
+    public function __construct(private SecurityLog $securityLog) { }
+
+    public function getDashboardData(string $userId): array
+    {
+        // منطق معقد هنا
+    }
+}
+```
+
+#### 2. Type Hinting (تلميحات الأنواع)
+```php
+// استخدم دائماً type hints صريحة
+public function getUserData(string $userId, ?array $filters = null): array
+{
+    // ...
+}
+```
+
+#### 3. معايير التسمية (Naming Conventions)
+- **جداول قاعدة البيانات:** snake_case
+  - `user_dashboard_data`
+  - `security_logs`
+  - `ai_insights`
+  - `user_two_factor_auth`
+
+- **مسارات API:** kebab-case
+  - `/api/v1/security-dashboard`
+  - `/api/v1/admin/users`
+  - `/api/v1/super-admin/roles`
+
+- **الفئات والدوال:** PascalCase و camelCase
+  - `SecurityDashboardService`
+  - `getUserData()`
+
+#### 4. دعم UUIDs
+```php
+// المشروع يستخدم UUIDs للمستخدمين
+// استخدم string type hints للمعرفات
+public function getUser(string $userId): User
+{
+    // ...
+}
+```
+
+#### 5. Eloquent Relationships
+```php
+// استخدم العلاقات الصحيحة مع type hints
+public function securityLogs(): HasMany
+{
+    return $this->hasMany(SecurityLog::class);
+}
+```
+
+#### 6. Validation (التحقق من البيانات)
+```php
+// استخدم Form Request Classes
+class StoreUserRequest extends FormRequest
+{
+    public function rules(): array
+    {
+        return [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users',
+        ];
+    }
+}
+```
+
+#### 7. Linting والتنسيق
+```bash
+# استخدم Laravel Pint قبل الانتهاء من أي تعديل
+vendor/bin/pint --dirty
+
+# لا تستخدم --test، استخدم الأمر مباشرة لإصلاح المشاكل
+vendor/bin/pint
+```
+
+### معايير Frontend (Vue.js 3)
+
+#### 1. Composition API
+```vue
+<script setup>
+import { ref, computed } from 'vue'
+
+const count = ref(0)
+const doubled = computed(() => count.value * 2)
+</script>
+
+<template>
+  <div>{{ doubled }}</div>
+</template>
+```
+
+#### 2. Tailwind CSS 4
+```vue
+<!-- استخدم utility-first styling -->
+<div class="flex gap-4 p-6 bg-white dark:bg-gray-900 rounded-lg shadow">
+  <button class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+    Click me
+  </button>
+</div>
+```
+
+#### 3. Dark Mode Support
+```vue
+<!-- إذا كان المشروع يدعم dark mode، استخدمه في المكونات الجديدة -->
+<div class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
+  Content
+</div>
+```
+
+#### 4. Icons
+```vue
+<!-- استخدم SVGs أو مكون icon موحد -->
+<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+  <!-- SVG content -->
+</svg>
+```
+
+#### 5. Component Reusability
+```vue
+<!-- استخرج الأنماط المتكررة إلى مكونات في components/ui/ -->
+<template>
+  <BaseCard :title="title">
+    <slot />
+  </BaseCard>
+</template>
+```
+
+#### 6. State Management (Pinia)
+```javascript
+// استخدم Pinia للحالة المعقدة
+import { defineStore } from 'pinia'
+
+export const useSecurityStore = defineStore('security', () => {
+  const dashboardData = ref(null)
+
+  const fetchDashboard = async (userId) => {
+    // ...
+  }
+
+  return { dashboardData, fetchDashboard }
+})
+```
+
+---
+
+## 🔐 تفاصيل التنفيذ الحرجة
+
+### 1. جدول AIInsight
+```php
+// تم تعيينه صراحة إلى ai_insights لتجنب تضارب التسمية
+protected $table = 'ai_insights';
+```
+
+### 2. سجلات الأمان
+```php
+// تخزين البيانات الوصفية كـ JSON للمرونة
+protected $casts = [
+    'metadata' => 'json',
+];
+```
+
+### 3. التشفير
+```php
+// استخدم مفاتيح التشفير المخزنة في MasterEncryptionKey
+// لا تخزن المفاتيح في الكود مباشرة
+```
+
+### 4. المصادقة الثنائية
+```php
+// استخدم Google2FA للتوليد والتحقق
+// احفظ رموز الاسترجاع بشكل آمن
+```
+
+### 5. الصلاحيات
+```php
+// استخدم Spatie Permission للتحكم الدقيق
+// تحقق من الصلاحيات في المسارات والمتحكمات
+Route::middleware('permission:users.view')->get('/users', ...);
+```
+
+---
+
+## 📊 الحزم والمكتبات الرئيسية
+
+### Backend Dependencies
+```json
+{
+  "laravel/framework": "^12.0",
+  "laravel/passport": "^13.0",
+  "laravel/reverb": "^1.0",
+  "laravel/socialite": "^5.23",
+  "laravel/ai": "^0.1.5",
+  "laravel/mcp": "^0.4.1",
+  "spatie/laravel-permission": "^6.21",
+  "pragmarx/google2fa": "^8.0",
+  "pragmarx/google2fa-laravel": "^2.3",
+  "irazasyed/telegram-bot-sdk": "^3.15",
+  "bacon/bacon-qr-code": "^3.0"
+}
+```
+
+### Frontend Dependencies
+```json
+{
+  "vue": "^3.5.22",
+  "vue-router": "^4.5.1",
+  "pinia": "^3.0.3",
+  "tailwindcss": "^4.0.0",
+  "chart.js": "^4.5.1",
+  "axios": "^1.11.0",
+  "laravel-echo": "^2.2.4"
+}
+```
+
+---
+
+## 🚀 خطوات البناء والتطوير
+
+### إعداد البيئة
+```bash
+# تثبيت المتطلبات
+composer install
+npm install
+
+# إنشاء ملف .env
+cp .env.example .env
+php artisan key:generate
+
+# إعداد قاعدة البيانات
+php artisan migrate
+php artisan db:seed
+```
+
+### التطوير
+```bash
+# تشغيل خادم التطوير
+php artisan serve
+
+# تجميع الأصول الأمامية
+npm run dev
+
+# أو تشغيل كليهما معاً
+composer run dev
+```
+
+### الاختبار
+```bash
+# تشغيل جميع الاختبارات
+php artisan test
+
+# تشغيل اختبار معين
+php artisan test tests/Feature/SecurityDashboardTest.php
+
+# تصفية الاختبارات
+php artisan test --filter=testName
+```
+
+### التنسيق والتحقق
+```bash
+# تنسيق الكود
+vendor/bin/pint
+
+# التحقق من الأخطاء فقط
+vendor/bin/pint --test
+```
+
+---
+
+## 📝 ملاحظات مهمة
+
+1. **استخدم Services للمنطق المعقد** - لا تضع كل شيء في Controllers
+2. **استخدم Type Hints دائماً** - يحسن الأداء والأمان
+3. **اختبر الكود** - اكتب اختبارات لكل ميزة جديدة
+4. **اتبع معايير التسمية** - ثبات في الكود يسهل الصيانة
+5. **استخدم Pinia للحالة** - لا تستخدم props drilling
+6. **استخدم Tailwind** - لا تكتب CSS مخصص إلا عند الضرورة
+7. **وثق الكود** - استخدم PHPDoc و JSDoc
+8. **احم البيانات الحساسة** - استخدم التشفير والمصادقة
+
+---
+
+## 🔗 الموارد المهمة
+
+- **Laravel Documentation:** https://laravel.com/docs
+- **Vue.js Documentation:** https://vuejs.org
+- **Tailwind CSS:** https://tailwindcss.com
+- **Pinia:** https://pinia.vuejs.org
+- **Spatie Permission:** https://spatie.be/docs/laravel-permission
+
+---
+
+## 📞 الدعم والمساعدة
+
+للأسئلة حول المشروع:
+1. تحقق من الملفات الموجودة ذات الصلة
+2. اقرأ التعليقات في الكود
+3. راجع الاختبارات للأمثلة
+4. استشر الوثائق الرسمية للمكتبات

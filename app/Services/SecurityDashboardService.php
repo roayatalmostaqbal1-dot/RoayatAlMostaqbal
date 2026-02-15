@@ -2,9 +2,11 @@
 
 namespace App\Services;
 
-use App\Models\{AIInsight, SecurityLog, User, UserDashboardData};
+use App\Models\AIInsight;
+use App\Models\SecurityLog;
+use App\Models\User;
+use App\Models\UserDashboardData;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 
 class SecurityDashboardService
 {
@@ -37,6 +39,11 @@ class SecurityDashboardService
             ]
         );
 
+        // Fetch encrypted data if available
+        $encryptedData = \App\Models\EncryptedUserData::forUser($userId)
+            ->byType('profile')
+            ->first();
+
         return [
             'user_name' => $user->name,
             'user_email' => $user->email,
@@ -47,6 +54,13 @@ class SecurityDashboardService
             'uae_pass_connected' => $dashboardData->uae_pass_connected,
             'last_sync' => $dashboardData->formatted_last_sync ?? 'Never',
             'expiry_date' => '2030-12-31', // Mock data
+            'encrypted_identity' => $encryptedData ? [
+                'encrypted_dek' => $encryptedData->encrypted_dek,
+                'dek_salt' => $encryptedData->dek_salt,
+                'dek_nonce' => $encryptedData->dek_nonce,
+                'ciphertext' => $encryptedData->profile_ciphertext,
+                'nonce' => $encryptedData->profile_nonce,
+            ] : null,
         ];
     }
 
@@ -59,7 +73,7 @@ class SecurityDashboardService
 
         // Apply period filter
         if (isset($filters['period'])) {
-            $query = match($filters['period']) {
+            $query = match ($filters['period']) {
                 'today' => $query->today(),
                 'week' => $query->lastWeek(),
                 'month' => $query->lastMonth(),
@@ -96,7 +110,7 @@ class SecurityDashboardService
     {
         $insight = AIInsight::latestForUser($userId)->first();
 
-        if (!$insight) {
+        if (! $insight) {
             // Generate initial insight if none exists
             $insight = $this->generateAIInsight($userId);
         }
@@ -131,7 +145,7 @@ class SecurityDashboardService
         $riskScore = min(100, ($criticalCount * 25) + ($highCount * 10) + ($mediumCount * 5) + ($lowCount * 1));
 
         // Determine risk level
-        $riskLevel = match(true) {
+        $riskLevel = match (true) {
             $riskScore >= 75 => 'critical',
             $riskScore >= 50 => 'high',
             $riskScore >= 25 => 'medium',
@@ -164,7 +178,7 @@ class SecurityDashboardService
      */
     private function generateRecommendation(string $riskLevel, $logs): string
     {
-        return match($riskLevel) {
+        return match ($riskLevel) {
             'critical' => 'CRITICAL: Immediate action required! Multiple high-severity threats detected. Review access logs and enable additional security measures.',
             'high' => 'WARNING: Elevated security risk detected. Review recent security events and verify all access attempts.',
             'medium' => 'CAUTION: Moderate security activity detected. Consider reviewing access policies and user permissions.',
@@ -184,7 +198,7 @@ class SecurityDashboardService
 
         return [
             'system_status' => 'stable',
-            'response_time' => rand(50, 200) . ' ms',
+            'response_time' => rand(50, 200).' ms',
             'protection_status' => 'active',
             'data_processed' => $this->formatBytes(rand(100000000, 2000000000)),
             'recent_activity' => $recentLogs,
@@ -198,12 +212,12 @@ class SecurityDashboardService
     {
         $eventTypes = [
             'login_success', 'access_attempt', 'system_scan',
-            'data_access', 'api_request', 'file_download'
+            'data_access', 'api_request', 'file_download',
         ];
         $severities = ['low', 'low', 'low', 'medium', 'medium', 'high', 'critical'];
         $sources = [
             '192.168.1.10', '192.168.1.15', '10.0.0.45',
-            'localhost', 'external_ip', '172.16.0.1'
+            'localhost', 'external_ip', '172.16.0.1',
         ];
 
         $created = 0;
@@ -234,7 +248,7 @@ class SecurityDashboardService
         $logs = SecurityLog::where('user_id', $userId);
 
         if (isset($filters['period'])) {
-            $logs = match($filters['period']) {
+            $logs = match ($filters['period']) {
                 'today' => $logs->today(),
                 'week' => $logs->lastWeek(),
                 'month' => $logs->lastMonth(),
@@ -270,6 +284,6 @@ class SecurityDashboardService
         $pow = min($pow, count($units) - 1);
         $bytes /= pow(1024, $pow);
 
-        return round($bytes, 2) . ' ' . $units[$pow];
+        return round($bytes, 2).' '.$units[$pow];
     }
 }

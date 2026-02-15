@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import apiClient from '@/vue/services/api';
+import { initSodium, encryptUserData, decryptUserData } from '@/vue/utils/encryption';
 
 export const useSecurityDashboardStore = defineStore('securityDashboard', {
     state: () => ({
@@ -12,6 +13,11 @@ export const useSecurityDashboardStore = defineStore('securityDashboard', {
         systemMetrics: null,
         isLoading: false,
         error: null,
+        // Encryption-related state
+        encryptedData: null,
+        encryptedDataList: [],
+        encryptionMetadata: null,
+        isEncryptionReady: false,
     }),
 
     getters: {
@@ -213,6 +219,201 @@ export const useSecurityDashboardStore = defineStore('securityDashboard', {
          */
         clearError() {
             this.error = null;
+        },
+
+        /**
+         * Initialize encryption library
+         */
+        async initializeEncryption() {
+            try {
+                await initSodium();
+                this.isEncryptionReady = true;
+                return { success: true };
+            } catch (error) {
+                this.error = 'Failed to initialize encryption library';
+                console.error('Encryption initialization error:', error);
+                return { success: false, error: this.error };
+            }
+        },
+
+        /**
+         * Fetch encrypted data (raw format - as stored in database)
+         */
+        async fetchEncryptedDataRaw(dataType = 'profile') {
+            this.isLoading = true;
+            this.error = null;
+
+            try {
+                const response = await apiClient.get('/security-dashboard/encrypted-raw', {
+                    params: { type: dataType },
+                });
+
+                if (response.data.success) {
+                    this.encryptedData = response.data.data;
+                    return { success: true, data: this.encryptedData };
+                }
+            } catch (error) {
+                this.error = error.response?.data?.message || 'Failed to fetch encrypted data';
+                console.error('Error fetching encrypted data:', error);
+                return { success: false, error: this.error };
+            } finally {
+                this.isLoading = false;
+            }
+        },
+
+        /**
+         * Fetch all encrypted data for the user
+         */
+        async fetchAllEncryptedData() {
+            this.isLoading = true;
+            this.error = null;
+
+            try {
+                const response = await apiClient.get('/security-dashboard/encrypted-all');
+
+                if (response.data.success) {
+                    this.encryptedDataList = response.data.data || [];
+                    return { success: true, data: this.encryptedDataList };
+                }
+            } catch (error) {
+                this.error = error.response?.data?.message || 'Failed to fetch encrypted data list';
+                console.error('Error fetching encrypted data list:', error);
+                return { success: false, error: this.error };
+            } finally {
+                this.isLoading = false;
+            }
+        },
+
+        /**
+         * Fetch encryption metadata
+         */
+        async fetchEncryptionMetadata(dataType = 'profile') {
+            try {
+                const response = await apiClient.get('/security-dashboard/encryption-metadata', {
+                    params: { type: dataType },
+                });
+
+                if (response.data.success) {
+                    this.encryptionMetadata = response.data.data;
+                    return { success: true, data: this.encryptionMetadata };
+                }
+            } catch (error) {
+                this.error = error.response?.data?.message || 'Failed to fetch encryption metadata';
+                console.error('Error fetching encryption metadata:', error);
+                return { success: false, error: this.error };
+            }
+        },
+
+        /**
+         * Decrypt user data with password
+         */
+        async decryptData(password, dekSalt, encryptedDek, dekNonce, profileCiphertext, profileNonce) {
+            try {
+                if (!this.isEncryptionReady) {
+                    await this.initializeEncryption();
+                }
+
+                const decryptedData = await decryptUserData(
+                    password,
+                    dekSalt,
+                    encryptedDek,
+                    dekNonce,
+                    profileCiphertext,
+                    profileNonce
+                );
+
+                return { success: true, data: decryptedData };
+            } catch (error) {
+                this.error = 'Failed to decrypt data. Wrong password or corrupted data.';
+                console.error('Decryption error:', error);
+                return { success: false, error: this.error };
+            }
+        },
+
+        /**
+         * Encrypt user data with password
+         */
+        async encryptData(password, userData) {
+            try {
+                if (!this.isEncryptionReady) {
+                    await this.initializeEncryption();
+                }
+
+                const encryptedData = await encryptUserData(password, userData);
+                return { success: true, data: encryptedData };
+            } catch (error) {
+                this.error = 'Failed to encrypt data';
+                console.error('Encryption error:', error);
+                return { success: false, error: this.error };
+            }
+        },
+
+        /**
+         * Setup encrypted identity for the first time
+         */
+        async setupEncryptedIdentity(password) {
+            this.isLoading = true;
+            this.error = null;
+
+            try {
+                // 1. Prepare data to encrypt (using existing identity data)
+                const identityDataToEncrypt = {
+                    identity_number: this.identityData?.identity_number || '784-1234-1234567-1',
+                    nationality: this.identityData?.nationality || 'UAE',
+                    full_name: this.identityData?.user_name || '',
+                    email: this.identityData?.user_email || '',
+                    phone: '+971501234567',
+                    address: 'Dubai, UAE',
+                    dob: '1990-01-01',
+                    passport_number: 'N12345678',
+                    expiry_date: '2030-12-31'
+                };
+
+                // 2. Encrypt the data
+                if (!this.isEncryptionReady) {
+                    await this.initializeEncryption();
+                }
+
+                const encryptedResult = await encryptUserData(password, identityDataToEncrypt);
+
+                // 3. Send to server
+                const payload = {
+                    ...encryptedResult,
+                    data_type: 'profile',
+                    metadata: JSON.stringify({
+                        version: '1.0',
+                        setup_date: new Date().toISOString(),
+                        client: 'web-dashboard'
+                    })
+                };
+
+                const response = await apiClient.post('/encrypted-data', payload);
+
+                if (response.data.success) {
+                    // Update field references to match what's returned/expected
+                    const newEncryptedData = response.data.data;
+
+                    // Merge into identity data so UI updates immediately
+                    this.identityData = {
+                        ...this.identityData,
+                        encrypted_identity: {
+                            encrypted_dek: newEncryptedData.encrypted_dek,
+                            dek_salt: newEncryptedData.dek_salt,
+                            dek_nonce: newEncryptedData.dek_nonce,
+                            ciphertext: newEncryptedData.profile_ciphertext,
+                            nonce: newEncryptedData.profile_nonce,
+                        }
+                    };
+
+                    return { success: true, message: 'Identity encryption setup complete' };
+                }
+            } catch (error) {
+                this.error = error.response?.data?.message || 'Failed to setup encrypted identity';
+                console.error('Setup encryption error:', error);
+                return { success: false, error: this.error };
+            } finally {
+                this.isLoading = false;
+            }
         },
     },
 });

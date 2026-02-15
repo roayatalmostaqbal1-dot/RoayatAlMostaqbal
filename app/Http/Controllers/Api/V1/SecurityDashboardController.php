@@ -3,18 +3,17 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Services\EncryptionService;
 use App\Services\SecurityDashboardService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class SecurityDashboardController extends Controller
 {
-    protected SecurityDashboardService $dashboardService;
-
-    public function __construct(SecurityDashboardService $dashboardService)
-    {
-        $this->dashboardService = $dashboardService;
-    }
+    public function __construct(
+        protected SecurityDashboardService $dashboardService,
+        protected EncryptionService $encryptionService
+    ) {}
 
     /**
      * Get all dashboard data for the authenticated user
@@ -205,13 +204,110 @@ class SecurityDashboardController extends Controller
                 'success' => true,
                 'data' => [
                     'csv' => $csv,
-                    'filename' => 'security_logs_' . date('Y-m-d_H-i-s') . '.csv',
+                    'filename' => 'security_logs_'.date('Y-m-d_H-i-s').'.csv',
                 ],
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to export logs',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Get encrypted data in raw format (for demo purposes)
+     *
+     * Returns the data exactly as stored in the database - fully encrypted.
+     * This endpoint demonstrates that sensitive data is stored encrypted.
+     *
+     * GET /api/v1/security-dashboard/encrypted-raw
+     */
+    public function encryptedRaw(Request $request): JsonResponse
+    {
+        try {
+            $userId = $request->user()->id;
+            $dataType = $request->input('type', 'profile');
+
+            $encryptedData = $this->encryptionService->getEncryptedDataRaw($userId, $dataType);
+
+            if (! $encryptedData) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No encrypted data found for this user',
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Encrypted data retrieved (stored in encrypted format)',
+                'data' => $encryptedData,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve encrypted data',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Get all encrypted data for the user (for demo purposes)
+     *
+     * GET /api/v1/security-dashboard/encrypted-all
+     */
+    public function encryptedAll(Request $request): JsonResponse
+    {
+        try {
+            $userId = $request->user()->id;
+
+            $encryptedDataList = $this->encryptionService->getAllEncryptedDataRaw($userId);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'All encrypted data retrieved (stored in encrypted format)',
+                'data' => $encryptedDataList,
+                'count' => count($encryptedDataList),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve encrypted data',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Get encryption metadata for user's data
+     *
+     * GET /api/v1/security-dashboard/encryption-metadata
+     */
+    public function encryptionMetadata(Request $request): JsonResponse
+    {
+        try {
+            $userId = $request->user()->id;
+            $dataType = $request->input('type', 'profile');
+
+            $metadata = $this->encryptionService->getEncryptionMetadata($userId, $dataType);
+
+            if (! $metadata) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No encryption metadata found',
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => $metadata,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve encryption metadata',
                 'error' => $e->getMessage(),
             ], 500);
         }

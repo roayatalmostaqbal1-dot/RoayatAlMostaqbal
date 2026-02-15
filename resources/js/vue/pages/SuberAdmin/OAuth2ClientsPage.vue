@@ -16,7 +16,7 @@
       </template>
 
       <!-- Error Message -->
-      <div v-if="errors.general" class="mb-4 p-4 rounded-lg bg-red-500 bg-opacity-10 border border-red-500 text-red-400">
+      <div v-if="errors.general" class="mb-4 p-4 rounded-lg bg-red-500 bg-opacity-10 border border-red-500 text-white">
         {{ errors.general }}
       </div>
 
@@ -57,7 +57,7 @@
               <td class="py-3 px-4">
                 <span :class="[
                   'inline-block px-2 py-1 rounded text-sm',
-                  client.revoked ? 'bg-red-500 bg-opacity-20 text-red-400' : 'bg-green-500 bg-opacity-20 text-white'
+                  client.revoked ? 'bg-red-500 bg-opacity-20 text-white' : 'bg-green-500 bg-opacity-20 text-white'
                 ]">
                   {{ client.revoked ? 'Revoked' : 'Active' }}
                 </span>

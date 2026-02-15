@@ -6,7 +6,7 @@
       </template>
 
       <!-- Error Message -->
-      <div v-if="pagesStore.error" class="mb-4 p-4 rounded-lg bg-red-500 bg-opacity-10 border border-red-500 text-red-400">
+      <div v-if="pagesStore.error" class="mb-4 p-4 rounded-lg bg-red-500 bg-opacity-10 border border-red-500 text-white">
         {{ pagesStore.error }}
         <button @click="pagesStore.clearError()" class="ml-2 text-red-300 hover:text-red-200">✕</button>
       </div>

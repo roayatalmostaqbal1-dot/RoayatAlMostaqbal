@@ -17,7 +17,7 @@
             <!-- Error -->
             <div v-else-if="error" class="text-center">
                 <div class="mb-4 p-4 bg-red-500 bg-opacity-20 border border-red-500 rounded-lg">
-                    <p class="text-red-400">{{ error }}</p>
+                    <p class="text-white">{{ error }}</p>
                 </div>
                 <Button variant="primary" size="lg" class="w-full" @click="closeWindow">Close</Button>
             </div>
@@ -25,7 +25,7 @@
             <!-- Success -->
             <div v-else class="text-center">
                 <div class="mb-4 p-4 bg-green-500 bg-opacity-20 border border-green-500 rounded-lg">
-                    <p class="text-green-400">Authentication successful!</p>
+                    <p class="text-white">Authentication successful!</p>
                 </div>
                 <p class="text-gray-400">You can close this window.</p>
             </div>

@@ -116,7 +116,7 @@
 
                         <!-- Error Message -->
                         <div v-if="recoveryStore.error"
-                            class="p-4 rounded-lg bg-red-500 bg-opacity-10 border border-red-500 text-red-400">
+                            class="p-4 rounded-lg bg-red-500 bg-opacity-10 border border-red-500 text-white">
                             {{ recoveryStore.error }}
                         </div>
 

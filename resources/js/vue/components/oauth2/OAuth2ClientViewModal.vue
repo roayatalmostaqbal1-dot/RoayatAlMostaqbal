@@ -82,7 +82,7 @@
             <label class="block text-sm font-semibold text-gray-300 mb-2">Status</label>
             <span :class="[
               'inline-block px-3 py-1 rounded text-sm',
-              client.revoked ? 'bg-red-500 bg-opacity-20 text-red-400' : 'bg-green-500 bg-opacity-20 text-white'
+              client.revoked ? 'bg-red-500 bg-opacity-20 text-white' : 'bg-green-500 bg-opacity-20 text-white'
             ]">
               {{ client.revoked ? 'Revoked' : 'Active' }}
             </span>

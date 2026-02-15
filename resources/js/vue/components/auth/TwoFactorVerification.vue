@@ -16,7 +16,7 @@
           />
         </div>
 
-        <div v-if="error" class="mb-4 p-3 rounded-lg bg-red-500 bg-opacity-10 border border-red-500 text-red-400 text-sm">
+        <div v-if="error" class="mb-4 p-3 rounded-lg bg-red-500 bg-opacity-10 border border-red-500 text-white text-sm">
           {{ error }}
         </div>
 

@@ -12,12 +12,12 @@
       <Card class="mb-6">
         <!-- Error Alert -->
         <div v-if="authStore.error" class="mb-4 p-4 bg-red-500 bg-opacity-20 border border-red-500 rounded-lg">
-          <p class="text-red-400 text-sm">{{ authStore.error }}</p>
+          <p class="text-white text-sm">{{ authStore.error }}</p>
         </div>
 
         <!-- Success Alert -->
         <div v-if="successMessage" class="mb-4 p-4 bg-green-500 bg-opacity-20 border border-green-500 rounded-lg">
-          <p class="text-green-400 text-sm">{{ successMessage }}</p>
+          <p class="text-white text-sm">{{ successMessage }}</p>
         </div>
 
         <!-- Full Name Input -->
